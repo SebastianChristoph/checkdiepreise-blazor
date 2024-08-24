@@ -1,5 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@inject ISnackbar Snackbar
 
 @* Required *@
 <MudThemeProvider />
@@ -10,48 +9,24 @@
 
 @* Needed for snackbars *@
 <MudSnackbarProvider />
-
-<MudLayout>
-    <MudAppBar Elevation="1">
-
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-                       OnClick="@(() => OpenDrawer(Anchor.Start))" />
-
-        <MudText Typo="Typo.h6">Rezepte</MudText>
-    </MudAppBar>
-
-    <MudDrawer @bind-Open="@open" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary"
-               Style="min-height: 100vh;">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6">Menu</MudText>
-        </MudDrawerHeader>
-
+<div class="page">
+    <div class="sidebar">
         <NavMenu />
+    </div>
 
-    </MudDrawer>
+    <main>
+        <div class="top-row px-4">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        </div>
 
-    <MudMainContent Class="pt-16 px-16 mt-8">
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
 
-        @Body
-
-    </MudMainContent>
-</MudLayout>
-
-
-@code {
-    bool open;
-
-    Anchor anchor;
-
-
-
-    void OpenDrawer(Anchor anchor)
-
-    {
-
-        open = true;
-
-        this.anchor = anchor;
-
-    }
-}
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
