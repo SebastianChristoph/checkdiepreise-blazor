@@ -12,38 +12,46 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar>
-        <MudButton Variant="Variant.Text" OnClick="OpenDrawer">[MENU]</MudButton>
-        My Application
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@(() => Snackbar.Add("Simple Snackbar"))">
-            Open Snackbar
-        </MudButton>
+    <MudAppBar Elevation="1">
+
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+                       OnClick="@(() => OpenDrawer(Anchor.Start))" />
+
+        <MudText Typo="Typo.h6">Rezepte</MudText>
     </MudAppBar>
-    <MudDrawer Open="@_open">
+
+    <MudDrawer @bind-Open="@open" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary"
+               Style="min-height: 100vh;">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">My App</MudText>
+            <MudText Typo="Typo.h6">Menu</MudText>
         </MudDrawerHeader>
-        <MudNavMenu>
-            <MudNavLink Match="NavLinkMatch.All">Store</MudNavLink>
-            <MudNavLink Match="NavLinkMatch.All">Library</MudNavLink>
-            <MudNavLink Match="NavLinkMatch.All">Community</MudNavLink>
-            <MudNavLink OnClick="_ => _open = false">Close Drawer</MudNavLink>
-        </MudNavMenu>
+
+        <NavMenu />
 
     </MudDrawer>
-    <MudMainContent>
+
+    <MudMainContent Class="pt-16 px-16 mt-8">
+
         @Body
+
     </MudMainContent>
 </MudLayout>
 
-@code {
-    private bool _open;
-    private Anchor _anchor;
-    private bool _overlayAutoClose = true;
 
-    private void OpenDrawer()
+@code {
+    bool open;
+
+    Anchor anchor;
+
+
+
+    void OpenDrawer(Anchor anchor)
+
     {
-        _open = true;
-        _anchor = Anchor.Start;
+
+        open = true;
+
+        this.anchor = anchor;
+
     }
 }
