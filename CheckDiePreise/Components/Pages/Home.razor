@@ -1,13 +1,18 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello Check</h1>
+<p>Connection string : @_connectionString</p>
+<p>Cann connect?: @_canConnect</p>
+<p>Status: @_status</p>
 
+<button class="btn btn-primary" @onclick="CreateProduct">Click me to run Create a Product</button>
 <ul>
 
 @foreach(var product in _products)
 {
-    <li>@product.Name</li> 
+    <li>@product.Id @product.Name</li> 
 }
 </ul>

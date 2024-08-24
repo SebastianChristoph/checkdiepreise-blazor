@@ -2,14 +2,31 @@ using CheckDiePreise.Components;
 using CheckDiePreise.Data;
 using CheckDiePreise.Data.Services;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("SQLiteDataDB");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+//var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING") ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+
+//if (Environment.IsDevelopment())
+//{
+//    builder.Services.AddDbContext<DataContext>(options =>
+//        options.UseSqlite("Data Source=localdatabase.db"));
+//}
+//else
+//{
+//    builder.Services.AddDbContext<DataContext>(options =>
+//        options.UseSqlServer(connectionString));
+//}
+
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddDbContextFactory<DataContext>(options => options.UseSqlite(connectionString));
+//builder.Services.AddDbContextFactory<DataContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 

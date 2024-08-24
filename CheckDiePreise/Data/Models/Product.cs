@@ -8,9 +8,10 @@ namespace CheckDiePreise.Data.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
-        required public string Name { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
     }
 
 }
