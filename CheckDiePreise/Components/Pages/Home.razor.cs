@@ -19,8 +19,8 @@ namespace CheckDiePreise.Components.Pages
         protected override async Task OnInitializedAsync()
         {
             // _products = await ProductService.GetAllProductsAsync();
-            // _connectionString = Configuration.GetConnectionString("DefaultConnection");
-            // _canConnect = ProductService.CanConnectToDatabase();
+            _connectionString = Configuration.GetConnectionString("DefaultConnection");
+            _canConnect = ProductService.CanConnectToDatabase();
         }
 
         private async Task CreateProduct()
