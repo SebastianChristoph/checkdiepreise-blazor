@@ -1,10 +1,17 @@
 using CheckDiePreise.Components;
+using CheckDiePreise.Data;
+using CheckDiePreise.Data.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("SQLiteDataDB");
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddDbContextFactory<DataContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 var app = builder.Build();
 
