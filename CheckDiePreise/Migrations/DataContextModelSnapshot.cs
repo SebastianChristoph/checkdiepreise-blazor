@@ -41,9 +41,6 @@ namespace CheckDiePreise.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("PriceBefore")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Store")
                         .IsRequired()
                         .HasColumnType("TEXT");

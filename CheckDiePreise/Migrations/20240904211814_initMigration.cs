@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CheckDiePreise.Migrations
 {
     /// <inheritdoc />
-    public partial class productChanges : Migration
+    public partial class initMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,6 @@ namespace CheckDiePreise.Migrations
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Identifier = table.Column<string>(type: "TEXT", nullable: false),
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
-                    PriceBefore = table.Column<decimal>(type: "TEXT", nullable: false),
                     Store = table.Column<string>(type: "TEXT", nullable: false),
                     Category = table.Column<string>(type: "TEXT", nullable: false)
                 },

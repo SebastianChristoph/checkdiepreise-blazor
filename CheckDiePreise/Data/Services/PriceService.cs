@@ -20,7 +20,6 @@ namespace CheckDiePreise.Data.Services
 
         public async Task<List<ProductChange>> SearchProductChanges(string productName)
         {
-            await Task.Delay(1000);
             List<ProductChange> products = await _context.ProductChanges
                 .Where(p => p.Name.ToLower().Contains(productName.ToLower()))
                 .ToListAsync();

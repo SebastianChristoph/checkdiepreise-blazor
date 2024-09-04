@@ -13,7 +13,6 @@ namespace CheckDiePreise.Data.Models
         [Required] public DateTime Date { get; set; }
         [Required] public string Identifier { get; set; }
         [Required] public decimal Price { get; set; }
-        [Required] public decimal PriceBefore { get; set; }
         [Required] public string Store { get; set; }
         public string Category { get; set; }
     }

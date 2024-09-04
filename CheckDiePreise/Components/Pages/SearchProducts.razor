@@ -5,12 +5,15 @@
 <h3>SearchProducts</h3>
 
 <MudTextField Label="Produktname" @bind-Value="_productName"/>
-<MudButton OnClick="SearchProductChanges">Search</MudButton>
+<MudButton Variant="Variant.Filled"  OnClick="SearchProductChanges">Search</MudButton>
 
 @if (_isSearching)
 {
     <MudProgressCircular Color="Color.Default" Indeterminate="true" />
 }
+
+
+
 @if(_productChanges is null)
 {
     <MudText>Keine Ergebnisse</MudText>
@@ -36,7 +39,6 @@ else
                 <td>@productChange.Date</td>
                 <td>@productChange.Identifier</td>
                 <td>@productChange.Price</td>
-                <td>@productChange.PriceBefore</td>
                 <td>@productChange.Store</td>
                 <td>@productChange.Category</td>
                
@@ -45,6 +47,21 @@ else
     </tbody>
 </MudSimpleTable>
 }
+
+
+<MudButton Variant="Variant.Filled" OnClick="GetAllProducts">Get all products</MudButton>
+
+@if(_allProducts is not null)
+{
+    <MudText>All ProductChanges:</MudText>
+    <ul>
+        @foreach (var product in _allProducts)
+        {
+            <li>@product.Name</li>
+        }
+    </ul>
+}
+
 
 
 
