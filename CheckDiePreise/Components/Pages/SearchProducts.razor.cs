@@ -26,6 +26,5 @@ public partial class SearchProducts
     private async Task GetAllProducts()
     {
         _allProducts = await PriceService.GetAllProductsAsync();
-        StateHasChanged();
     }
 }
