@@ -6,15 +6,26 @@ using System;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var useDb = builder.Configuration.GetValue<string>("UseDb");
+if(useDb == "SQLite")
+{
+    var connectionString = builder.Configuration.GetConnectionString("SQLiteTestConnection");
+    builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connectionString));
+}
+else
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+
+}
+
 
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 //builder.Services.AddDbContextFactory<DataContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<PriceService>();
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 

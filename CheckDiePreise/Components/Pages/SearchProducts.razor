@@ -1,0 +1,50 @@
+﻿@page "/search"
+@using CheckDiePreise.Data.Models
+@rendermode InteractiveServer
+
+<h3>SearchProducts</h3>
+
+<MudTextField Label="Produktname" @bind-Value="_productName"/>
+<MudButton OnClick="SearchProductChanges">Search</MudButton>
+
+@if (_isSearching)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+@if(_productChanges is null)
+{
+    <MudText>Keine Ergebnisse</MudText>
+}
+else
+{
+
+    <MudSimpleTable Dense="@true" Hover="@true" Bordered="@true" Striped="@true" Style="overflow-x: auto;">
+    <thead>
+        <tr>
+            @foreach (var h in headings)
+            {
+                <th>@h</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var productChange in _productChanges)
+        {
+            <tr>
+                <td>@productChange.Id</td>
+                <td>@productChange.Name</td>
+                <td>@productChange.Date</td>
+                <td>@productChange.Identifier</td>
+                <td>@productChange.Price</td>
+                <td>@productChange.PriceBefore</td>
+                <td>@productChange.Store</td>
+                <td>@productChange.Category</td>
+               
+            </tr>
+        }
+    </tbody>
+</MudSimpleTable>
+}
+
+
+

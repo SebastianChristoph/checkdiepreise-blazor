@@ -1,21 +1,14 @@
 ﻿@page "/"
-@rendermode InteractiveServer
+@* @rendermode InteractiveServer *@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello Check</h1>
-<MudText>Ich bin ein MudText</MudText>
-<p>Connection string : @_connectionString</p>
-<p>Cann connect?: @_canConnect</p>
-
-
-<p>Status: @_status</p>
-
-<button class="btn btn-primary" @onclick="CreateProduct">Click me to run Create a Product</button>
-<ul>
-
-@foreach(var product in _products)
+@if (_canConnect)
 {
-    <li>@product.Id @product.Name</li> 
+    <MudAlert Severity="Severity.Success">Erfolgreich mit Datenbank verbunden; @_usedDb</MudAlert>
 }
-</ul>
+
+else
+{
+    <MudAlert Severity="Severity.Error">Keine Verbindung zur Datenbank: @_usedDb, ConnectionString: @_connectionString</MudAlert>
+}

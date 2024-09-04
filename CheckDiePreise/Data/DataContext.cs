@@ -42,9 +42,7 @@ public class DataContext : DbContext
     //    modelBuilder.Entity<Product>().ToTable("Product").HasData(product1, product2);
 
     //}
-    public DbSet<Product> Product { get; set; }
-
-
+    public DbSet<ProductChange> ProductChanges { get; set; }
 
 }
 
