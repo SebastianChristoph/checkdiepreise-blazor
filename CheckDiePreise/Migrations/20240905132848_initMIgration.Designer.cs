@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CheckDiePreise.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240904211814_initMigration")]
-    partial class initMigration
+    [Migration("20240905132848_initMIgration")]
+    partial class initMIgration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,10 @@ namespace CheckDiePreise.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Store")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Trend")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

@@ -4,6 +4,7 @@ using CheckDiePreise.Data.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using MudBlazor.Services;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 var useDb = builder.Configuration.GetValue<string>("UseDb");
@@ -26,6 +27,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 //builder.Services.AddDbContextFactory<DataContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddScoped<PriceService>();
+builder.Services.AddRadzenComponents();
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 

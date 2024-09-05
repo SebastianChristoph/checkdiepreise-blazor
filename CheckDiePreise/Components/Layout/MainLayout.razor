@@ -1,11 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider Theme="MyCustomTheme" />
+<MudPopoverProvider />
 
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
+        <MudText Typo="Typo.h5" Class="ml-3">Check die Preise &nbsp;</MudText>
+        <MudIcon Icon="@Icons.Material.Outlined.BarChart" Title="Favorite" />
         <MudSpacer />
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
@@ -13,14 +15,20 @@
         <MudNavMenu>
             <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
             <MudNavLink Href="/search" Icon="@Icons.Material.Filled.Storage">Produkt suchen</MudNavLink>
+            <MudNavLink Href="/search" Icon="@Icons.Material.Filled.Storage">Produkt suchen</MudNavLink>
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>
-        <MudContainer>
+        <MudContainer Class="pt-8" style="min-height: 100vh;">
             @Body
         </MudContainer>
+        <MudContainer style="min-height: 200px;"></MudContainer>
       
     </MudMainContent>
+
+    <footer style="background-color: #FAFAFA; position: fixed; bottom:0; width: 100%; height: 50px;">
+        Social links
+    </footer>
 </MudLayout>
 
 @code {
@@ -30,4 +38,16 @@
     {
         _drawerOpen = !_drawerOpen;
     }
+
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                Primary = MudBlazor.Colors.Amber.Default,
+                Secondary =  MudBlazor.Colors.Green.Accent4,
+                Tertiary =  MudBlazor.Colors.Gray.Lighten5,
+                AppbarBackground = MudBlazor.Colors.Amber.Default,
+            },
+
+        };
 }

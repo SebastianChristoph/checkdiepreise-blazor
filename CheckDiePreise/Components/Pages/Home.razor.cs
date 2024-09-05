@@ -17,8 +17,9 @@ namespace CheckDiePreise.Components.Pages
 
         [Inject] IConfiguration Configuration { get; set; } = null!;
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
+            base.OnInitialized();
             _connectionString = Configuration.GetConnectionString("DefaultConnection");
             _canConnect = PriceService.CanConnectToDatabase();
             _usedDb = Configuration.GetValue<string>("UseDb");

@@ -15,6 +15,7 @@ namespace CheckDiePreise.Data.Models
         [Required] public decimal Price { get; set; }
         [Required] public string Store { get; set; }
         public string Category { get; set; }
+        [Required] public string Trend { get; set; }
     }
 
 }

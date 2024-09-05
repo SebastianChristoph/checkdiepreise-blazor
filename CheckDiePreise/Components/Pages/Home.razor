@@ -1,14 +1,71 @@
 ﻿@page "/"
 @* @rendermode InteractiveServer *@
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Willkommen auf CheckDiePreise!</PageTitle>
 
+<MudPaper Class="pa-16 ma-2" Elevation="3">
+    <MudGrid>
+        <MudItem sm="8" xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudStack>
+                <MudText Typo="Typo.h3">Check die Preise</MudText>
+                <MudText Typo="Typo.body1">
+                    Wie sehr gehen die Preise in deutschen Märkten nach oben oder unten? Wird Butter wirklich immer teurer? Werden Malms (IKEA) immer günstiger? <br />
+                    Um sich ein Bild verschaffen zu können, durchsuchen Roboter die Online-Shops der bekanntesten Supermärkte Deutschlands und sammeln Preise für über 240.620 Produkte - und das täglich.
+                    <br />
+                    <br />
+                    Erkunde selbst die Daten oder hilf mit, noch mehr Supermärkte, Drogerien oder Baumärkte hinzuzufügen.
+                </MudText>
+                <MudButton Href="/search" Style="width: 50%;" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zur Produktsuche</MudButton>
+            </MudStack>
+        </MudItem>
+
+        <MudItem sm="4" xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudImage Fluid="true" Src="hero.png" Alt="Swedish Farm House" Class="rounded-lg" />
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+
+<MudGrid>
+    <MudItem sm="6" xs="12">
+        <MudPaper Class="pa-16 ma-2" Elevation="3">
+            <MudStack>
+                <MudText Typo="Typo.h6">Gewinner des Tages <MudIcon Icon="@Icons.Material.Outlined.Mood" Title="Favorite" /></MudText>
+                <MudText Typo="Typo.h6">Langnese Eisbecher</MudText>
+                <MudText Typo="Typo.caption">LIDL</MudText>
+                <MudSpacer/>
+                <MudText>Preis gestern: 2,98€ pro Artikel</MudText>
+                <MudText>Preis heute: 2,10€ pro Artikel</MudText>
+                <MudText>Veränderung: - 0.49€ [-51%]</MudText>
+                <MudButton Style="width: 50%;" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+    <MudItem sm="6" xs="12">
+        <MudPaper Class="pa-16 ma-2" Elevation="3">
+            <MudStack>
+                <MudText Typo="Typo.h6">Verlierer des Tages <MudIcon Icon="@Icons.Material.Outlined.MoodBad" Title="Favorite" /></MudText>
+                <MudText Typo="Typo.h6">Langnese Eisbecher</MudText>
+                <MudText Typo="Typo.caption">LIDL</MudText>
+                <MudSpacer />
+                <MudText>Preis gestern: 2,98€ pro Artikel</MudText>
+                <MudText>Preis heute: 2,10€ pro Artikel</MudText>
+                <MudText>Veränderung: + 0.49€ [+51%]</MudText>
+                <MudButton Style="width: 50%;" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+
+<div style="position: absolute; right: 0; top: 80px;">
 @if (_canConnect)
 {
-    <MudAlert Severity="Severity.Success">Erfolgreich mit Datenbank verbunden; @_usedDb</MudAlert>
+    <MudAlert Severity="Severity.Success">Verbunden: @_usedDb</MudAlert>
 }
 
 else
 {
-    <MudAlert Severity="Severity.Error">Keine Verbindung zur Datenbank: @_usedDb, ConnectionString: @_connectionString</MudAlert>
+    <MudAlert Severity="Severity.Error">Nicht verbunden: @_usedDb, ConnectionString: @_connectionString</MudAlert>
 }
+
+</div>

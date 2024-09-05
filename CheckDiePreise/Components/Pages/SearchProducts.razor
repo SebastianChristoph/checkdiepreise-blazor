@@ -2,65 +2,190 @@
 @using CheckDiePreise.Data.Models
 @rendermode InteractiveServer
 
-<h3>SearchProducts</h3>
+@using Radzen
+@using Radzen.Blazor
 
-<MudTextField Label="Produktname" @bind-Value="_productName"/>
-<MudButton Variant="Variant.Filled"  OnClick="SearchProductChanges">Search</MudButton>
+
+<MudPaper Class="pa-16 ma-2" Elevation="3">
+    <MudText Typo="Typo.h4">Produktsuche</MudText>
+    <MudGrid>
+
+        <MudItem sm="8" xs="12">
+            <MudTextField Label="Produktname oder Artikelnummer" Variant="MudBlazor.Variant.Outlined" @bind-Value="_productName" />
+            <MudText Typo="Typo.caption">Tipp: Eine Einzelwort-Suche ergibt bessere Resultate!</MudText>
+            <MudDivider Class="mt-8 mb-4"/>
+          
+            <MudText Typo="Typo.body1">Suche in...</MudText>
+            <MudRadioGroup @bind-Value="_searchAll">
+                    <MudRadio Value="true" Color="Color.Primary">Allen Märkte</MudRadio>
+                    <MudRadio Value="false" Color="Color.Primary">Ausgewählten Märkten</MudRadio>
+            </MudRadioGroup>
+            
+                @if (!_searchAll)
+                {
+                    <MudPaper Class="pa-2 ma-2">
+                        <MudStack Row="true">
+
+                        @foreach (string store in _availableStores)
+                        {
+                            <MudSwitch @bind-Value="_searchStores[store]" Label="@store" Color="Color.Primary" />
+                        }
+
+                        </MudStack>
+                    </MudPaper>
+                }
+            
+
+            <MudRadioGroup @bind-Value="_searchTrend">
+                <MudRadio Value="@("up")" Color="Color.Primary">Nur Preissteigerungen</MudRadio>
+                <MudRadio Value="@("down")" Color="Color.Primary">Nur Preissenkungen</MudRadio>
+                <MudRadio Value="@("both")" Color="Color.Primary">Alle Preisänderungen</MudRadio>
+            </MudRadioGroup>
+
+        </MudItem>
+        
+        @* ---------- DEBUG ----------------------- *@
+        <MudItem xs="4">
+            <MudText Typo="Typo.h6">Debug</MudText>
+            @foreach (KeyValuePair<string, bool> store in _searchStores)
+            {
+                <MudText>@store.Key : @store.Value.ToString()</MudText>
+            }
+
+            <MudText>@_searchTrend</MudText>
+            <MudText>All Dates in Chart:</MudText>
+            @foreach(DateTime date in allDatesInChart)
+            {
+                <MudText>@date.ToString()</MudText>
+            }
+            @foreach (var identifier in _identifierInChart)
+            {
+                <MudText>@identifier</MudText>
+            }
+
+        </MudItem>
+    </MudGrid>  
+    <MudButton class="mt-4" Variant="MudBlazor.Variant.Filled" Color="Color.Primary" OnClick=" SearchProductChanges">Produkt suchen</MudButton>
+</MudPaper>
+
+
+@* ---------- SPINNER ----------------------- *@
 
 @if (_isSearching)
 {
     <MudProgressCircular Color="Color.Default" Indeterminate="true" />
 }
 
-
-@if(_productChanges is null)
+@if (_productData is not null)
 {
-    <MudText>Keine Ergebnisse</MudText>
-}
-else
-{
+    @* ---------- CHART ----------------------- *@
+    @if(_chartData.Count > 0)
+    {
+        <MudPaper Class="pa-16 ma-2" Elevation="3">
+        
+            <RadzenChart>
+                @foreach (KeyValuePair<string, List<DataItem>> dataset in _chartData)
+                {
+                    <RadzenLineSeries Smooth="false" Data="@dataset.Value" CategoryProperty="Date" Title="@dataset.Key" LineType="LineType.Solid" ValueProperty="Price">
+                        <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
+                        <RadzenSeriesDataLabels Visible="true" />
+                    </RadzenLineSeries>
+                }
 
-    <MudSimpleTable Dense="@true" Hover="@true" Bordered="@true" Striped="@true" Style="overflow-x: auto;">
-    <thead>
-        <tr>
-            @foreach (var h in headings)
+                <RadzenCategoryAxis Padding="20" />
+                <RadzenValueAxis>
+                    <RadzenGridLines Visible="true" />
+                    <RadzenAxisTitle Text="Preis in €" />
+                </RadzenValueAxis>
+            </RadzenChart>
+
+            <MudStack Row="true" Reverse="true">
+                <MudTooltip Text="Diagramm zurücksetzen">
+                    <MudFab OnClick="DeleteAllSeriesInChart" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Replay" Size="Size.Small" />
+                </MudTooltip>
+            </MudStack>
+            
+        </MudPaper>
+    }
+    
+    @* ---------- STORES ----------------------- *@
+    <MudPaper Class="pa-16 ma-2" Elevation="3">
+
+        <MudExpansionPanels MultiExpansion="true">
+
+            @foreach (KeyValuePair<string, Dictionary<string, List<ProductChange>>> store in _productData)
             {
-                <th>@h</th>
+                <MudExpansionPanel>
+                    <TitleContent>
+                        <div class="d-flex">
+                            <MudIcon Icon="@Icons.Material.Filled.LocalGroceryStore" class="mr-3"></MudIcon>
+                            <MudText><strong>@store.Key</strong> (@store.Value.Count() Produkte)</MudText>
+                        </div>
+                    </TitleContent>
+                    <ChildContent>
+                          <MudExpansionPanels MultiExpansion="true">
+                            
+                              @* ---------- PRODUCTS ----------------------- *@
+
+                        @foreach (KeyValuePair<string, List<ProductChange>> product in store.Value)
+                        {
+                             <MudExpansionPanel>
+                                 <TitleContent>
+                                        <div class="d-flex align-center">
+                                        @if(product.Value[product.Value.Count-1].Trend == "up")
+                                        {
+                                                <span style="color:red;"> <MudIcon Icon="@Icons.Material.Filled.TrendingUp" class="mr-3"></MudIcon></span>  @product.Key.ToString()
+                                            }
+                                        else if (product.Value[product.Value.Count - 1].Trend == "down")
+                                        {
+                                                <span style="color:green;"> <MudIcon Icon="@Icons.Material.Filled.TrendingDown" class="mr-3"></MudIcon></span> @product.Key.ToString()
+                                            }
+                                        else
+                                        {
+                                                <span style="color:gray;"> <MudIcon Icon="@Icons.Material.Filled.TrendingFlat" class="mr-3"></MudIcon></span>  @product.Key.ToString();
+                                        }
+                                        </div>
+                                        
+                                 </TitleContent>
+                                 <ChildContent>
+                                     <MudGrid>
+                                         <MudItem xs="10">
+                                             <ul>
+                                                @foreach (ProductChange productChange in product.Value){
+                                                    <li>
+                                                            <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.Price €
+                                                    </li>
+                                                }
+                                             </ul>
+                                            </MudItem>
+                                            <MudItem xs="2">
+
+                                                @if (_identifierInChart.Contains(product.Value[0].Identifier))
+                                                {
+                                                    <MudTooltip Text="Aus Diagramm ausblenden">
+                                                        <MudIconButton OnClick="() => AddChartData(store.Key,product.Key.ToString(), product.Value[0].Identifier)" Icon="@Icons.Material.Filled.MultilineChart" Variant="MudBlazor.Variant.Filled" Color="Color.Error" Size="Size.Medium" />
+                                                    </MudTooltip>
+                                                }
+                                                else
+                                                {
+                                                    <MudTooltip Text="Im Diagramm anzeigen">
+                                                        <MudIconButton OnClick="() => AddChartData(store.Key,product.Key.ToString(), product.Value[0].Identifier)" Icon="@Icons.Material.Filled.StackedBarChart" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Size="Size.Medium" />
+                                                    </MudTooltip>
+
+                                                }
+
+                                                
+                                            </MudItem>
+                                        </MudGrid>
+                                 </ChildContent>
+                             </MudExpansionPanel>
+                        }
+                        </MudExpansionPanels>
+                    </ChildContent>
+                </MudExpansionPanel>
+            
             }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var productChange in _productChanges)
-        {
-            <tr>
-                <td>@productChange.Id</td>
-                <td>@productChange.Name</td>
-                <td>@productChange.Date</td>
-                <td>@productChange.Identifier</td>
-                <td>@productChange.Price</td>
-                <td>@productChange.Store</td>
-                <td>@productChange.Category</td>
-               
-            </tr>
-        }
-    </tbody>
-</MudSimpleTable>
+
+        </MudExpansionPanels>
+     </MudPaper>
 }
-
-
-<MudButton Variant="Variant.Filled" OnClick="GetAllProducts">Get all products</MudButton>
-
-@if(_allProducts is not null)
-{
-    <MudText>All ProductChanges:</MudText>
-    <ul>
-        @foreach (var product in _allProducts)
-        {
-            <li>@product.Name</li>
-        }
-    </ul>
-}
-
-
-
-
