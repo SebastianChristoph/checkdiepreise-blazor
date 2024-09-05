@@ -2,6 +2,7 @@ using CheckDiePreise.Data.Models;
 using CheckDiePreise.Data.Services;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Radzen.Blazor;
 using Radzen.Blazor.Rendering;
 using System.Globalization;
 
@@ -18,6 +19,7 @@ public partial class SearchProducts
     string[] headings = {"Name", "Date", "Identifier", "Price", "Store", "Category" };
     private Dictionary<string, Dictionary<string, List<ProductChange>>>? _productData;
     public Dictionary<string, List<DataItem>> _chartData = new Dictionary<string, List<DataItem>>();
+    Interpolation interpolation = Interpolation.Step;
 
     private List<string> _identifierInChart = [];
 

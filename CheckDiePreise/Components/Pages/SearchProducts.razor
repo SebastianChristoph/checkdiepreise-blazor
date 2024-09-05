@@ -17,7 +17,7 @@
           
             <MudText Typo="Typo.body1">Suche in...</MudText>
             <MudRadioGroup @bind-Value="_searchAll">
-                    <MudRadio Value="true" Color="Color.Primary">Allen Märkte</MudRadio>
+                    <MudRadio Value="true" Color="Color.Primary">Allen Märkten</MudRadio>
                     <MudRadio Value="false" Color="Color.Primary">Ausgewählten Märkten</MudRadio>
             </MudRadioGroup>
             
@@ -86,8 +86,8 @@
             <RadzenChart>
                 @foreach (KeyValuePair<string, List<DataItem>> dataset in _chartData)
                 {
-                    <RadzenLineSeries Smooth="false" Data="@dataset.Value" CategoryProperty="Date" Title="@dataset.Key" LineType="LineType.Solid" ValueProperty="Price">
-                        <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
+                    <RadzenLineSeries Interpolation="@interpolation" Data="@dataset.Value" CategoryProperty="Date" Title="@dataset.Key" LineType="LineType.Solid" ValueProperty="Price">
+                        <RadzenMarkers Visible="false" MarkerType="MarkerType.Square" />
                         <RadzenSeriesDataLabels Visible="true" />
                     </RadzenLineSeries>
                 }

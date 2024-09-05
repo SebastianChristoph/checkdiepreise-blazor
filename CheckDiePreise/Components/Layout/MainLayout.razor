@@ -13,9 +13,8 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <MudNavMenu>
-            <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
-            <MudNavLink Href="/search" Icon="@Icons.Material.Filled.Storage">Produkt suchen</MudNavLink>
-            <MudNavLink Href="/search" Icon="@Icons.Material.Filled.Storage">Produkt suchen</MudNavLink>
+            <MudNavLink OnClick="@((e) => DrawerToggle())" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
+            <MudNavLink OnClick="@((e) => DrawerToggle("search"))" Icon="@Icons.Material.Filled.Storage">Produkt suchen</MudNavLink>
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>
@@ -31,23 +30,3 @@
     </footer>
 </MudLayout>
 
-@code {
-    bool _drawerOpen = true;
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    MudTheme MyCustomTheme = new MudTheme()
-        {
-            PaletteLight = new PaletteLight()
-            {
-                Primary = MudBlazor.Colors.Amber.Default,
-                Secondary =  MudBlazor.Colors.Green.Accent4,
-                Tertiary =  MudBlazor.Colors.Gray.Lighten5,
-                AppbarBackground = MudBlazor.Colors.Amber.Default,
-            },
-
-        };
-}
