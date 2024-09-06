@@ -1,5 +1,6 @@
 ﻿using CheckDiePreise.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using FuzzySharp;
 
 namespace CheckDiePreise.Data.Services
 {
@@ -18,29 +19,34 @@ namespace CheckDiePreise.Data.Services
             return products;
         }
 
-        public async Task<Dictionary<string, Dictionary<string, List<ProductChange>>>> GetGroupedProductsAsync(bool searchAll, string trend, Dictionary<string, bool> searchStores)
+        public async Task<Dictionary<string, Dictionary<string, List<ProductChange>>>> GetGroupedProductsAsync(string productName, bool searchAll, string trend, Dictionary<string, bool> searchStores)
         {
-
-            IQueryable<ProductChange> query = _context.ProductChanges;
-
+            // Liste der Stores, die durchsucht werden sollen
             List<string> stores = searchStores
-                 .Where(kvp => kvp.Value)
-                 .Select(kvp => kvp.Key)
-                 .ToList();
+                .Where(kvp => kvp.Value)
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            // Datenbankabfrage aufbauen, um die benötigten Daten zu laden, basierend auf den Stores
+            IQueryable<ProductChange> query = _context.ProductChanges.AsQueryable();
 
             if (!searchAll)
             {
                 query = query.Where(p => stores.Contains(p.Store));
             }
 
-            //if (trend != "both")
-            //{
-            //    query = query.Where(p => p.Trend == trend);
-            //}
-
+            // Hole die Produkte in eine Liste (kein Vorfilter für den Namen, da wir Fuzzy-Suche anwenden)
             List<ProductChange> products = await query.ToListAsync();
 
-            var groupedProducts = products
+            // Parallelisiere die Fuzzy-Suche, um sie effizienter zu machen
+            var filteredProducts = products
+                .AsParallel()  // Parallele Verarbeitung
+                .Where(p => Fuzz.Ratio(p.Name.ToLower(), productName.ToLower()) > 70) // Fuzzy-Suche (Schwelle bei 70)
+                .ToList();
+
+            // Gruppierung und Filterung in Speicher
+            var groupedProducts = filteredProducts
+                .AsParallel()  // Parallele Verarbeitung der Gruppierung
                 .GroupBy(p => p.Store)
                 .ToDictionary(
                     storeGroup => storeGroup.Key,
@@ -79,7 +85,8 @@ namespace CheckDiePreise.Data.Services
             return groupedProducts;
         }
 
-            public bool CanConnectToDatabase()
+
+        public bool CanConnectToDatabase()
         {
             try
             {

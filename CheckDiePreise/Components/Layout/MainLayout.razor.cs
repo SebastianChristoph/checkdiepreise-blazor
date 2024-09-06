@@ -7,6 +7,7 @@ public partial class MainLayout
 {
 
     bool _drawerOpen = true;
+    private string _quicksearch;
 
     [Inject] 
     private NavigationManager NavigationManager { get; set; } = null!;

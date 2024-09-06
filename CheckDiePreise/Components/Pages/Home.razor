@@ -15,7 +15,7 @@
                     <br />
                     Erkunde selbst die Daten oder hilf mit, noch mehr Supermärkte, Drogerien oder Baumärkte hinzuzufügen.
                 </MudText>
-                <MudButton Href="/search" Style="width: 50%;" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zur Produktsuche</MudButton>
+                <MudButton Href="/search" Style="max-width: 300px;" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zur Produktsuche</MudButton>
             </MudStack>
         </MudItem>
 
@@ -29,28 +29,28 @@
     <MudItem sm="6" xs="12">
         <MudPaper Class="pa-16 ma-2" Elevation="3">
             <MudStack>
-                <MudText Typo="Typo.h6">Gewinner des Tages <MudIcon Icon="@Icons.Material.Outlined.Mood" Title="Favorite" /></MudText>
+                <MudText Typo="Typo.h6" Color="Color.Success">Gewinner des Tages <MudIcon Icon="@Icons.Material.Outlined.Mood" Title="Favorite" /></MudText>
                 <MudText Typo="Typo.h6">Langnese Eisbecher</MudText>
                 <MudText Typo="Typo.caption">LIDL</MudText>
                 <MudSpacer/>
                 <MudText>Preis gestern: 2,98€ pro Artikel</MudText>
                 <MudText>Preis heute: 2,10€ pro Artikel</MudText>
-                <MudText>Veränderung: - 0.49€ [-51%]</MudText>
-                <MudButton Style="width: 50%;" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
+                <MudText Color="Color.Success"><strong>Veränderung: - 0.49€ [-51%]</strong></MudText>
+                <MudButton  FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
             </MudStack>
         </MudPaper>
     </MudItem>
     <MudItem sm="6" xs="12">
         <MudPaper Class="pa-16 ma-2" Elevation="3">
             <MudStack>
-                <MudText Typo="Typo.h6">Verlierer des Tages <MudIcon Icon="@Icons.Material.Outlined.MoodBad" Title="Favorite" /></MudText>
+                <MudText Typo="Typo.h6" Color="Color.Error">Verlierer des Tages <MudIcon Icon="@Icons.Material.Outlined.MoodBad" Title="Favorite" /></MudText>
                 <MudText Typo="Typo.h6">Langnese Eisbecher</MudText>
                 <MudText Typo="Typo.caption">LIDL</MudText>
                 <MudSpacer />
                 <MudText>Preis gestern: 2,98€ pro Artikel</MudText>
                 <MudText>Preis heute: 2,10€ pro Artikel</MudText>
-                <MudText>Veränderung: + 0.49€ [+51%]</MudText>
-                <MudButton Style="width: 50%;" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
+                <MudText Color="Color.Error"><strong>Veränderung: - 0.49€ [-51%]</strong></MudText>
+                <MudButton FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
             </MudStack>
         </MudPaper>
     </MudItem>

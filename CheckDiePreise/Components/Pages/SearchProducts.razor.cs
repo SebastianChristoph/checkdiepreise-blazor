@@ -10,7 +10,7 @@ namespace CheckDiePreise.Components.Pages;
 
 public partial class SearchProducts
 {
-    private string _productName;
+    private string _productName = string.Empty;
     private List<string> _availableStores = [];
     private Dictionary<string, bool> _searchStores = [];
     private bool _isSearching = false;
@@ -29,9 +29,10 @@ public partial class SearchProducts
     private Dictionary<string, List<ProductChange>> allSeriesInChart = [];
 
 
-    [Inject]
-    private PriceService PriceService { get; set; } = null!;
+    [Inject] private PriceService PriceService { get; set; } = null!;
     [Inject] IConfiguration Configuration { get; set; } = null!;
+
+    [Inject] ISnackbar Snackbar { get; set; } = null!;
 
     protected override void OnInitialized()
     {
@@ -45,8 +46,14 @@ public partial class SearchProducts
 
     private async Task SearchProductChanges()
     {
+        if (_productName.Length <= 2)
+        {
+            Snackbar.Add("Bitte geben Sie mehr als 2 Buchstaben als Produktnamen ein!", Severity.Warning);
+            return;
+        }
+        DeleteAllSeriesInChart();
         _isSearching = true;
-        _productData = await PriceService.GetGroupedProductsAsync(_searchAll, _searchTrend, _searchStores);
+        _productData = await PriceService.GetGroupedProductsAsync(_productName, _searchAll, _searchTrend, _searchStores);
         _isSearching = false;
     }
 
@@ -115,6 +122,11 @@ public partial class SearchProducts
         _identifierInChart = [];
         allDatesInChart = [];
         ReDrawChart();
+    }
+
+    private static string FormatAsDouble(object value)
+    {
+        return ((double)value).ToString("N1", CultureInfo.CurrentCulture);
     }
 
    public class DataItem
