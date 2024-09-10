@@ -1,25 +1,71 @@
 ﻿@page "/product/{store}/{name}-{identifier}"
 
-<MudGrid>
+@using Radzen
+@using Radzen.Blazor
+
+<MudGrid Class="mb-8">
     <MudItem xs="12">
-        <MudText Typo="Typo.h4">Produktdetails</MudText>
-        <MudText Typo="Typo.h6">@Name [@Identifier]</MudText>
-        <MudText Typo="Typo.caption">@Store</MudText>
+        <MudText Class="mb-4" Typo="Typo.h4">Produktdetails</MudText>
+        <MudText Typo="Typo.h6">@Name</MudText>
+        <MudText Typo="Typo.caption">@Store, Artikelnummer: @Identifier</MudText>
     </MudItem>
 </MudGrid>
 
 @if(_productChanges is not null)
 {
 
-<MudGrid>
-        @foreach(var productChange in _productChanges)
-        {
-            <MudItem xs="12">
-                <MudText>@productChange.Date : @productChange.PriceUnit€/@productChange.UnitName [@productChange.PriceBulk/@productChange.BulkUnitName]@productChange.Trend</MudText>
-            </MudItem>
-        }
-    </MudGrid>
-    
+      <RadzenChart>
+        <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartData" CategoryProperty="Date" Title=@Name LineType="LineType.Solid" StrokeWidth="4" Stroke="#E08148" ValueProperty="Price">
+            <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
+            <RadzenSeriesDataLabels Visible="true" />
+        </RadzenLineSeries>
+      
+        <RadzenCategoryAxis Padding="20" />
+        <RadzenValueAxis Step="1" Formatter="@FormatAsDouble">
+            <RadzenGridLines Visible="true" />
+            <RadzenAxisTitle Text="Preis in €" />
+        </RadzenValueAxis>
+    </RadzenChart>
+
+
+
+    <MudSimpleTable Class="mt-8" Dense="true" Hover="true" Striped="true" Style="overflow-x: auto;">
+        <thead>
+            <tr>
+               <th><strong>Preisänderung</strong></th>
+                <th><strong>Preis pro Stk.</strong></th>
+                <th><strong>Preis pro Einheit</strong></th>
+                <th><strong>Trend</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+                @foreach (var productChange in _productChanges)
+            {
+                <tr>
+                   <td>@productChange.Date</td>
+                   <td>@productChange.PriceUnit€ / @productChange.UnitName</td>
+                   <td>@productChange.PriceBulk€ / @productChange.BulkUnitName</td>
+                   <td>
+
+                            @if (productChange.Trend == "up")
+                            {
+                                <span style="color:red;"> <MudIcon Icon="@Icons.Material.Filled.TrendingUp" class="mr-3"></MudIcon></span>
+                            }
+                            else if (productChange.Trend == "down")
+                            {
+                                <span style="color:green;"> <MudIcon Icon="@Icons.Material.Filled.TrendingDown" class="mr-3"></MudIcon></span>
+                            }
+                            else
+                            {
+                                <span style="color:gray;"> <MudIcon Icon="@Icons.Material.Filled.TrendingFlat" class="mr-3"></MudIcon></span>
+                                ;
+                            }
+
+                   </td>
+                </tr>
+            }
+        </tbody>
+</MudSimpleTable>
 }
 
 

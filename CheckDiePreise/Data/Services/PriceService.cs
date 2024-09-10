@@ -22,6 +22,21 @@ namespace CheckDiePreise.Data.Services
                 .ToList());
             return storePricesChanges;
         }
+
+        public async Task<Dictionary<string, List<StorePriceChange>>> GetStorePriceChangesByStoreAsync(string storeName)
+        {
+            // Hole die Preisänderungen und gruppiere sie nach Kategorie
+            var storePriceChanges = await Task.FromResult(_context.StorePriceChanges
+                .Where(spc => spc.StoreName == storeName)
+                .OrderBy(spc => spc.Category)
+                .ThenBy(spc => spc.Date)
+                .GroupBy(spc => spc.Category)
+                .ToDictionary(g => g.Key, g => g.ToList()));
+
+            return storePriceChanges;
+        }
+
+
         public async Task<List<ProductChange>> GetAllProductsAsync()
         {
             List<ProductChange> products = await Task.FromResult(_context.ProductChanges.ToList());

@@ -1,18 +1,75 @@
 ﻿@page "/analysis"
 
+@using Radzen
+@using Radzen.Blazor
+
 <MudPaper Class="pa-16 ma-2" Elevation="3">
-    <MudText Typo="Typo.h4">Analyse (Beispiel LIDL)</MudText>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudContainer Class="d-flex align-center justify-center py-4">
+                <MudButtonGroup Color="Color.Primary" Variant="MudBlazor.Variant.Filled">
+                    <MudButton OnClick='() =>DrawChart("ALDI")'>ALDI</MudButton>
+                    <MudButton OnClick='() =>DrawChart("LIDL")'>LIDL</MudButton>
+                    <MudButton OnClick='() =>DrawChart("REWE")'>REWE</MudButton>
+                </MudButtonGroup>
+            </MudContainer>
+        </MudItem>
 
-    @if (_storePriceChanges is not null)
-    {
-        @foreach (var storePriceChange in _storePriceChanges)
+        <MudItem xs="12">
+            <MudContainer Class="d-flex align-center justify-center py-4">
+                <MudText>Zeige Preise in Preis/Stk.</MudText>
+                <MudSwitch @bind-Value="_displayUnit" Label="Zeige Preise in Preis/." Color="Color.Primary" />
+            </MudContainer>
+        </MudItem>
+
+
+        @if (string.IsNullOrEmpty(_store))
         {
-            <MudText>@storePriceChange.Category @storePriceChange.Date : @storePriceChange.PriceUnit / @storePriceChange.PriceBulk</MudText>
+            <MudItem xs="12">
+                <MudText Align="Align.Center" Typo="Typo.h6">Bitte wählen sie einen Supermarkt aus.</MudText>
+            </MudItem>
         }
-    }
+        else
+        {
+            <MudItem xs="12">
+                <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store</MudText>
+            </MudItem>
+        }
+        
 
-    
+        <MudItem xs="12">
 
+            @if(_chartData.Count > 0)
+            {
+                <RadzenChart>
+
+                    @foreach (var category in _chartData)
+                    {
+                        <RadzenLineSeries Interpolation="Interpolation.Step" Data="@category.Value" CategoryProperty="Date" Title=@category.Key LineType="LineType.Solid" StrokeWidth="4" ValueProperty="Price">
+                            <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
+                            <RadzenSeriesDataLabels Visible="false" />
+                        </RadzenLineSeries>
+                    }
+
+
+                    <RadzenCategoryAxis Padding="20" />
+                    <RadzenValueAxis Min="0" Step="1" Formatter="@FormatAsDouble">
+                        <RadzenGridLines Visible="true" />
+                        <RadzenAxisTitle Text="Preis in €" />
+                    </RadzenValueAxis>
+                </RadzenChart>
+            }
+            </MudItem>
+
+@*     @foreach(KeyValuePair<string, List<DataItem>> data in _chartData)
+    {
+        <MudText>@data.Key</MudText>
+        @foreach (var dataPoint in data.Value)
+        {
+            <MudText>@dataPoint.Date : @dataPoint.Price</MudText>
+        }
+    } *@
+    </MudGrid>
 </MudPaper>
 
 
