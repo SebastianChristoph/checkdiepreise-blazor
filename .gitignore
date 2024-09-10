@@ -399,3 +399,6 @@ FodyWeavers.xsd
 *.sln.iml
 /Crawler/secrets.py
 /CheckDiePreise/appsettings.json
+/CheckDiePreise/ProductChanges.db
+/CheckDiePreise/ProductChanges.db-shm
+/CheckDiePreise/ProductChanges.db-wal
