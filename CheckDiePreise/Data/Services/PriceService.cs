@@ -13,6 +13,15 @@ namespace CheckDiePreise.Data.Services
 
         private DataContext _context;
 
+        public async Task<List<StorePriceChange>> GetStorePriceChangesByStore(string storeName)
+        {
+            List<StorePriceChange> storePricesChanges = await Task.FromResult(_context.StorePriceChanges
+                .Where(spc => spc.StoreName == storeName)
+                .OrderBy(spc => spc.Category)
+                .ThenBy(spc => spc.Date)
+                .ToList());
+            return storePricesChanges;
+        }
         public async Task<List<ProductChange>> GetAllProductsAsync()
         {
             List<ProductChange> products = await Task.FromResult(_context.ProductChanges.ToList());
@@ -34,8 +43,6 @@ namespace CheckDiePreise.Data.Services
                 .ToList());
             return productChanges;
         }
-
-
 
         public async Task<Dictionary<string, Dictionary<string, List<ProductChange>>>> GetGroupedProductsAsync(string productName, bool searchAll, string trend, Dictionary<string, bool> searchStores)
         {

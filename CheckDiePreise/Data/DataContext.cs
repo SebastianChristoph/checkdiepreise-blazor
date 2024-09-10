@@ -19,6 +19,7 @@ public class DataContext : DbContext
         Configuration = configuration;
     }
     public DbSet<ProductChange> ProductChanges { get; set; }
+    public DbSet<StorePriceChange> StorePriceChanges { get; set; }
     public DbSet<DailyStats> DailyStats { get; set; }
 
 }
