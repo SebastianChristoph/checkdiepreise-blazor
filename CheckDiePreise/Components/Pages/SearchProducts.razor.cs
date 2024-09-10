@@ -103,7 +103,7 @@ public partial class SearchProducts
                 if (matchingProductChange != null)
                 {
                     // Wenn eine Übereinstimmung gefunden wurde, setze den Preis
-                    price = (double)matchingProductChange.Price;
+                    price = (double)matchingProductChange.PriceUnit;
                     serieData.Add(new DataItem
                     {
                         Date = date,

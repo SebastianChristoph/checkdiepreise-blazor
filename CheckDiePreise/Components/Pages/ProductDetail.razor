@@ -15,7 +15,7 @@
         @foreach(var productChange in _productChanges)
         {
             <MudItem xs="12">
-                <MudText>@productChange.Date @productChange.Price @productChange.Trend</MudText>
+                <MudText>@productChange.Date : @productChange.PriceUnit€/@productChange.UnitName [@productChange.PriceBulk/@productChange.BulkUnitName]@productChange.Trend</MudText>
             </MudItem>
         }
     </MudGrid>

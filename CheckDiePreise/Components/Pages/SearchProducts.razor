@@ -112,7 +112,6 @@
                 </MudStack>
 
             </MudPaper>
-
         }
         </MudHidden>
         
@@ -164,7 +163,7 @@
                                                         @foreach (ProductChange productChange in product.Value)
                                                         {
                                                             <li>
-                                                                <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.Price €
+                                                                <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.PriceUnit€/@productChange.UnitName [@productChange.PriceBulk/@productChange.BulkUnitName]
                                                             </li>
                                                         }
                                                     </ul>
