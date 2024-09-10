@@ -25,37 +25,48 @@
     </MudGrid>
 </MudPaper>
 
-<MudGrid>
-    <MudItem sm="6" xs="12">
-        <MudPaper Class="pa-16 ma-2" Elevation="3">
-            <MudStack>
-                <MudText Typo="Typo.h6" Color="Color.Success">Gewinner des Tages <MudIcon Icon="@Icons.Material.Outlined.Mood" Title="Favorite" /></MudText>
-                <MudText Typo="Typo.h6">Langnese Eisbecher</MudText>
-                <MudText Typo="Typo.caption">LIDL</MudText>
-                <MudSpacer/>
-                <MudText>Preis gestern: 2,98€ pro Artikel</MudText>
-                <MudText>Preis heute: 2,10€ pro Artikel</MudText>
-                <MudText Color="Color.Success"><strong>Veränderung: - 0.49€ [-51%]</strong></MudText>
-                <MudButton  FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
-            </MudStack>
-        </MudPaper>
-    </MudItem>
-    <MudItem sm="6" xs="12">
-        <MudPaper Class="pa-16 ma-2" Elevation="3">
-            <MudStack>
-                <MudText Typo="Typo.h6" Color="Color.Error">Verlierer des Tages <MudIcon Icon="@Icons.Material.Outlined.MoodBad" Title="Favorite" /></MudText>
-                <MudText Typo="Typo.h6">Langnese Eisbecher</MudText>
-                <MudText Typo="Typo.caption">LIDL</MudText>
-                <MudSpacer />
-                <MudText>Preis gestern: 2,98€ pro Artikel</MudText>
-                <MudText>Preis heute: 2,10€ pro Artikel</MudText>
-                <MudText Color="Color.Error"><strong>Veränderung: - 0.49€ [-51%]</strong></MudText>
-                <MudButton FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
-            </MudStack>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+@if (_dailyStats is not null)
+{
+    <MudGrid>
+        <MudItem sm="6" xs="12">
+            <MudPaper Class="pa-16 ma-2" Elevation="3">
+                <MudStack>
+                    <MudText Typo="Typo.h6" Color="Color.Success">Gewinner des Tages <MudIcon Icon="@Icons.Material.Outlined.Mood" Title="Favorite" /></MudText>
+                    <MudText Typo="Typo.h6">@_dailyStats.MinName</MudText>
+                    <MudText Typo="Typo.caption">@_dailyStats.MinStore</MudText>
+                    <MudSpacer />
+                    <MudText>Preis gestern: @_dailyStats.MinPriceBefore€ pro Artikel</MudText>
+                    <MudText>Preis heute: @_dailyStats.MinPrice€ pro Artikel</MudText>
+                    <MudText Color="Color.Success">
+                        <strong>
+                            Veränderung: - @(_dailyStats.MinPriceBefore - _dailyStats.MinPrice)€ [@((((_dailyStats.MinPrice - _dailyStats.MinPriceBefore) / _dailyStats.MinPriceBefore) * 100).ToString("F2"))%]
+                        </strong>
+                     </MudText>
+                    <MudButton Href=@_hrefMinProduct FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+        <MudItem sm="6" xs="12">
+            <MudPaper Class="pa-16 ma-2" Elevation="3">
+                <MudStack>
+                    <MudText Typo="Typo.h6" Color="Color.Error">Verlierer des Tages <MudIcon Icon="@Icons.Material.Outlined.MoodBad" Title="Favorite" /></MudText>
+                    <MudText Typo="Typo.h6">@_dailyStats.MaxName</MudText>
+                    <MudText Typo="Typo.caption">@_dailyStats.MaxStore</MudText>
+                    <MudSpacer />
+                    <MudText>Preis gestern: @_dailyStats.MaxPriceBefore€ pro Artikel</MudText>
+                    <MudText>Preis heute: @_dailyStats.MaxPrice€ pro Artikel</MudText>
+                    <MudText Color="Color.Error">
+                        <strong>
+                            Veränderung: +@(_dailyStats.MaxPrice - _dailyStats.MaxPriceBefore)€ [+@((((_dailyStats.MaxPrice - _dailyStats.MaxPriceBefore) / _dailyStats.MaxPriceBefore) * 100).ToString("F2"))%]
+                        </strong>
+                    </MudText>
+                    <MudButton Href=@_hrefMaxProduct FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
 
+}
 
 <div style="position: absolute; right: 0; top: 80px;">
 @if (_canConnect)

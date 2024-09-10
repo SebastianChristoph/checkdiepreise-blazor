@@ -19,6 +19,24 @@ namespace CheckDiePreise.Data.Services
             return products;
         }
 
+        public async Task<DailyStats> GetLastDailyStat()
+        {
+            DailyStats dailyStat = await _context.DailyStats
+                                          .OrderByDescending(d => d.Date)
+                                          .FirstOrDefaultAsync();
+            return dailyStat;
+        }
+
+        public async Task<List<ProductChange>> GetAllProductChangesOfProductAsync(string store, string identifier)
+        {
+            List<ProductChange> productChanges = await Task.FromResult(_context.ProductChanges
+                .Where(p=> p.Store == store && p.Identifier == identifier)
+                .ToList());
+            return productChanges;
+        }
+
+
+
         public async Task<Dictionary<string, Dictionary<string, List<ProductChange>>>> GetGroupedProductsAsync(string productName, bool searchAll, string trend, Dictionary<string, bool> searchStores)
         {
             // Liste der Stores, die durchsucht werden sollen

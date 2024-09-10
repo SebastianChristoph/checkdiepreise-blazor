@@ -1,0 +1,25 @@
+﻿@page "/product/{store}/{name}-{identifier}"
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudText Typo="Typo.h4">Produktdetails</MudText>
+        <MudText Typo="Typo.h6">@Name [@Identifier]</MudText>
+        <MudText Typo="Typo.caption">@Store</MudText>
+    </MudItem>
+</MudGrid>
+
+@if(_productChanges is not null)
+{
+
+<MudGrid>
+        @foreach(var productChange in _productChanges)
+        {
+            <MudItem xs="12">
+                <MudText>@productChange.Date @productChange.Price @productChange.Trend</MudText>
+            </MudItem>
+        }
+    </MudGrid>
+    
+}
+
+

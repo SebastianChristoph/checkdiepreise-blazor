@@ -19,13 +19,8 @@ else
     builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
 }
-
-
-
-// Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-//builder.Services.AddDbContextFactory<DataContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddScoped<PriceService>();
 builder.Services.AddRadzenComponents();
 builder.Services.AddMudServices();

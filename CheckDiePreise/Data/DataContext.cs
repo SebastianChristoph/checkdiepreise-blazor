@@ -18,31 +18,8 @@ public class DataContext : DbContext
     {
         Configuration = configuration;
     }
-
-
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    optionsBuilder.UseSqlite(Configuration.GetConnectionString("SQLiteDataDB"));
-    //}
-
-    //protected override void OnModelCreating(ModelBuilder modelBuilder)
-    //{
-    //    var product1 = new Product
-    //    {
-    //        Id = Guid.NewGuid(),
-    //        Name = "Nudeln",
-    //    };
-
-    //    var product2 = new Product
-    //    {
-    //        Id = Guid.NewGuid(),
-    //        Name = "Autos",
-    //    };
-
-    //    modelBuilder.Entity<Product>().ToTable("Product").HasData(product1, product2);
-
-    //}
     public DbSet<ProductChange> ProductChanges { get; set; }
+    public DbSet<DailyStats> DailyStats { get; set; }
 
 }
 
