@@ -12,15 +12,18 @@
         
         
         <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
-           
-            <MudTextField style="width: 70%; height: 50px;" Label="Schnellsuche" Variant="MudBlazor.Variant.Filled" @bind-Value="_quicksearch" />
-            <MudIconButton Icon="@Icons.Material.Filled.Search" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Size="Size.Small" />
+            <div style="height: 30px; display:flex; gap: 1em;">
+                <MudTextField style="height: 35px" Variant="MudBlazor.Variant.Outlined" @bind-Value="_quicksearch" />
+                 <MudTooltip Text="Produkt suchen">
+                    <MudIconButton Href=@($"/search/{_quicksearch}") Icon="@Icons.Material.Filled.Search" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Size="Size.Small" />
+                </MudTooltip>
+            </div>
         </MudHidden>
         <MudTooltip Text="eMail">
             <MudIconButton Icon="@Icons.Material.Filled.Email" Color="Color.Inherit" Edge="Edge.End" />
         </MudTooltip>
         <MudTooltip Text="Zur Git-Repo">
-            <MudIconButton Icon="@Icons.Material.Filled.Code" Color="Color.Inherit" Edge="Edge.End" />
+            <MudIconButton Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" Icon="@Icons.Material.Filled.ForkRight" Color="Color.Inherit" Edge="Edge.End" />
         </MudTooltip>
             
        
@@ -28,7 +31,7 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <MudNavMenu>
-            <MudNavLink OnClick="@((e) => DrawerToggle())" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
+            <MudNavLink OnClick="@((e) => DrawerToggle(""))" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("search"))" Icon="@Icons.Material.Filled.ManageSearch">Produkt suchen</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("analysis"))" Icon="@Icons.Material.Filled.Dataset">Store Analyse</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("about"))" Icon="@Icons.Material.Filled.Info">Über diese Seite</MudNavLink>
@@ -47,7 +50,7 @@
         <MudStack Row="true" Reverse="true">
         <MudLink Href="/impressum" Class="mr-4" Color="Color.Dark">Impressum</MudLink>
         <MudLink Href="/datenschutz" Class="mr-4" Color="Color.Dark">Datenschutz</MudLink>
-        <MudLink Class="mr-4" Color="Color.Dark">Copyright 2024</MudLink>
+        <MudText Class="mr-4" Color="Color.Dark">Copyright 2024</MudText>
         </MudStack>
     </footer>
 </MudLayout>

@@ -11,14 +11,18 @@ namespace CheckDiePreise.Components.Pages
         private Dictionary<string, List<DataItem>> _chartData = [];
         private string _store = string.Empty;
         private bool _displayUnit = true;
+        private List<string> _availableStores = [];
+        private bool _showInfo = true;
 
-        [Inject] 
-        private PriceService PriceService { get; set; } = null!;
+        [Inject] PriceService PriceService { get; set; } = null!;
+
+        [Inject] IConfiguration Configuration { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
             base.OnInitialized();
-            _storePriceChanges = await PriceService.GetStorePriceChangesByStore("LIDL");
+            _availableStores = Configuration.GetValue<string>("Stores").Split(",").ToList();
+            _availableStores.Sort();
         }
 
 
@@ -75,6 +79,17 @@ namespace CheckDiePreise.Components.Pages
                 return _displayUnit ? (double)lastPriceCHange.PriceUnit : (double)lastPriceCHange.PriceBulk;
             }
             else return 0;
+        }
+
+        private void SetPriceUnit(bool status)
+        {
+            _displayUnit = status;
+            DrawChart(_store);
+        }
+
+        private void CloseInfo()
+        {
+            _showInfo = false;
         }
 
         private static string FormatAsDouble(object value)

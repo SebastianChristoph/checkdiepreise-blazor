@@ -77,7 +77,7 @@ namespace CheckDiePreise.Data.Services
 
             var filteredProducts = products
                 .AsParallel()
-                .Where(p => Fuzz.Ratio(p.Name.ToLower(), productName.ToLower()) > 70)
+                .Where(p => Fuzz.Ratio(p.Name.ToLower(), productName.ToLower()) > 50)
                 .ToList();
 
             var groupedProducts = filteredProducts

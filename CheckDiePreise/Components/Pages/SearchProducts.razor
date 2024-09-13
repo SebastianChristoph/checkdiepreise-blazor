@@ -1,4 +1,6 @@
 ﻿@page "/search"
+@page "/search/{product}"
+
 @rendermode InteractiveServer
 @using CheckDiePreise.Data.Models
 @using Radzen
@@ -69,7 +71,7 @@
             </MudItem>
         </MudHidden>
     </MudGrid>  
-    <MudButton class="mt-4" Variant="MudBlazor.Variant.Filled" Color="Color.Primary" OnClick=" SearchProductChanges">Produkt suchen</MudButton>
+    <MudButton class="mt-4" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" OnClick=" SearchProductChanges">Produkt suchen</MudButton>
 </MudPaper>
 
 
@@ -107,7 +109,7 @@
 
                 <MudStack Row="true" Reverse="true">
                     <MudTooltip Text="Diagramm zurücksetzen">
-                        <MudFab OnClick="DeleteAllSeriesInChart" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Replay" Size="Size.Small" />
+                        <MudFab OnClick="DeleteAllSeriesInChart" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Replay" Size="Size.Small" />
                     </MudTooltip>
                 </MudStack>
 
@@ -118,6 +120,7 @@
 
         @* ---------- STORES ----------------------- *@
         <MudPaper Class="pa-16 ma-2" Elevation="3">
+            <MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4">Gefundene Produkte:</MudText>
 
             <MudExpansionPanels MultiExpansion="true">
 

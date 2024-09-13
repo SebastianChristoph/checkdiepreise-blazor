@@ -28,19 +28,25 @@ public partial class SearchProducts
 
     private Dictionary<string, List<ProductChange>> allSeriesInChart = [];
 
+    [Parameter] public string Product { get; set; }
 
     [Inject] private PriceService PriceService { get; set; } = null!;
     [Inject] IConfiguration Configuration { get; set; } = null!;
-
     [Inject] ISnackbar Snackbar { get; set; } = null!;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _availableStores = Configuration.GetValue<string>("Stores").Split(",").ToList();
-        foreach(string store in _availableStores)
+        foreach (string store in _availableStores)
         {
             _searchStores.Add(store, false);
+        }
+
+        if (Product is not null)
+        {
+            _productName = Product;
+            SearchProductChanges();
         }
     }
 

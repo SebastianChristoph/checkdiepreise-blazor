@@ -4,24 +4,35 @@
 @using Radzen.Blazor
 
 <MudPaper Class="pa-16 ma-2" Elevation="3">
+    <MudText Typo="Typo.h4">Supermarkt Analyse</MudText>
+
+    @if (_showInfo)
+    {
+        <MudAlert Class="my-4" Severity="Severity.Info" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true" CloseIconClicked="CloseInfo">
+            Analaysieren Sie hier die Preistrends der einzelnen Supermärkte und deren Kategorien. Sie können entscheiden, ob Sie sich die Preise pro Stk oder pro Einheit anzeigen lassen.
+        </MudAlert>
+    }
+
+
     <MudGrid>
         <MudItem xs="12">
-            <MudContainer Class="d-flex align-center justify-center py-4">
-                <MudButtonGroup Color="Color.Primary" Variant="MudBlazor.Variant.Filled">
-                    <MudButton OnClick='() =>DrawChart("ALDI")'>ALDI</MudButton>
-                    <MudButton OnClick='() =>DrawChart("LIDL")'>LIDL</MudButton>
-                    <MudButton OnClick='() =>DrawChart("REWE")'>REWE</MudButton>
-                </MudButtonGroup>
-            </MudContainer>
-        </MudItem>
+          
+            <MudButtonGroup Color="Color.Secondary" Variant="MudBlazor.Variant.Filled" Class="mb-4">
 
-        <MudItem xs="12">
-            <MudContainer Class="d-flex align-center justify-center py-4">
-                <MudText>Zeige Preise in Preis/Stk.</MudText>
-                <MudSwitch @bind-Value="_displayUnit" Label="Zeige Preise in Preis/." Color="Color.Primary" />
-            </MudContainer>
-        </MudItem>
+                @foreach(var store in _availableStores)
+                {
+                    <MudButton OnClick='() =>DrawChart(store)'>@store</MudButton>
+                }
+            </MudButtonGroup>
+           
+            <br/>
 
+            <MudButtonGroup Color="Color.Tertiary" Variant="MudBlazor.Variant.Filled">
+                <MudButton OnClick='() =>SetPriceUnit(true)'>Preise in €/Stk</MudButton>
+                <MudButton OnClick='() =>SetPriceUnit(false)'>Preise in €/Einheit</MudButton>
+            </MudButtonGroup>
+          
+        </MudItem>
 
         @if (string.IsNullOrEmpty(_store))
         {
@@ -32,16 +43,24 @@
         else
         {
             <MudItem xs="12">
-                <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store</MudText>
+                @if (_displayUnit)
+                {
+                    <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store in Preis/Stk</MudText>
+                }
+                else
+                {
+                    <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store in Preis/Einheit</MudText>
+                }
+                
             </MudItem>
         }
         
 
-        <MudItem xs="12">
+        <MudItem xs="12" Style="min-height: 45vh;">
 
             @if(_chartData.Count > 0)
             {
-                <RadzenChart>
+                <RadzenChart ColorScheme=ColorScheme.Palette>
 
                     @foreach (var category in _chartData)
                     {
@@ -55,20 +74,21 @@
                     <RadzenCategoryAxis Padding="20" />
                     <RadzenValueAxis Min="0" Step="1" Formatter="@FormatAsDouble">
                         <RadzenGridLines Visible="true" />
-                        <RadzenAxisTitle Text="Preis in €" />
+
+                        @if (_displayUnit)
+                        {
+                            <RadzenAxisTitle Text="Preis in €/Stk" />
+                        }
+                        else
+                        {
+                            <RadzenAxisTitle Text="Preis in €/Einheit" />
+                        }
+
+                        
                     </RadzenValueAxis>
                 </RadzenChart>
             }
             </MudItem>
-
-@*     @foreach(KeyValuePair<string, List<DataItem>> data in _chartData)
-    {
-        <MudText>@data.Key</MudText>
-        @foreach (var dataPoint in data.Value)
-        {
-            <MudText>@dataPoint.Date : @dataPoint.Price</MudText>
-        }
-    } *@
     </MudGrid>
 </MudPaper>
 

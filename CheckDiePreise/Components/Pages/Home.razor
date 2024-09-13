@@ -15,7 +15,7 @@
                     <br />
                     Erkunde selbst die Daten oder hilf mit, noch mehr Supermärkte, Drogerien oder Baumärkte hinzuzufügen.
                 </MudText>
-                <MudButton Href="/search" Style="max-width: 300px;" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zur Produktsuche</MudButton>
+                <MudButton Href="/search" Style="max-width: 300px;" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Produktsuche</MudButton>
             </MudStack>
         </MudItem>
 
@@ -42,7 +42,7 @@
                             Veränderung: - @(_dailyStats.MinPriceBefore - _dailyStats.MinPrice)€ [@((((_dailyStats.MinPrice - _dailyStats.MinPriceBefore) / _dailyStats.MinPriceBefore) * 100).ToString("F2"))%]
                         </strong>
                      </MudText>
-                    <MudButton Href=@_hrefMinProduct FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
+                    <MudButton Href=@_hrefMinProduct FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zum Produkt</MudButton>
                 </MudStack>
             </MudPaper>
         </MudItem>
@@ -60,7 +60,7 @@
                             Veränderung: +@(_dailyStats.MaxPrice - _dailyStats.MaxPriceBefore)€ [+@((((_dailyStats.MaxPrice - _dailyStats.MaxPriceBefore) / _dailyStats.MaxPriceBefore) * 100).ToString("F2"))%]
                         </strong>
                     </MudText>
-                    <MudButton Href=@_hrefMaxProduct FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Primary">Zum Produkt</MudButton>
+                    <MudButton Href=@_hrefMaxProduct FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zum Produkt</MudButton>
                 </MudStack>
             </MudPaper>
         </MudItem>

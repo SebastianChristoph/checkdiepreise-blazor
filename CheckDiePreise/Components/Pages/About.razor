@@ -1,6 +1,157 @@
 ﻿@page "/about"
 <MudPaper Class="pa-16 ma-2" Elevation="3">
-    <MudText Typo="Typo.h4">About</MudText>
+   
+    <MudPaper Class="pa-4 mb-4" Elevation="1">
+        <MudText Typo="Typo.h4">Wie funktioniert das hier?</MudText>
+        <MudText Typo="Typo.caption">Und überhaupt: Wozu das ganze?</MudText>
+        <MudDivider Class="my-4"/>
+        <MudText>
+            Erfahre auf dieser Seite alles über die eingesetzten Scraper, über JSONS, Daten-Visualisierung und Code.
+            Inspiriert wurde diese Seite von <MudLink Href="https://heisse-preise.io/" Target="_blank">heisse-preise.io </MudLink>, die für den österreichischen Markt Analysen durchführt.
+        </MudText>
+    </MudPaper>
+
+    <MudExpansionPanels MultiExpansion="true">
+
+        @* Woher kommen die Daten? *@
+        <MudExpansionPanel>
+            <TitleContent>
+                <div class="d-flex">
+                    <MudIcon Color=Color.Secondary Icon="@Icons.Material.Filled.Info" class="mr-3"></MudIcon>
+                    <MudText><strong>Woher kommen die Daten?</strong></MudText>
+                </div>
+            </TitleContent>
+            <ChildContent>
+                Die Daten und Preise sind frei in den Online-Shops zugänglich. Wenn man z.B. die Seite
+                <br />
+                <br />
+                <MudLink Href="https://www.kaufland.de/item/search/?search_value=kartoffel">
+                https://www.kaufland.de/item/search/?search_value=kartoffel
+                </MudLink>
+                <br />
+                <br />
+
+                aufruft, erhält man viele Artikel zum Suchwort Kartoffel. Mit automatisierten
+                Scripts kann man den Quellcode dieser Website auslesen und die Preise
+                auslesen. 
+                <br/>
+                (Versuch es selbst und lass dir mit einem Rechtsklick auf die Website den
+                Seiten-Quellcode anzeigen).
+
+                <br/>
+                <br />
+                Eine andere Methode ist der Daten-Abruf via <strong>API</strong>.
+                Versuch es selbst: Mit dem Link
+
+                <br />
+                <br />
+                <MudLink Href="https://www.lidl.de/p/api/gridboxes/DE/de/?max=1">
+                    https://www.lidl.de/p/api/gridboxes/DE/de/?max=1
+                </MudLink>
+                <br />
+                <br />
+
+                kannst du dir einen Artikel aus dem LIDL-Onlineshop aufrufen.
+                Sieht erstmal kryptisch aus, aber bei genauerem Betrachten entdeckst du den
+                Titel, Produktbeschreibungen, den Link zum Produktbild und den Preis.
+               
+                <br />
+                <br />
+                All das lesen meine automatisierten Skripte aus und speichern es übersichtlich
+                ab - natürlich für mehr als nur ein Produkt.
+
+                <MudDivider Class="my-4"/>
+                <MudText Align="Align.End">Du möchtest dir den Code ansehen?</MudText>
+                <MudStack Row="true" Reverse="true">
+                    <MudButton Style="width: 30%" Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Git-Repo</MudButton>
+                </MudStack>
+                
+            </ChildContent>
+        </MudExpansionPanel>
+
+        @* WebScraping? *@
+        <MudExpansionPanel>
+            <TitleContent>
+                <div class="d-flex">
+                    <MudIcon Color=Color.Secondary Icon ="@Icons.Material.Filled.BugReport" class="mr-3"></MudIcon>
+                    <MudText><strong>WebScraping</strong></MudText>
+                </div>
+            </TitleContent>
+            <ChildContent>
+                Web-Scraping ist eine automatisierte Methode zum Extrahieren von Informationen von Websites. 
+                <br />
+                Ich nutze dazu Pythons Module:
+               
+                <code>bs4</code> <code>BeautifulSoup</code> und <code>requests</code>. 
+                
+                <br/>
+                <br />
+                Durch den Zugriff auf die APIs oder URLS der Online-Shops ist es möglich, alle möglichen Daten zu erhalten.
+                Diese werden in einem Python Script sortiert und am Ende in einer JSON-Datei gespeichert - und das täglich.
+
+                <br />
+                <br />
+                Die JSON, die nach dem Ordnen der Daten entsteht, sieht pro Supermarkt so aus:
+                <br />
+                <code>
+                {
+                "store": "LIDL",
+                "products" : [
+                {
+                "name": "Original Irische Butter"
+                "id" : 12345,
+                "category": "Molkerei",
+                "original_link": "www..",
+                "unit" : "pro kg",
+                "price_changes": [
+                {
+                "date": "30-10-2023",
+                "price_single": "15.99",
+                "price_bulk": "21.32"},
+                }
+                ]
+                }
+                ]
+                }
+                </code>
+
+                <br />
+                <br />
+
+                Die Hauptaufgabe von Web-Scraping besteht darin, Daten von Webseiten zu sammeln und in einer strukturierten Form zu speichern, die für weitere Analysen oder Anwendungen verwendet werden kann.
+
+                <MudDivider Class="my-4" />
+                <MudText Align="Align.End">Du möchtest dir den Code ansehen?</MudText>
+                <MudStack Row="true" Reverse="true">
+                    <MudButton Style="width: 30%" Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Git-Repo</MudButton>
+                </MudStack>
+            </ChildContent>
+        </MudExpansionPanel>
+
+        @* TechStack *@
+        <MudExpansionPanel>
+            <TitleContent>
+                <div class="d-flex">
+                    <MudIcon Color=Color.Secondary Icon="@Icons.Material.Filled.Code" class="mr-3"></MudIcon>
+                    <MudText><strong>TechStack</strong></MudText>
+                </div>
+            </TitleContent>
+            <ChildContent>
+                Panel Content
+
+                <MudDivider Class="my-4" />
+                <MudText Align="Align.End">Du möchtest dir den Code ansehen?</MudText>
+                <MudStack Row="true" Reverse="true">
+                    <MudButton Style="width: 30%" Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Git-Repo</MudButton>
+                </MudStack>
+            </ChildContent>
+        </MudExpansionPanel>
+
+
+</MudExpansionPanels>
+
+
+
 </MudPaper>
 
 @code {
