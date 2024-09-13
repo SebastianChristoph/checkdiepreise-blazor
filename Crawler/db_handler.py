@@ -16,21 +16,26 @@ def get_conn():
     return conn
 
 def post_random():
+    print("Start POST random")
     name = random.choice(names)
     date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     identifier = random.randint(100000, 999999999999999999)
-    price = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
+    price_unit = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
+    unit_name ="Stk"
+    price_bulk = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
+    bulk_unit_name ="Liter"
     store = random.choice(stores)
     category = random.choice(categories)
     trend = random.choice(trends)
 
     sql_query = f"""
-    INSERT INTO [dbo].[ProductChanges] (Name, Date, Identifier, Price, Store, Category, Trend)
-    VALUES ('{name}', '{date}', '{identifier}', {price}, '{store}', '{category}', '{trend}');
+    INSERT INTO [dbo].[ProductChanges] (Name, Date, Identifier, PriceUnit, UnitName, PriceBulk, BulkUnitName, Store, Category, Trend)
+    VALUES ('{name}', '{date}', '{identifier}', {price_unit},'{unit_name}', {price_bulk},'{bulk_unit_name}', '{store}', '{category}', '{trend}');
     """
     
     with get_conn() as conn:
         cursor = conn.cursor()
         cursor.execute(sql_query)
+    print("FINISHED POST random")
 
 post_random()
