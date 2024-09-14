@@ -10,18 +10,18 @@ public partial class MainLayout
 
     bool _drawerOpen = true;
     private string _quicksearch ="Produkt-Schnellsuche";
-    private string? _connectionString;
+    //private string? _connectionString;
 
     [Inject] 
     private NavigationManager NavigationManager { get; set; } = null!;
 
     [Inject] IConfiguration Configuration { get; set; } = null!;
 
-    protected override async Task OnInitializedAsync()
-    {
-        base.OnInitialized();
-        _connectionString = Configuration.GetConnectionString("DefaultConnection");
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    base.OnInitialized();
+    //    _connectionString = Configuration.GetConnectionString("DefaultConnection");
+    //}
     void DrawerToggle(string page)
     {
         _drawerOpen = !_drawerOpen;
