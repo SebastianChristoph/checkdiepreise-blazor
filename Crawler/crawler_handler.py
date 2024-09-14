@@ -2,7 +2,7 @@ import db_handler
 import datetime
 import re
 
-SHOW_PRINTS = True
+SHOW_PRINTS = False
 TO_AZURE = True
 
 class Crawler_Handler:
@@ -56,7 +56,7 @@ class Crawler_Handler:
 
     def clean_name(self, name):
 
-        forbidden_characters = ["|", '"', "\\", "/"]
+        forbidden_characters = ["|", '"', "\\", "/", "'"]
 
         for char in forbidden_characters:
             name = name.replace(char, "")

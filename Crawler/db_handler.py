@@ -6,7 +6,7 @@ import pypyodbc as odbc
 import sqlite3
 import os
 
-SHOW_PRINTS = True
+SHOW_PRINTS = False
 
 connection_string = f"Driver={{ODBC Driver 18 for SQL Server}};Server=tcp:{secrets.server},1433;Database={secrets.db_name};Uid={secrets.username};Pwd={secrets.password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
 SQLITE_DB_NAME = "LocalSqliteDb.db"
@@ -108,7 +108,6 @@ def post_price_change_to_local_sqlite_db(product, trend):
             sqlite_connection.close()
             if SHOW_PRINTS : print("SQL Verbindung geschlossen")
 
-
 def post_random_price_change_to_local_sqlite_db():
     names = ['Product A', 'Product B', 'Product C', 'Product D']
     stores = ["LIDL", "REWE", "ALDI"]
@@ -180,16 +179,16 @@ def post_price_change_to_azure(product, trend):
             with get_conn() as conn:
                 cursor = conn.cursor()
                 cursor.execute(sql_query)
-                print("             >>> POSTED TO AZURE!")
+                if SHOW_PRINTS: print("             >>> POSTED TO AZURE!")
                 skip = True
         except Exception as e:
             tries += 1
             print("                 >>> FEHLER UPLOAD AZURE!", e)
             if tries == retries:
                 skip = True
-                print("                 >>> SKIP!")
+                if SHOW_PRINTS: print("                 >>> SKIP!")
             else:
-                print("                 >>> RETRY:", tries)
+                if SHOW_PRINTS: print("                 >>> RETRY:", tries)
 
 
 def post_random_price_change_to_azure():
@@ -217,6 +216,5 @@ def post_random_price_change_to_azure():
 def main():
     if SHOW_PRINTS: print("\n\nStart DB Handler")
     create_db_with_table()
-    #post_random_price_change_to_local_sqlite_db()
 
 main()
