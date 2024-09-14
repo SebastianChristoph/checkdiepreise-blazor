@@ -150,7 +150,7 @@
                                                 }
                                                 else if (product.Value[product.Value.Count - 1].Trend == "down")
                                                 {
-                                                    <span style="color:green;"> <MudIcon Icon="@Icons.Material.Filled.TrendingDown" class="mr-3"></MudIcon></span>  @product.Value[0].Name
+                                                    <span style="color:green;"> <MudIcon Icon="@Icons.Material.Filled.TrendingDown" class="mr-3"></MudIcon></span>          @product.Value[0].Name
                                                     <MudText Typo="Typo.body2" Color="Color.Tertiary">&nbsp;[@product.Key.ToString()]</MudText>
                                                 }
                                                 else
@@ -168,10 +168,16 @@
                                                         @foreach (ProductChange productChange in product.Value)
                                                         {
                                                             <li>
-                                                                <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.PriceUnit€/@productChange.UnitName [@productChange.PriceBulk/@productChange.BulkUnitName] [@productChange.Identifier]
+                                                                <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.PriceUnit€/@productChange.UnitName [@productChange.Baseprice/@productChange.BasepriceName] [@productChange.Identifier]
                                                             </li>
                                                         }
                                                     </ul>
+                                                    
+                                                    @if(product.Value.Count > 0){
+                                                        <MudDivider Class="mt-4"/>
+                                                        <MudLink Href="@product.Value[0].Url" Target="_blank">Zum WebShop</MudLink>
+                                                    }
+                                                    
                                                 </MudItem>
                                                 <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
                                                     <MudItem xs="2">

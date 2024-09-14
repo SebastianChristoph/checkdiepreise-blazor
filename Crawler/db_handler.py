@@ -6,11 +6,15 @@ import pypyodbc as odbc
 import sqlite3
 import os
 
+
+SHOW_PRINTS = True
+
 connection_string = f"Driver={{ODBC Driver 18 for SQL Server}};Server=tcp:{secrets.server},1433;Database={secrets.db_name};Uid={secrets.username};Pwd={secrets.password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
 SQLITE_DB_NAME = "LocalSqliteDb.db"
 TABLE_PRICE_CHANGES = "ProductChanges"
 TABLE_STORE_PRICE_CHANGES = "StorePriceChanges"
 TABLE_DAILY_STATS = "DailyStats"
+
 
 ############### LOCAL SQLITE ##########
 def create_db_with_table():
@@ -30,11 +34,12 @@ def create_db_with_table():
                                 Identifier NVARCHAR(50) NOT NULL,
                                 PriceUnit DECIMAL(18,2) NOT NULL,
                                 UnitName NVARCHAR(50) NOT NULL,
-                                PriceBulk DECIMAL(18,2) NOT NULL,
-                                BulkUnitName NVARCHAR(50) NOT NULL,
+                                Baseprice DECIMAL(18,2) NOT NULL,
+                                BasepriceName NVARCHAR(50) NOT NULL,
                                 Store NVARCHAR(255) NOT NULL,
                                 Category NVARCHAR(255),
-                                Trend NVARCHAR(50) NOT NULL
+                                Trend NVARCHAR(50) NOT NULL,
+                                Url NVARCHAR(255)
                             );
                             """
             
@@ -43,7 +48,7 @@ def create_db_with_table():
                             StoreName NVARCHAR(255) NOT NULL,
                             Date DATETIME NOT NULL,
                             PriceUnit DECIMAL(18,2) NOT NULL,
-                            PriceBulk DECIMAL(18,2) NOT NULL,
+                            Baseprice DECIMAL(18,2) NOT NULL,
                             Category NVARCHAR(255) NOT NULL);"""
             
             sql_query3 = f"""CREATE TABLE {TABLE_DAILY_STATS} (
@@ -81,26 +86,26 @@ def create_db_with_table():
     
 def post_price_change_to_local_sqlite_db(product, trend):
     try:
-        print("         POST PriceChange to DB")
+        if SHOW_PRINTS : print("         POST PriceChange to DB")
         sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
         change_date = datetime.datetime.now().strftime('%Y-%m-%d')
         cursor = sqlite_connection.cursor()
-        print("             Erfolgreich mit DB verbunden", end = " > ")
-        sql_query = f"""INSERT INTO {TABLE_PRICE_CHANGES} (Id, Name, Date, Identifier, PriceUnit, UnitName, PriceBulk, BulkUnitName, Store, Category, Trend)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?);"""
+        if SHOW_PRINTS : print("             Erfolgreich mit DB verbunden", end = " > ")
+        sql_query = f"""INSERT INTO {TABLE_PRICE_CHANGES} (Id, Name, Date, Identifier, PriceUnit, UnitName, Baseprice, BasepriceName, Store, Category, Trend, Url)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?);"""
         
-        cursor.execute(sql_query, (None, product.product_name, change_date, product.identifier, product.price_unit, product.unit_name, product.price_bulk, product.bulk_unit_name, product.store, product.category, trend))
+        cursor.execute(sql_query, (None, product.product_name, change_date, product.identifier, product.price_unit, product.unit_name, product.baseprice, product.baseprice_name, product.store, product.category, trend, product.url))
 
         sqlite_connection.commit()
-        print("Datenbank-Eintrag erfolgt", end = " > ")
+        if SHOW_PRINTS : print("Datenbank-Eintrag erfolgt", end = " > ")
         cursor.close()
 
     except Exception as e:
-        print("Verbindung fehlerhaft:", e, end = " > ")
+        if SHOW_PRINTS : print("Verbindung fehlerhaft:", e, end = " > ")
     finally:
         if sqlite_connection:
             sqlite_connection.close()
-            print("SQL Verbindung geschlossen")
+            if SHOW_PRINTS : print("SQL Verbindung geschlossen")
 
 def post_random_price_change_to_local_sqlite_db():
     names = ['Product A', 'Product B', 'Product C', 'Product D']
@@ -108,22 +113,22 @@ def post_random_price_change_to_local_sqlite_db():
     categories = ['Electronics', 'Books', 'Clothing', 'Food']
     trends = ['up', 'down']
 
-    print("POST Random Price Change")
+    if SHOW_PRINTS : print("POST Random Price Change")
     product_name = random.choice(names)
     change_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     identifier = random.randint(100000, 999999999999999999)
     price_unit = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
     unit_name ="Stk"
-    price_bulk = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
-    bulk_unit_name ="Liter"
+    baseprice = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
+    baseprice_name ="Liter"
     store = random.choice(stores)
     category = random.choice(categories)
     trend = random.choice(trends)
 
-    post_price_change_to_local_sqlite_db(product_name, change_date, identifier, price_unit, unit_name, price_bulk, bulk_unit_name, store, category, trend)
+    post_price_change_to_local_sqlite_db(product_name, change_date, identifier, price_unit, unit_name, baseprice, baseprice_name, store, category, trend)
 
 def get_latest_price_data_by_identifier_for_product_from_sqlite_db(store, identifier) -> dict:
-    print(f"         Get Price Change for {store} [{identifier}]")
+    if SHOW_PRINTS : print(f"         Get Price Change for {store} [{identifier}]")
 
     try:
         sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
@@ -148,7 +153,7 @@ def get_latest_price_data_by_identifier_for_product_from_sqlite_db(store, identi
         return None
         
     except Exception as e:
-        print("Verbindung fehlerhaft:", e)
+        if SHOW_PRINTS : print("Verbindung fehlerhaft:", e)
     finally:
         if sqlite_connection:
             sqlite_connection.close()
@@ -159,15 +164,31 @@ def get_conn():
     conn = odbc.connect(connection_string)
     return conn
 
-def post_price_change_to_azure(product_name, change_date, identifier, price_unit, unit_name, price_bulk, bulk_unit_name, store, category, trend):
+def post_price_change_to_azure(product, trend):
+    change_date = datetime.datetime.now().strftime('%Y-%m-%d')
     sql_query = f"""
-    INSERT INTO [dbo].[ProductChanges] (Name, Date, Identifier, PriceUnit, UnitName, PriceBulk, BulkUnitName, Store, Category, Trend)
-    VALUES ('{product_name}', '{change_date}', '{identifier}', {price_unit},'{unit_name}', {price_bulk},'{bulk_unit_name}', '{store}', '{category}', '{trend}');
+    INSERT INTO [dbo].[ProductChanges] (Name, Date, Identifier, PriceUnit, UnitName, Baseprice, BasepriceName, Store, Category, Trend, Url)
+    VALUES ('{product.product_name}', '{change_date}', '{product.identifier}', {product.price_unit},'{product.unit_name}', {product.baseprice},'{product.baseprice_name}', '{product.store}', '{product.category}', '{trend}', '{product.url}');
     """
-    
-    with get_conn() as conn:
-        cursor = conn.cursor()
-        cursor.execute(sql_query)
+    retries = 3
+    tries = 0
+    skip = False
+    while skip == False:
+        try:
+            with get_conn() as conn:
+                cursor = conn.cursor()
+                cursor.execute(sql_query)
+                print("             >>> POSTED TO AZURE!")
+                skip = True
+        except Exception as e:
+            tries += 1
+            print("                 >>> FEHLER UPLOAD AZURE!", e)
+            if tries == retries:
+                skip = True
+                print("                 >>> SKIP!")
+            else:
+                print("                 >>> RETRY:", tries)
+
 
 def post_random_price_change_to_azure():
 
@@ -176,7 +197,7 @@ def post_random_price_change_to_azure():
     categories = ['Electronics', 'Books', 'Clothing', 'Food']
     trends = ['up', 'down']
 
-    print("Start POST random")
+    if SHOW_PRINTS: print("Start POST random")
     product_name = random.choice(names)
     change_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     identifier = random.randint(100000, 999999999999999999)
@@ -192,7 +213,7 @@ def post_random_price_change_to_azure():
 
 
 def main():
-    print("\n\nStart DB Handler")
+    if SHOW_PRINTS: print("\n\nStart DB Handler")
     create_db_with_table()
     #post_random_price_change_to_local_sqlite_db()
 

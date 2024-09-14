@@ -11,7 +11,7 @@ namespace CheckDiePreise.Data.Models
         [Required] public string StoreName { get; set; }
         [Required] public DateTime Date { get; set; }
         [Required] public decimal PriceUnit { get; set; }
-        [Required] public decimal PriceBulk { get; set; }
+        [Required] public decimal Baseprice { get; set; }
         [Required]  public string Category { get; set; }
     }
 }

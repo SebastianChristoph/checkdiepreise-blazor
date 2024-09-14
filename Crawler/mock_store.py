@@ -6,7 +6,7 @@ RANDOM_PRODUCTS = 100
 
 def get_random_product():
     names = [['Product A', 1], ['Product B', 2], ['Product C', 3], ['Product D', 4]]
-    stores = ["LIDL", "ALDI"]
+    stores = ["MOCKSTORE"]
     categories = ['Electronics', 'Books', 'Clothing', 'Food']
 
     random_product = random.choice(names)
@@ -18,7 +18,7 @@ def get_random_product():
     bulk_unit_name ="Liter"
     store = random.choice(stores)
     category = random.choice(categories)
-    url ="www.cool.com"
+    url ="www.google.com"
 
     random_product = Product.Product(product_name, identifier, price_unit, unit_name, price_bulk, bulk_unit_name, store, category, url)
 

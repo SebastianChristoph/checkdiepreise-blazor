@@ -49,7 +49,7 @@ namespace CheckDiePreise.Components.Pages
                     data.Add(new DataItem
                     {
                         Date = entry.Date,
-                        Price = _displayUnit ? (double)entry.PriceUnit : (double)entry.PriceBulk,
+                        Price = _displayUnit ? (double)entry.PriceUnit : (double)entry.Baseprice,
                     });
 
                 }
@@ -76,7 +76,7 @@ namespace CheckDiePreise.Components.Pages
                 .FirstOrDefault();                  // Nimm das erste Element (nähestes zu heute)
             if (lastPriceCHange != null)
             {
-                return _displayUnit ? (double)lastPriceCHange.PriceUnit : (double)lastPriceCHange.PriceBulk;
+                return _displayUnit ? (double)lastPriceCHange.PriceUnit : (double)lastPriceCHange.Baseprice;
             }
             else return 0;
         }
