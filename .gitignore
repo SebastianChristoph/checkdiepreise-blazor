@@ -398,7 +398,7 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /Crawler/secrets.py
-/CheckDiePreise/appsettings.json
+# /CheckDiePreise/appsettings.json
 /CheckDiePreise/ProductChanges.db
 /CheckDiePreise/ProductChanges.db-shm
 /CheckDiePreise/ProductChanges.db-wal
