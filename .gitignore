@@ -403,3 +403,4 @@ FodyWeavers.xsd
 /CheckDiePreise/ProductChanges.db-shm
 /CheckDiePreise/ProductChanges.db-wal
 /LocalSqliteDb.db
+/debug.html
