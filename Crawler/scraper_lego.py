@@ -125,7 +125,7 @@ def get_products_from_site(url, category):
 def get_products_from_shop():
     current = 1
     get_category_sites()
-    # iteration = 0
+    iteration = 0
     for category_site in categories:
         current += 1
         if "?" in categories[category_site]["url"]:
@@ -133,9 +133,9 @@ def get_products_from_shop():
 
         get_products_from_site(categories[category_site]["url"], categories[category_site]["category"])
 
-        # iteration += 1
-        # if iteration == 3:
-        #     break
+        iteration += 1
+        if iteration == 3:
+            break
     
 
 

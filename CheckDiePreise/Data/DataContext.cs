@@ -8,11 +8,6 @@ public class DataContext : DbContext
 {
     protected readonly IConfiguration Configuration;
 
-    //public DataContext(IConfiguration configuration)
-    //{
-    //    Configuration = configuration;
-    //}
-
     public DataContext(DbContextOptions<DataContext> options, IConfiguration configuration)
         : base(options)
     {

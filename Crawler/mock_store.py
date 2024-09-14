@@ -2,7 +2,8 @@ import crawler_handler
 import random 
 import Product
 
-RANDOM_PRODUCTS = 100
+
+RANDOM_PRODUCTS = 20
 
 def get_random_product():
     names = [['Product A', 1], ['Product B', 2], ['Product C', 3], ['Product D', 4]]

@@ -57,6 +57,7 @@ namespace CheckDiePreise.Data.Services
                 .ToList();
 
             IQueryable<ProductChange> query = _context.ProductChanges.AsQueryable();
+            string sql = query.ToQueryString();
 
             if (!searchAll)
             {

@@ -6,7 +6,6 @@ import pypyodbc as odbc
 import sqlite3
 import os
 
-
 SHOW_PRINTS = True
 
 connection_string = f"Driver={{ODBC Driver 18 for SQL Server}};Server=tcp:{secrets.server},1433;Database={secrets.db_name};Uid={secrets.username};Pwd={secrets.password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
@@ -32,9 +31,9 @@ def create_db_with_table():
                                 Name NVARCHAR(255) NOT NULL,
                                 Date DATETIME NOT NULL,
                                 Identifier NVARCHAR(50) NOT NULL,
-                                PriceUnit DECIMAL(18,2) NOT NULL,
+                                PriceUnit NUMERIC(18,2) NOT NULL,
                                 UnitName NVARCHAR(50) NOT NULL,
-                                Baseprice DECIMAL(18,2) NOT NULL,
+                                Baseprice NUMERIC(18,2) NOT NULL,
                                 BasepriceName NVARCHAR(50) NOT NULL,
                                 Store NVARCHAR(255) NOT NULL,
                                 Category NVARCHAR(255),
@@ -85,16 +84,18 @@ def create_db_with_table():
         print("Found SQLite DB")
     
 def post_price_change_to_local_sqlite_db(product, trend):
+    change_date = datetime.datetime.now().strftime('%Y-%m-%d')
     try:
         if SHOW_PRINTS : print("         POST PriceChange to DB")
         sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
-        change_date = datetime.datetime.now().strftime('%Y-%m-%d')
         cursor = sqlite_connection.cursor()
+        
         if SHOW_PRINTS : print("             Erfolgreich mit DB verbunden", end = " > ")
         sql_query = f"""INSERT INTO {TABLE_PRICE_CHANGES} (Id, Name, Date, Identifier, PriceUnit, UnitName, Baseprice, BasepriceName, Store, Category, Trend, Url)
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?);"""
         
-        cursor.execute(sql_query, (None, product.product_name, change_date, product.identifier, product.price_unit, product.unit_name, product.baseprice, product.baseprice_name, product.store, product.category, trend, product.url))
+        # Verwende den Decimal-Wert direkt im SQL-Query
+        cursor.execute(sql_query, (None, product.product_name, change_date, product.identifier, product.price_unit, product.unit_name, product.baseprice, product.baseprice_name,product.store, product.category, trend, product.url))
 
         sqlite_connection.commit()
         if SHOW_PRINTS : print("Datenbank-Eintrag erfolgt", end = " > ")
@@ -106,6 +107,7 @@ def post_price_change_to_local_sqlite_db(product, trend):
         if sqlite_connection:
             sqlite_connection.close()
             if SHOW_PRINTS : print("SQL Verbindung geschlossen")
+
 
 def post_random_price_change_to_local_sqlite_db():
     names = ['Product A', 'Product B', 'Product C', 'Product D']
