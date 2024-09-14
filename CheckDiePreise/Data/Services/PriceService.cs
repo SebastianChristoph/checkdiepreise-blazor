@@ -13,16 +13,6 @@ namespace CheckDiePreise.Data.Services
 
         private DataContext _context;
 
-        public async Task<List<StorePriceChange>> GetStorePriceChangesByStore(string storeName)
-        {
-            List<StorePriceChange> storePricesChanges = await Task.FromResult(_context.StorePriceChanges
-                .Where(spc => spc.StoreName == storeName)
-                .OrderBy(spc => spc.Category)
-                .ThenBy(spc => spc.Date)
-                .ToList());
-            return storePricesChanges;
-        }
-
         public async Task<Dictionary<string, List<StorePriceChange>>> GetStorePriceChangesByStoreAsync(string storeName)
         {
             // Hole die Preisänderungen und gruppiere sie nach Kategorie
@@ -86,7 +76,7 @@ namespace CheckDiePreise.Data.Services
                 .ToDictionary(
                     storeGroup => storeGroup.Key,
                     storeGroup => storeGroup
-                        .GroupBy(p => p.Name)
+                        .GroupBy(p => p.Identifier)
                         .ToDictionary(
                             nameGroup => nameGroup.Key,
                             nameGroup =>
