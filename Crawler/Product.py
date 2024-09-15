@@ -1,11 +1,10 @@
 class Product:
-    def __init__(self, product_name, identifier, priceUnit, unit_name, price_bulk, bulk_unit_name, store, category, url):
-        self.product_name = product_name
+    def __init__(self, name, identifier, price, baseprice, baseprice_unit, store, category, url):
+        self.name = name
         self.identifier = identifier
-        self.price_unit = priceUnit
-        self.unit_name = unit_name
-        self.baseprice = price_bulk
-        self.baseprice_name = bulk_unit_name
+        self.price = price
+        self.baseprice = baseprice
+        self.baseprice_unit = baseprice_unit
         self.store = store
         self.category = category
         self.url = url

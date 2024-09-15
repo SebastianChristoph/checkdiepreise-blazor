@@ -168,7 +168,7 @@
                                                         @foreach (ProductChange productChange in product.Value)
                                                         {
                                                             <li>
-                                                                <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.PriceUnit€/@productChange.UnitName [@productChange.Baseprice/@productChange.BasepriceName] [@productChange.Identifier]
+                                                                <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.Price€/Stk &nbsp; [@productChange.Baseprice/@productChange.BasepriceUnit]
                                                             </li>
                                                         }
                                                     </ul>

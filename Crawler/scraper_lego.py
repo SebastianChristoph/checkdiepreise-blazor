@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import Product
 
-SHOW_PRINTS = True
+SHOW_PRINTS = False
 
 categories = {}
 list_of_found_products = []
@@ -48,7 +48,7 @@ def get_products_from_site(url, category):
 
     if SHOW_PRINTS:
         print("#####################################################################")
-        print("Get product infos for", category)
+    print("Get product infos for", category)
     pages = get_site_pages(url)
 
     if pages == None:
@@ -75,14 +75,14 @@ def get_products_from_site(url, category):
                     continue
 
                 # name, identifier and link
-                possible_titles = product_wrapper.find_all("a", class_="ds-body-md-medium")
+                possible_names = product_wrapper.find_all("a", class_="ds-body-md-medium")
                 identifier = None
 
-                for possible_title in possible_titles:
-                    if possible_title.get("data-test") == "product-leaf-title":
+                for possible_name in possible_names:
+                    if possible_name.get("data-test") == "product-leaf-title":
                         try:
-                                title = possible_title.text
-                                original_link = "https://www.lego.com" +possible_title.get("href")
+                                name = possible_name.text
+                                original_link = "https://www.lego.com" +possible_name.get("href")
                                 identifier = original_link.split("-")[-1]
                                 break
                         except:
@@ -90,10 +90,10 @@ def get_products_from_site(url, category):
                 if identifier == None:
                     continue
 
-                #price_unit
-                price_unit = product_wrapper.find("span", class_ ="price-sm-bold")
-                if price_unit != None:
-                    price_unit = price_unit.text.replace("€", "").replace(",", ".")
+                #price
+                price = product_wrapper.find("span", class_ ="price-sm-bold")
+                if price != None:
+                    price = price.text.replace("€", "").replace(",", ".")
                 else:
                     continue
 
@@ -106,18 +106,18 @@ def get_products_from_site(url, category):
                         break
                 
                 if pieces == 0:
-                    baseprice = price_unit
-                    unit_name = "€ pro Artikel"
+                    baseprice = price
+                    baseprice_unit = "€ pro Artikel"
                 else:
-                    baseprice = round(float(price_unit) / float(pieces), 2)
-                    unit_name = "€ pro Artikel"
+                    baseprice = round(float(price) / float(pieces), 2)
+                    baseprice_unit = "€ pro Stein"
 
                 
-                product = Product.Product(title, identifier, price_unit, unit_name, baseprice, "€ pro Stein", "LEGO", category, original_link)
+                product = Product.Product(name, identifier, float(price), float(baseprice), baseprice_unit, "LEGO", category, original_link)
           
                 if product not in list_of_found_products:
                         if SHOW_PRINTS:
-                            print(identifier, title, category)
+                            print(identifier, name, category)
                         list_of_found_products.append(product)
         except Exception as e:
             print("error getting page products", e)
@@ -125,7 +125,7 @@ def get_products_from_site(url, category):
 def get_products_from_shop():
     current = 1
     get_category_sites()
-    iteration = 0
+    # iteration = 0
     for category_site in categories:
         current += 1
         if "?" in categories[category_site]["url"]:
@@ -133,12 +133,10 @@ def get_products_from_shop():
 
         get_products_from_site(categories[category_site]["url"], categories[category_site]["category"])
 
-        iteration += 1
-        if iteration == 3:
-            break
+        # iteration += 1
+        # if iteration == 2:
+        #     break
     
-
-
 get_products_from_shop()
 CrawlerHandler = crawler_handler.Crawler_Handler(list_of_found_products)
 CrawlerHandler.handle()

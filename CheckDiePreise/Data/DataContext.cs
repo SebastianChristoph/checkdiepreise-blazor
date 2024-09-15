@@ -15,7 +15,6 @@ public class DataContext : DbContext
     }
     public DbSet<ProductChange> ProductChanges { get; set; }
     public DbSet<StorePriceChange> StorePriceChanges { get; set; }
-    public DbSet<DailyStats> DailyStats { get; set; }
 
 }
 

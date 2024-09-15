@@ -9,19 +9,19 @@ def get_random_product():
     names = [['Product A', 1], ['Product B', 2], ['Product C', 3], ['Product D', 4]]
     stores = ["MOCKSTORE"]
     categories = ['Electronics', 'Books', 'Clothing', 'Food']
+    units = ['Liter', 'ml', 'Kilo', 'kg']
 
     random_product = random.choice(names)
     product_name = random_product[0]
     identifier = random_product[1]
-    price_unit = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
-    unit_name ="Stk"
-    price_bulk = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
-    bulk_unit_name ="Liter"
+    price = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
+    baseprice = round(random.uniform(10.0, 20.0), 2)  # zufälliger Preis zwischen 10 und 500
+    baseprice_unit = random.choice(units)
     store = random.choice(stores)
     category = random.choice(categories)
     url ="www.google.com"
 
-    random_product = Product.Product(product_name, identifier, price_unit, unit_name, price_bulk, bulk_unit_name, store, category, url)
+    random_product = Product.Product(product_name, identifier, price, baseprice, baseprice_unit, store, category, url)
 
     return random_product
 

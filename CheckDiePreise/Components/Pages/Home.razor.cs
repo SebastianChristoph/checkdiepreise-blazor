@@ -8,12 +8,12 @@ namespace CheckDiePreise.Components.Pages
     public partial class Home
     {
         private string? _connectionString;
-        private List<ProductChange> _products = [];
+        private ProductChange _maxChange;
+        private ProductChange _minChange; 
         private bool _canConnect;
         private string _usedDb = string.Empty;
-        private DailyStats _dailyStats;
-        private string _hrefMaxProduct = string.Empty;
-        private string _hrefMinProduct = string.Empty;
+        private string _hrefMinProduct;
+        private string _hrefMaxProduct;
 
         [Inject]
         private PriceService PriceService{ get; set; } = null!;
@@ -26,15 +26,28 @@ namespace CheckDiePreise.Components.Pages
             _connectionString = Configuration.GetConnectionString("DefaultConnection");
             _canConnect = PriceService.CanConnectToDatabase();
             _usedDb = Configuration.GetValue<string>("UseDb");
-            _dailyStats = await PriceService.GetLastDailyStat();
-            if(_dailyStats is not null)
+            _maxChange = await PriceService.GetTodaysProductChangeMaxAsync();
+            _minChange = await PriceService.GetTodaysProductChangeMinAsync();
+
+            if(_maxChange is null)
             {
-                _hrefMinProduct = $"/product/{_dailyStats.MinStore}/{_dailyStats.MinName}-{_dailyStats.MinIdentifier}";
-                _hrefMaxProduct = $"/product/{_dailyStats.MaxStore}/{_dailyStats.MaxName}-{_dailyStats.MaxIdentifier}";
+                _maxChange = await PriceService.GetRandomPriceChangeAsync();
+            }
+
+
+            if (_minChange is null)
+            {
+                _minChange = await PriceService.GetRandomPriceChangeAsync();
+            }
+
+            if (_minChange is not null && _maxChange is not null)
+            {
+                _hrefMinProduct = $"/product/{_minChange.Store}/{_minChange.Name}-{_minChange.Identifier}";
+                _hrefMaxProduct = $"/product/{_maxChange.Store}/{_maxChange.Name}-{_maxChange.Identifier}";
             }
         }
 
-       
+
 
     }
 }

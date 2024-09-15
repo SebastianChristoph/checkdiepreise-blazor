@@ -1,8 +1,9 @@
 import db_handler
 import datetime
 import re
+import PriceChange
 
-SHOW_PRINTS = False
+SHOW_PRINTS = True
 TO_AZURE = True
 
 class Crawler_Handler:
@@ -56,7 +57,7 @@ class Crawler_Handler:
 
     def clean_name(self, name):
 
-        forbidden_characters = ["|", '"', "\\", "/", "'"]
+        forbidden_characters = ["|", '"', "\\", "/", "'", "™"]
 
         for char in forbidden_characters:
             name = name.replace(char, "")
@@ -74,23 +75,25 @@ class Crawler_Handler:
 
         for product in self.products:
 
-            if SHOW_PRINTS: print(f"     Check <{product.product_name}>")
+            if SHOW_PRINTS: print(f"     Check <{product.name}>")
             
             # CLEAN UP
-            product.price_unit = self.clean_price_text(product.price_unit)
-            product.product_name = self.clean_name(product.product_name)
-            product.baseprice_name = self.clean_unit_text(product.baseprice_name)
+            product.price = self.clean_price_text(product.price)
+            product.name = self.clean_name(product.name)
+            product.baseprice_unit = self.clean_unit_text(product.baseprice_unit)
 
             # Check if Price-Changes
             price_changes_for_product = db_handler.get_latest_price_data_by_identifier_for_product_from_sqlite_db(product.store, product.identifier)
 
             # WENN priceChange == None : neues Produkt
             if price_changes_for_product == None:
-                if SHOW_PRINTS: print("         >>> Neues Produkt mit Preis:", product.price_unit)
+                if SHOW_PRINTS: print("         >>> Neues Produkt mit Preis:", product.price)
                 trend = "none"
-                db_handler.post_price_change_to_local_sqlite_db(product, trend)
+                new_product_price_change = PriceChange.PriceChange(product.name, today, product.identifier, product.price, product.price, product.baseprice, product.baseprice, 0, 0, product.baseprice_unit, product.store, product.category, "none", product.url)
+
+                db_handler.post_price_change_to_local_sqlite_db(new_product_price_change)
                 if TO_AZURE:
-                    db_handler.post_price_change_to_azure(product, trend)
+                    db_handler.post_price_change_to_azure(new_product_price_change)
                 
                 self.new_products += 1
                 
@@ -101,22 +104,28 @@ class Crawler_Handler:
                     if SHOW_PRINTS: print("     _____________________________________________")
                     continue
                 if SHOW_PRINTS: print("         >>> Berechne Trend")
-                if SHOW_PRINTS: print("         Alter Preis:", price_changes_for_product["price_unit_old"])
-                if SHOW_PRINTS: print("         Neuer Preis:", product.price_unit)
-                diff =  product.price_unit - price_changes_for_product["price_unit_old"]
-                if SHOW_PRINTS: print("         Differenz:", diff)
+                if SHOW_PRINTS: print("         Alter Preis:", price_changes_for_product["price_old"])
+                if SHOW_PRINTS: print("         Neuer Preis:", product.price)
+                difference =  product.price - price_changes_for_product["price_old"]
+                difference_baseprice =  product.baseprice - price_changes_for_product["basepriceprice_old"]
+                if SHOW_PRINTS: print("         Differenz:", difference, difference_baseprice)
 
-                if(diff == 0):
+                if(difference == 0 and difference_baseprice == 0):
                     if SHOW_PRINTS: print("         Kein neuer Preis, continue!")
+                    self.skipped_products += 1
                     continue
 
-                if diff > 0: 
+                if (difference ==  0 and difference_baseprice > 0) or (difference >  0 and difference_baseprice == 0) or (difference >  0 and difference_baseprice > 0): 
                     trend = "up"
                 else:
                     trend = "down"
                 if SHOW_PRINTS: print("         Trend:", trend)
 
-                db_handler.post_price_change_to_local_sqlite_db(product, trend)
+                new_price_change = PriceChange.PriceChange(product.name, today, product.identifier, product.price, price_changes_for_product["price_old"], product.baseprice, price_changes_for_product["baseprice_old"], difference, difference_baseprice, product.baseprice_unit, product.store, product.category, product.trend, product.url)
+
+                db_handler.post_price_change_to_local_sqlite_db(new_price_change)
+                if TO_AZURE:
+                    db_handler.post_price_change_to_azure(new_price_change)
                 self.updates_products += 1
                 
             if SHOW_PRINTS: print("     _____________________________________________")

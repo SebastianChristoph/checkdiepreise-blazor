@@ -13,6 +13,59 @@ namespace CheckDiePreise.Data.Services
 
         private DataContext _context;
 
+        public async Task<List<ProductChange>> GetRandomProductsAsync()
+        {
+            List<ProductChange> products = await _context.ProductChanges
+                .Take(5)                      // 10 Einträge nehmen
+                .ToListAsync();                // Asynchron abrufen
+
+            return products;
+        }
+
+        public async Task<ProductChange> GetRandomPriceChangeAsync()
+        {
+            ProductChange product = await _context.ProductChanges.FirstOrDefaultAsync();
+            return product;
+        }
+
+
+        public async Task<List<ProductChange>> GetTodaysProductChanges()
+        {
+            List<ProductChange> products = await _context.ProductChanges
+                .Where(p => p.Date == DateTime.Today)
+                .ToListAsync();
+
+            return products;
+        }
+
+        public async Task<ProductChange> GetTodaysProductChangeMaxAsync()
+        {
+            List<ProductChange> products = await _context.ProductChanges
+                .Where(p => p.Date == DateTime.Today)
+                .ToListAsync();  // Datenbankabruf ohne Sortierung
+
+            ProductChange product = products
+                .OrderByDescending(p => p.Difference)  // Sortierung auf der Clientseite
+                .FirstOrDefault();  // Das größte Element auswählen
+
+            return product;
+        }
+
+        public async Task<ProductChange> GetTodaysProductChangeMinAsync()
+        {
+
+            List<ProductChange> products = await _context.ProductChanges
+                .Where(p => p.Date == DateTime.Today)
+                .ToListAsync();  // Datenbankabruf ohne Sortierung
+
+            ProductChange product = products
+                .OrderBy(p => p.Difference)
+                .FirstOrDefault();  // Das größte Element auswählen
+
+            return product;
+        }
+
+
         public async Task<Dictionary<string, List<StorePriceChange>>> GetStorePriceChangesByStoreAsync(string storeName)
         {
             // Hole die Preisänderungen und gruppiere sie nach Kategorie
@@ -31,14 +84,6 @@ namespace CheckDiePreise.Data.Services
         {
             List<ProductChange> products = await Task.FromResult(_context.ProductChanges.ToList());
             return products;
-        }
-
-        public async Task<DailyStats> GetLastDailyStat()
-        {
-            DailyStats dailyStat = await _context.DailyStats
-                                          .OrderByDescending(d => d.Date)
-                                          .FirstOrDefaultAsync();
-            return dailyStat;
         }
 
         public async Task<List<ProductChange>> GetAllProductChangesOfProductAsync(string store, string identifier)

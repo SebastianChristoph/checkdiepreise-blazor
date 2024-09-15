@@ -32,7 +32,7 @@ namespace CheckDiePreise.Components.Pages
                 _chartData.Add(new DataItem
                 {
                     Date = prodcutChange.Date,
-                    Price = (double)prodcutChange.PriceUnit,
+                    Price = (double)prodcutChange.Price,
                 });
             }
         }
