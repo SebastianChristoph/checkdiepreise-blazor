@@ -1,6 +1,5 @@
 ﻿using CheckDiePreise.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace CheckDiePreise.Data;
 
@@ -15,6 +14,7 @@ public class DataContext : DbContext
     }
     public DbSet<ProductChange> ProductChanges { get; set; }
     public DbSet<StorePriceChange> StorePriceChanges { get; set; }
+    public DbSet<DailyReport> DailyReports { get; set; }
 
 }
 

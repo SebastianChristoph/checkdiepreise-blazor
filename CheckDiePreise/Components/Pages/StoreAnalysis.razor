@@ -12,8 +12,6 @@
             Analaysieren Sie hier die Preistrends der einzelnen Supermärkte und deren Kategorien. Sie können entscheiden, ob Sie sich die Preise pro Stk oder pro Einheit anzeigen lassen.
         </MudAlert>
     }
-
-
     <MudGrid>
         <MudItem xs="12">
           
@@ -28,8 +26,8 @@
             <br/>
 
             <MudButtonGroup Color="Color.Tertiary" Variant="MudBlazor.Variant.Filled">
-                <MudButton OnClick='() =>SetPriceUnit(true)'>Preise in €/Stk</MudButton>
-                <MudButton OnClick='() =>SetPriceUnit(false)'>Preise in €/Einheit</MudButton>
+                <MudButton OnClick='() =>SetPrice(true)'>Preise in €/Stk</MudButton>
+                <MudButton OnClick='() =>SetPrice(false)'>Preise in €/Einheit</MudButton>
             </MudButtonGroup>
           
         </MudItem>

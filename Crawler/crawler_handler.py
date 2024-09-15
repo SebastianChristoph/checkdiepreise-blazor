@@ -2,9 +2,10 @@ import db_handler
 import datetime
 import re
 import PriceChange
+import random 
 
 SHOW_PRINTS = True
-TO_AZURE = True
+TO_AZURE = False
 
 class Crawler_Handler:
     def __init__(self, products):
@@ -130,7 +131,12 @@ class Crawler_Handler:
                 
             if SHOW_PRINTS: print("     _____________________________________________")
 
+        random_product_for_report = random.choice(self.products)
+        db_handler.post_random_product_to_daily_report_sqlite(random_product_for_report)
+        if TO_AZURE:
+            db_handler.post_random_product_to_daily_report_azure(random_product_for_report)
 
+        
         print("#################################################################################")
         print("     Neue Produkte:", self.new_products)
         print("     Update Produkte:", self.updates_products)

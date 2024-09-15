@@ -3,6 +3,7 @@ using CheckDiePreise.Data.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CheckDiePreise.Components.Pages
 {
@@ -27,14 +28,44 @@ namespace CheckDiePreise.Components.Pages
 
         private void DrawChart()
         {
-            foreach(var prodcutChange in _productChanges)
+            bool foundToday = false;
+            double lastPrice = 0;
+
+            foreach (var prodcutChange in _productChanges)
             {
+                if (prodcutChange.Date == DateTime.Now)
+                {
+                    foundToday = true;
+                }
+
                 _chartData.Add(new DataItem
                 {
                     Date = prodcutChange.Date,
                     Price = (double)prodcutChange.Price,
                 });
             }
+            if (!foundToday)
+            {
+
+                _chartData.Add(new DataItem
+                {
+                    Date = DateTime.Now,
+                    Price = GetLatestPriceChange(_productChanges),
+                });
+            }
+        }
+
+        public double GetLatestPriceChange(List<ProductChange> priceChanges)
+        {
+            // Suche das Element mit dem letzten Datum
+            var lastPriceChange = priceChanges
+                .OrderByDescending(spc => spc.Date) // Sortiere absteigend nach Datum
+                .FirstOrDefault();                  // Nimm das erste Element (nähestes zu heute)
+            if (lastPriceChange != null)
+            {
+                return (double)lastPriceChange.Price;
+            }
+            else return 0;
         }
 
         private static string FormatAsDouble(object value)

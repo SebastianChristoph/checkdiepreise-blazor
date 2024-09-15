@@ -46,8 +46,5 @@ namespace CheckDiePreise.Components.Pages
                 _hrefMaxProduct = $"/product/{_maxChange.Store}/{_maxChange.Name}-{_maxChange.Identifier}";
             }
         }
-
-
-
     }
 }

@@ -11,7 +11,7 @@ connection_string = f"Driver={{ODBC Driver 18 for SQL Server}};Server=tcp:{secre
 SQLITE_DB_NAME = "LocalSqliteDb.db"
 TABLE_PRICE_CHANGES = "ProductChanges"
 TABLE_STORE_PRICE_CHANGES = "StorePriceChanges"
-TABLE_DAILY_STATS = "DailyStats"
+TABLE_DAILY_REPORTS = "DailyReports"
 
 
 ############### LOCAL SQLITE ##########
@@ -52,9 +52,22 @@ def create_db_with_table():
                             Baseprice DECIMAL(18,2) NOT NULL,
                             Category NVARCHAR(255) NOT NULL);"""
             
+            sql_query3 = f"""CREATE TABLE {TABLE_DAILY_REPORTS} (
+                            Id INTEGER PRIMARY KEY AUTOINCREMENT, -- Auto-incrementing primary key
+                            Name NVARCHAR(255) NOT NULL,
+                            Date DATETIME NOT NULL,
+                            Identifier NVARCHAR(50) NOT NULL,
+                            Price DECIMAL(18,2) NOT NULL,
+                            Baseprice DECIMAL(18,2) NOT NULL,
+                            BasepriceUnit NVARCHAR(50) NOT NULL,
+                            Store NVARCHAR(255) NOT NULL,
+                            Category NVARCHAR(255),
+                            Url NVARCHAR(255)
+                        );"""
             
             cursor.execute(sql_query)
             cursor.execute(sql_query2)
+            cursor.execute(sql_query3)
             sqlite_connection.commit()
             cursor.close()
 
@@ -92,26 +105,36 @@ def post_price_change_to_local_sqlite_db(price_change):
             sqlite_connection.close()
             if SHOW_PRINTS : print("SQL Verbindung geschlossen")
 
-# def post_random_price_change_to_local_sqlite_db():
-#     names = ['Product A', 'Product B', 'Product C', 'Product D']
-#     stores = ["LIDL", "REWE", "ALDI"]
-#     categories = ['Electronics', 'Books', 'Clothing', 'Food']
-#     trends = ['up', 'down']
+def post_random_product_to_daily_report_sqlite(product):
+    change_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
-#     if SHOW_PRINTS : print("POST Random Price Change")
-#     product_name = random.choice(names)
-#     change_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-#     identifier = random.randint(100000, 999999999999999999)
-#     price = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
-#     price = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
-#     baseprice = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
-#     baseprice_before = baseprice - 0.5;
-#     baseprice_unit ="Liter"
-#     store = random.choice(stores)
-#     category = random.choice(categories)
-#     trend = random.choice(trends)
+    store_report_for_today = get_daily_report_for_store(product.store)
+    if store_report_for_today != None:
+        if SHOW_PRINTS : print("    \nSTORE hat bereits Daily Report")
+        return
+    else:
+        try:
+            if SHOW_PRINTS : print("    \nPOST Random PriceChange to Daily Report")
+            sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
+            cursor = sqlite_connection.cursor()
+            
+            if SHOW_PRINTS : print("             Erfolgreich mit DB verbunden", end = " > ")
+            sql_query = f"""INSERT INTO {TABLE_DAILY_REPORTS} (Id, Name, Date, Identifier, Price, Baseprice, BasepriceUnit, Store, Category, Url)
+            VALUES (?,?,?,?,?,?,?,?,?,?);"""
+            
+            # Verwende den Decimal-Wert direkt im SQL-Query
+            cursor.execute(sql_query, (None, product.name, change_date, product.identifier, product.price, product.baseprice, product.baseprice_unit, product.store, product.category,product.url))
 
-#     post_price_change_to_local_sqlite_db(product_name, change_date, identifier, price, baseprice, baseprice_unit, store, category, trend)
+            sqlite_connection.commit()
+            if SHOW_PRINTS : print("Datenbank-Eintrag erfolgt", end = " > ")
+            cursor.close()
+
+        except Exception as e:
+            if SHOW_PRINTS : print("Verbindung fehlerhaft:", e, end = " > ")
+        finally:
+            if sqlite_connection:
+                sqlite_connection.close()
+                if SHOW_PRINTS : print("SQL Verbindung geschlossen")
 
 def get_latest_price_data_by_identifier_for_product_from_sqlite_db(store, identifier) -> dict:
     if SHOW_PRINTS : print(f"         Get Price Change for {store} [{identifier}]")
@@ -144,6 +167,27 @@ def get_latest_price_data_by_identifier_for_product_from_sqlite_db(store, identi
         if sqlite_connection:
             sqlite_connection.close()
             
+def get_daily_report_for_store(store):
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
+    try:
+        sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
+        cursor = sqlite_connection.cursor()
+        sql_query = f"""SELECT * FROM {TABLE_DAILY_REPORTS}
+                WHERE Store=? AND Date=?"""
+        cursor.execute(sql_query, (store, today))
+
+        # Ergebnisse abrufen
+        results = cursor.fetchall()
+        cursor.close()
+
+        return results
+    
+    except Exception as e:
+        if SHOW_PRINTS : print("Verbindung fehlerhaft:", e)
+    finally:
+        if sqlite_connection:
+            sqlite_connection.close()
+
 
 ################ AZURE #################
 def get_conn():
@@ -175,27 +219,30 @@ def post_price_change_to_azure(price_change):
             else:
                 if SHOW_PRINTS: print("                 >>> RETRY:", tries)
 
-
-# def post_random_price_change_to_azure():
-
-#     names = ['Product A', 'Product B', 'Product C', 'Product D']
-#     stores = ["LIDL", "REWE", "ALDI"]
-#     categories = ['Electronics', 'Books', 'Clothing', 'Food']
-#     trends = ['up', 'down']
-
-#     if SHOW_PRINTS: print("Start POST random")
-#     product_name = random.choice(names)
-#     change_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-#     identifier = random.randint(100000, 999999999999999999)
-#     price = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
-#     baseprice = round(random.uniform(10.0, 500.0), 2)  # zufälliger Preis zwischen 10 und 500
-#     baseprice_unit ="Liter"
-#     store = random.choice(stores)
-#     category = random.choice(categories)
-#     trend = random.choice(trends)
-
-#     post_price_change_to_azure(product_name, change_date, identifier, price, baseprice, baseprice_unit, store, category, trend)
-
+def post_random_product_to_daily_report_azure(product):
+    change_date = datetime.datetime.now().strftime('%Y-%m-%d')
+    sql_query = f"""
+    INSERT INTO [dbo].[DailyReports] (Name, Date, Identifier, Price, Baseprice, BasepriceUnit, Store, Category, Url)
+    VALUES ('{product.product_name}', '{change_date}', '{product.identifier}', {product.price}, {product.baseprice}, '{product.baseprice_unit}', '{product.store}', '{product.category}', '{product.url}');
+    """
+    retries = 3
+    tries = 0
+    skip = False
+    while skip == False:
+        try:
+            with get_conn() as conn:
+                cursor = conn.cursor()
+                cursor.execute(sql_query)
+                if SHOW_PRINTS: print("             >>> POSTED RANDOM PRODUCT TO AZURE DAILY REPORT!")
+                skip = True
+        except Exception as e:
+            tries += 1
+            print("                 >>> FEHLER UPLOAD AZURE!", e)
+            if tries == retries:
+                skip = True
+                if SHOW_PRINTS: print("                 >>> SKIP!")
+            else:
+                if SHOW_PRINTS: print("                 >>> RETRY:", tries)
 
 def main():
     if SHOW_PRINTS: print("\n\nStart DB Handler")

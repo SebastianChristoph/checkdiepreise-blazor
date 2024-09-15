@@ -49,7 +49,7 @@ namespace CheckDiePreise.Components.Pages
                     data.Add(new DataItem
                     {
                         Date = entry.Date,
-                        Price = _displayUnit ? (double)entry.PriceUnit : (double)entry.Baseprice,
+                        Price = _displayUnit ? (double)entry.Price : (double)entry.Baseprice,
                     });
 
                 }
@@ -71,17 +71,17 @@ namespace CheckDiePreise.Components.Pages
         public double GetLatestPriceChange(List<StorePriceChange> storePriceChanges)
         {
             // Suche das Element mit dem letzten Datum
-            var lastPriceCHange =  storePriceChanges
+            var lastPriceChange =  storePriceChanges
                 .OrderByDescending(spc => spc.Date) // Sortiere absteigend nach Datum
                 .FirstOrDefault();                  // Nimm das erste Element (nähestes zu heute)
-            if (lastPriceCHange != null)
+            if (lastPriceChange != null)
             {
-                return _displayUnit ? (double)lastPriceCHange.PriceUnit : (double)lastPriceCHange.Baseprice;
+                return _displayUnit ? (double)lastPriceChange.Price : (double)lastPriceChange.Baseprice;
             }
             else return 0;
         }
 
-        private void SetPriceUnit(bool status)
+        private void SetPrice(bool status)
         {
             _displayUnit = status;
             DrawChart(_store);

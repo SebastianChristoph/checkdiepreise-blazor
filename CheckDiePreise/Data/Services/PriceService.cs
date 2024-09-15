@@ -38,6 +38,15 @@ namespace CheckDiePreise.Data.Services
             return products;
         }
 
+        public async Task<List<DailyReport>> GetLastDailyReports()
+        {
+            List<DailyReport> reports = await _context.DailyReports
+                .OrderBy(r => r.Store)
+                .ToListAsync();
+
+            return reports;
+        }
+
         public async Task<ProductChange> GetTodaysProductChangeMaxAsync()
         {
             List<ProductChange> products = await _context.ProductChanges

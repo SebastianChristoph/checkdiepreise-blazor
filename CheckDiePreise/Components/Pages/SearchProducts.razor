@@ -195,6 +195,10 @@
                                                             </MudTooltip>
 
                                                         }
+
+                                                        <MudTooltip Text="Detailansicht öffnen">
+                                                            <MudIconButton Class="ml-2" Href=@($"/product/{product.Value[0].Store}/{product.Value[0].Name}-{product.Value[0].Identifier}") Icon="@Icons.Material.Filled.RemoveRedEye" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Size="Size.Medium" />
+                                                        </MudTooltip>
                                                     </MudItem>
                                                 </MudHidden>
                                             </MudGrid>
@@ -204,7 +208,6 @@
                             </MudExpansionPanels>
                         </ChildContent>
                     </MudExpansionPanel>
-
                 }
 
             </MudExpansionPanels>
