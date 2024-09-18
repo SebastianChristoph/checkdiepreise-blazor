@@ -109,7 +109,7 @@ def post_random_product_to_daily_report_sqlite(product):
     change_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
     store_report_for_today = get_daily_report_for_store(product.store)
-    if store_report_for_today != None:
+    if len(store_report_for_today) > 0:
         if SHOW_PRINTS : print("    \nSTORE hat bereits Daily Report")
         return
     else:
@@ -141,21 +141,30 @@ def get_latest_price_data_by_identifier_for_product_from_sqlite_db(store, identi
 
     try:
         sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
+       # Den Row-Factory setzen, um ein Dictionary mit den Spaltennamen als Keys zu erhalten
+        sqlite_connection.row_factory = sqlite3.Row
         cursor = sqlite_connection.cursor()
+
+        # SQL-Abfrage vorbereiten
         sql_query = f"""SELECT * FROM {TABLE_PRICE_CHANGES}
-                WHERE Store=? AND Identifier=?
-                ORDER BY Date ASC"""
+                        WHERE Store=? AND Identifier=?
+                        ORDER BY Date ASC"""
         cursor.execute(sql_query, (store, identifier))
 
         # Ergebnisse abrufen
         results = cursor.fetchall()
         cursor.close()
 
-        if len(results) > 0:        
+        # Prüfen, ob Ergebnisse vorhanden sind
+        if len(results) > 0:
+            # Den letzten Eintrag in ein Dictionary umwandeln
+            last_entry = dict(results[-1])
+
+            # Zugriff auf die relevanten Felder
             data = {
-                "date" : results[-1][2],
-                "price_old" : results[-1][4],
-                "baseprice_old" : results[-1][6],
+                "date": last_entry["Date"],
+                "price_old": last_entry["Price"],
+                "baseprice_old": last_entry["Baseprice"]
             }
             return data
 

@@ -3,50 +3,46 @@
 
 <PageTitle>Tägliche Neuigkeiten</PageTitle>
 
-<MudPaper Class="pa-16 ma-2" Elevation="3">
-    <MudPaper Class="pa-4 mb-4" Elevation="1">
-        <MudText Typo="Typo.h4">Tägliche Updates</MudText>
-        <MudDivider Class="my-4" />
-        <MudText>
-            Erfahre auf dieser Seite alles über die täglichen Dynamiken in den Webshops. Bei welchen produkten gab es Preis-Änderungen? Wurden diese teurer oder günstiger? Klicke auf das Auge, um die Detailansicht des Produktes zu öffnen.
-        </MudText>
-    </MudPaper>
-
-    
-
-    @if(ProductChanges is not null)
-    {
-
-        <MudTable Items="@ProductChanges" Hover="true" SortLabel="Sort By">
-            <HeaderContent>
-                <MudTh><MudTableSortLabel SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Identifier)">ArtNr.</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Store)">Shop</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Price)">Preis</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Difference)">Differenz</MudTableSortLabel></MudTh>
-
-                <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Baseprice)">Grundpreis </MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.DifferenceBaseprice)">Differenz </MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Trend)">Trend</MudTableSortLabel></MudTh>
-                <MudTh>Details</MudTh>
-
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd DataLabel="Identifier">@context.Identifier</MudTd>
-                <MudTd DataLabel="Store">@context.Store</MudTd>
-                <MudTd DataLabel="Name"><MudLink Href="@context.Url" Target="_blank">@context.Name</MudLink></MudTd>
-                <MudTd DataLabel="Price">@context.Price / Stk.</MudTd>
-                <MudTd DataLabel="Difference">@context.Difference€</MudTd>
-
-                <MudTd DataLabel="Baseprice">@context.Baseprice @context.BasepriceUnit</MudTd>
-                <MudTd DataLabel="DifferenceBaseprice">@context.DifferenceBaseprice€</MudTd>
-                <MudTd DataLabel="Trend">@context.Trend</MudTd>
-                <MudTd><MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Href=@($"/product/{context.Store}/{context.Name}-{context.Identifier}") /></MudTd>
-            </RowTemplate>
-            <PagerContent>
-                <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100 }" />
-            </PagerContent>
-        </MudTable>
-    }
-        
+<MudPaper Class="pa-4 mb-4" Elevation="1">
+    <MudText Typo="Typo.h4">Tägliche Updates</MudText>
+    <MudDivider Class="my-4" />
+    <MudText>
+        Erfahre auf dieser Seite alles über die täglichen Dynamiken in den Webshops. Bei welchen produkten gab es Preis-Änderungen? Wurden diese teurer oder günstiger? Klicke auf das Auge, um die Detailansicht des Produktes zu öffnen.
+    </MudText>
 </MudPaper>
+
+@if(ProductChanges is not null)
+{
+
+    <MudTable Items="@ProductChanges" Hover="true" SortLabel="Sort By">
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Identifier)">ArtNr.</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Store)">Shop</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Price)">Preis <br/>(Preis gestern)</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Difference)">Differenz</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Baseprice)">Grundpreis<br/>(Grundpreis gestern) </MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.DifferenceBaseprice)">Differenz Grundpreis</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.ProductChange, object>(x=>x.Trend)">Trend</MudTableSortLabel></MudTh>
+            <MudTh>Details</MudTh>
+
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Identifier">@context.Identifier</MudTd>
+            <MudTd DataLabel="Store">@context.Store</MudTd>
+            <MudTd DataLabel="Name"><MudLink Href="@context.Url" Target="_blank">@context.Name</MudLink></MudTd>
+            <MudTd DataLabel="Price">@context.Price€ (@context.PriceBefore€) / Stk.</MudTd>
+            <MudTd DataLabel="Difference">@context.Difference€</MudTd>
+
+            <MudTd DataLabel="Baseprice">@context.Baseprice€ (@context.BasepriceBefore€)/@context.BasepriceUnit</MudTd>
+            <MudTd DataLabel="DifferenceBaseprice">@context.DifferenceBaseprice€</MudTd>
+            <MudTd DataLabel="Trend">@context.Trend</MudTd>
+            <MudTd><MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Href=@($"/product/{context.Store}/{context.Name}-{context.Identifier}") /></MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100 }" />
+        </PagerContent>
+    </MudTable>
+}
+       

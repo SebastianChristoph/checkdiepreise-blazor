@@ -3,11 +3,11 @@ import random
 import Product
 
 
-RANDOM_PRODUCTS = 20
+RANDOM_PRODUCTS = 50
 
 def get_random_product():
     names = [['Product A', 1], ['Product B', 2], ['Product C', 3], ['Product D', 4]]
-    stores = ["MOCKSTORE"]
+    stores = ["MOCKSTORE", "MOCKSTORE2"]
     categories = ['Electronics', 'Books', 'Clothing', 'Food']
     units = ['Liter', 'ml', 'Kilo', 'kg']
 

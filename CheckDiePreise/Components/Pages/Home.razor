@@ -3,8 +3,7 @@
 
 <PageTitle>Willkommen auf CheckDiePreise!</PageTitle>
 
-<MudPaper Class="pa-16 ma-2" Elevation="3">
-    <MudGrid>
+<MudGrid>
         <MudItem sm="8" xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
             <MudStack>
                 <MudText Typo="Typo.h3">Check die Preise</MudText>
@@ -23,11 +22,10 @@
             <MudImage Fluid="true" Src="hero.png" Alt="Swedish Farm House" Class="rounded-lg" />
         </MudItem>
     </MudGrid>
-</MudPaper>
 
-@if (_minChange is not null && _maxChange is not null)
-{
-    <MudGrid>
+<MudGrid>
+    @if (_minChange is not null)
+    {
         <MudItem sm="6" xs="12">
             <MudPaper Class="pa-16 ma-2" Elevation="3">
                 <MudStack>
@@ -46,6 +44,9 @@
                 </MudStack>
             </MudPaper>
         </MudItem>
+       }
+    @if (_maxChange is not null)
+    {
         <MudItem sm="6" xs="12">
             <MudPaper Class="pa-16 ma-2" Elevation="3">
                 <MudStack>
@@ -64,9 +65,9 @@
                 </MudStack>
             </MudPaper>
         </MudItem>
+    }
     </MudGrid>
 
-}
 
 <div style="position: absolute; right: 0; top: 80px;">
 @if (_canConnect)

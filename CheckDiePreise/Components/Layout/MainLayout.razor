@@ -42,8 +42,10 @@
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>
-        <MudContainer Class="pt-8" style="min-height: 100vh;">
-            @Body
+        <MudContainer Class="pt-8" style="min-height: 100vh;max-width: 1500px;" Fixed="true">
+            <MudPaper Class="pa-8 ma-2" Elevation="3">
+                @Body
+            </MudPaper>
         </MudContainer>
         <MudContainer style="min-height: 200px;"></MudContainer>
       

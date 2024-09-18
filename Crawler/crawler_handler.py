@@ -88,7 +88,7 @@ class Crawler_Handler:
 
             # WENN priceChange == None : neues Produkt
             if price_changes_for_product == None:
-                if SHOW_PRINTS: print("         >>> Neues Produkt mit Preis:", product.price)
+                if SHOW_PRINTS: print(f"         >>> Neues Produkt mit Preis: {product.price} [{product.baseprice}]")
                 trend = "none"
                 new_product_price_change = PriceChange.PriceChange(product.name, today, product.identifier, product.price, product.price, product.baseprice, product.baseprice, 0, 0, product.baseprice_unit, product.store, product.category, "none", product.url)
 
@@ -105,10 +105,13 @@ class Crawler_Handler:
                     if SHOW_PRINTS: print("     _____________________________________________")
                     continue
                 if SHOW_PRINTS: print("         >>> Berechne Trend")
-                if SHOW_PRINTS: print("         Alter Preis:", price_changes_for_product["price_old"])
-                if SHOW_PRINTS: print("         Neuer Preis:", product.price)
+                if SHOW_PRINTS: print(f"         Alter Preis: {price_changes_for_product['price_old']}  [{price_changes_for_product['baseprice_old']} ]")
+                if SHOW_PRINTS: print(f"         Neuer Preis: {product.price} [{product.baseprice}]")
+
+                # difference = 8€ - 7€ = 1€ ( = teurer)
+                # difference = 8€ - 10€ = -2€ (= günstiger)
                 difference =  product.price - price_changes_for_product["price_old"]
-                difference_baseprice =  product.baseprice - price_changes_for_product["basepriceprice_old"]
+                difference_baseprice =  product.baseprice - price_changes_for_product["baseprice_old"]
                 if SHOW_PRINTS: print("         Differenz:", difference, difference_baseprice)
 
                 if(difference == 0 and difference_baseprice == 0):
@@ -122,7 +125,7 @@ class Crawler_Handler:
                     trend = "down"
                 if SHOW_PRINTS: print("         Trend:", trend)
 
-                new_price_change = PriceChange.PriceChange(product.name, today, product.identifier, product.price, price_changes_for_product["price_old"], product.baseprice, price_changes_for_product["baseprice_old"], difference, difference_baseprice, product.baseprice_unit, product.store, product.category, product.trend, product.url)
+                new_price_change = PriceChange.PriceChange(product.name, today, product.identifier, product.price, price_changes_for_product["price_old"], product.baseprice, price_changes_for_product["baseprice_old"], difference, difference_baseprice, product.baseprice_unit, product.store, product.category, trend, product.url)
 
                 db_handler.post_price_change_to_local_sqlite_db(new_price_change)
                 if TO_AZURE:

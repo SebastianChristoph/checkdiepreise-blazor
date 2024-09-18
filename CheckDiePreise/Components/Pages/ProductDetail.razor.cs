@@ -33,14 +33,14 @@ namespace CheckDiePreise.Components.Pages
 
             foreach (var prodcutChange in _productChanges)
             {
-                if (prodcutChange.Date == DateTime.Now)
+                if (prodcutChange.Date == DateTime.UtcNow.Date)
                 {
                     foundToday = true;
                 }
 
                 _chartData.Add(new DataItem
                 {
-                    Date = prodcutChange.Date,
+                    Date = prodcutChange.Date.ToString("dd.MM.yyyy"),
                     Price = (double)prodcutChange.Price,
                 });
             }
@@ -49,7 +49,7 @@ namespace CheckDiePreise.Components.Pages
 
                 _chartData.Add(new DataItem
                 {
-                    Date = DateTime.Now,
+                    Date = DateTime.UtcNow.Date.ToString("dd.MM.yyyy"),
                     Price = GetLatestPriceChange(_productChanges),
                 });
             }
@@ -75,7 +75,7 @@ namespace CheckDiePreise.Components.Pages
 
         public class DataItem
         {
-            public DateTime Date { get; set; }
+            public string Date { get; set; }
             public double? Price { get; set; }
         }
     }

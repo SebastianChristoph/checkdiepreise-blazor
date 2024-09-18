@@ -8,71 +8,70 @@
 
 <MudSnackbarProvider/>
 
-<MudPaper Class="pa-16 ma-2" Elevation="3">
-    <MudText Typo="Typo.h4">Produktsuche</MudText>
+<PageTitle>Produktsuche</PageTitle>
+<MudText Typo="Typo.h4">Produktsuche</MudText>
 
-    <MudGrid>
-        <MudItem sm="8" xs="12">
-            <MudTextField Label="Produktname oder Artikelnummer" Variant="MudBlazor.Variant.Outlined" @bind-Value="_productName" />
-            <MudText Typo="Typo.caption">Tipp: Eine Einzelwort-Suche ergibt bessere Resultate!</MudText>
-            <MudDivider Class="mt-8 mb-4"/>
+<MudGrid>
+    <MudItem sm="8" xs="12">
+        <MudTextField Label="Produktname oder Artikelnummer" Variant="MudBlazor.Variant.Outlined" @bind-Value="_productName" />
+        <MudText Typo="Typo.caption">Tipp: Eine Einzelwort-Suche ergibt bessere Resultate!</MudText>
+        <MudDivider Class="mt-8 mb-4"/>
           
-            <MudText Typo="Typo.body1">Suche in...</MudText>
-            <MudRadioGroup @bind-Value="_searchAll">
-                    <MudRadio Value="true" Color="Color.Primary">Allen Märkten</MudRadio>
-                    <MudRadio Value="false" Color="Color.Primary">Ausgewählten Märkten</MudRadio>
-            </MudRadioGroup>
+        <MudText Typo="Typo.body1">Suche in...</MudText>
+        <MudRadioGroup @bind-Value="_searchAll">
+                <MudRadio Value="true" Color="Color.Primary">Allen Märkten</MudRadio>
+                <MudRadio Value="false" Color="Color.Primary">Ausgewählten Märkten</MudRadio>
+        </MudRadioGroup>
 
-            @if (!_searchAll)
+        @if (!_searchAll)
+        {
+            <MudPaper Class="pa-2 ma-2">
+                <MudStack Row="true">
+
+                @foreach (string store in _availableStores)
+                {
+                    <MudSwitch @bind-Value="_searchStores[store]" Label="@store" Color="Color.Primary" />
+                }
+
+                </MudStack>
+            </MudPaper>
+        }
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+            <MudDivider Class="mt-8 mb-4" />
+        </MudHidden>
+
+        <MudRadioGroup @bind-Value="_searchTrend">
+            <MudRadio Value="@("up")" Color="Color.Primary">Nur Preissteigerungen</MudRadio>
+            <MudRadio Value="@("down")" Color="Color.Primary">Nur Preissenkungen</MudRadio>
+            <MudRadio Value="@("both")" Color="Color.Primary">Alle Preisänderungen</MudRadio>
+        </MudRadioGroup>
+
+    </MudItem>
+        
+    @* ---------- DEBUG ----------------------- *@
+    <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
+        <MudItem xs="4">
+            <MudText Typo="Typo.h6">Debug</MudText>
+            @foreach (KeyValuePair<string, bool> store in _searchStores)
             {
-                <MudPaper Class="pa-2 ma-2">
-                    <MudStack Row="true">
-
-                    @foreach (string store in _availableStores)
-                    {
-                        <MudSwitch @bind-Value="_searchStores[store]" Label="@store" Color="Color.Primary" />
-                    }
-
-                    </MudStack>
-                </MudPaper>
+                <MudText>@store.Key : @store.Value.ToString()</MudText>
             }
-            <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-                <MudDivider Class="mt-8 mb-4" />
-            </MudHidden>
 
-            <MudRadioGroup @bind-Value="_searchTrend">
-                <MudRadio Value="@("up")" Color="Color.Primary">Nur Preissteigerungen</MudRadio>
-                <MudRadio Value="@("down")" Color="Color.Primary">Nur Preissenkungen</MudRadio>
-                <MudRadio Value="@("both")" Color="Color.Primary">Alle Preisänderungen</MudRadio>
-            </MudRadioGroup>
+            <MudText>@_searchTrend</MudText>
+            <MudText>All Dates in Chart:</MudText>
+            @foreach(DateTime date in allDatesInChart)
+            {
+                <MudText>@date.ToString()</MudText>
+            }
+            @foreach (var identifier in _identifierInChart)
+            {
+                <MudText>@identifier</MudText>
+            }
 
         </MudItem>
-        
-        @* ---------- DEBUG ----------------------- *@
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
-            <MudItem xs="4">
-                <MudText Typo="Typo.h6">Debug</MudText>
-                @foreach (KeyValuePair<string, bool> store in _searchStores)
-                {
-                    <MudText>@store.Key : @store.Value.ToString()</MudText>
-                }
-
-                <MudText>@_searchTrend</MudText>
-                <MudText>All Dates in Chart:</MudText>
-                @foreach(DateTime date in allDatesInChart)
-                {
-                    <MudText>@date.ToString()</MudText>
-                }
-                @foreach (var identifier in _identifierInChart)
-                {
-                    <MudText>@identifier</MudText>
-                }
-
-            </MudItem>
-        </MudHidden>
-    </MudGrid>  
-    <MudButton class="mt-4" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" OnClick=" SearchProductChanges">Produkt suchen</MudButton>
-</MudPaper>
+    </MudHidden>
+</MudGrid>  
+<MudButton class="mt-4" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" OnClick=" SearchProductChanges">Produkt suchen</MudButton>
 
 
 @* ---------- SPINNER ----------------------- *@
@@ -168,7 +167,7 @@
                                                         @foreach (ProductChange productChange in product.Value)
                                                         {
                                                             <li>
-                                                                <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.Price€/Stk &nbsp; [@productChange.Baseprice/@productChange.BasepriceUnit]
+                                                                <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.Price€ / Stk &nbsp; [@productChange.Baseprice€ /  @productChange.BasepriceUnit]
                                                             </li>
                                                         }
                                                     </ul>

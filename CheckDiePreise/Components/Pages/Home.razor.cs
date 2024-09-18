@@ -29,20 +29,14 @@ namespace CheckDiePreise.Components.Pages
             _maxChange = await PriceService.GetTodaysProductChangeMaxAsync();
             _minChange = await PriceService.GetTodaysProductChangeMinAsync();
 
-            if(_maxChange is null)
-            {
-                _maxChange = await PriceService.GetRandomPriceChangeAsync();
-            }
 
-
-            if (_minChange is null)
-            {
-                _minChange = await PriceService.GetRandomPriceChangeAsync();
-            }
-
-            if (_minChange is not null && _maxChange is not null)
+            if (_minChange is not null)
             {
                 _hrefMinProduct = $"/product/{_minChange.Store}/{_minChange.Name}-{_minChange.Identifier}";
+            }
+
+            if (_maxChange is not null)
+            {
                 _hrefMaxProduct = $"/product/{_maxChange.Store}/{_maxChange.Name}-{_maxChange.Identifier}";
             }
         }

@@ -15,10 +15,6 @@ namespace CheckDiePreise.Components.Pages
         {
             base.OnInitialized();
             ProductChanges = await PriceService.GetTodaysProductChanges();
-            if (!ProductChanges.Any())
-            {
-                ProductChanges = await PriceService.GetRandomProductsAsync();
-            }
         }
 
     }
