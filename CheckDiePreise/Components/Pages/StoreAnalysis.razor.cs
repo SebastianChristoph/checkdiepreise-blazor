@@ -41,14 +41,14 @@ namespace CheckDiePreise.Components.Pages
 
                 foreach (var entry in category.Value)
                 {
-                    if(entry.Date == DateTime.Now)
+                    if(entry.Date == DateTime.UtcNow.Date)
                     {
                         foundToday = true;
                     }
 
                     data.Add(new DataItem
                     {
-                        Date = entry.Date,
+                        Date = entry.Date.ToString("dd.MM.yyyy"),
                         Price = _displayUnit ? (double)entry.Price : (double)entry.Baseprice,
                     });
 
@@ -60,7 +60,7 @@ namespace CheckDiePreise.Components.Pages
 
                     data.Add(new DataItem
                     {
-                        Date = DateTime.Now,
+                        Date = DateTime.UtcNow.Date.ToString(),
                         Price = GetLatestPriceChange(category.Value),
                     });
                 }
@@ -99,7 +99,7 @@ namespace CheckDiePreise.Components.Pages
 
         public class DataItem
         {
-            public DateTime Date { get; set; }
+            public string Date { get; set; }
             public double? Price { get; set; }
         }
 

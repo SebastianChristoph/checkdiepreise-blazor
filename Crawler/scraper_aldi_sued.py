@@ -12,20 +12,16 @@ categories = {}
 current = 0
 
 SHOW_PRINTS = False
+ONLY_ITERATE_3_TIMES = False
 
 def clean_category_name(input_string):
-    # Ersetze "-" durch Leerzeichen
     input_string = input_string.replace("-", " ")
-
-    # Teile den String in Wörter auf
     words = input_string.split()
 
-    # Verarbeite jedes Wort
     for i, word in enumerate(words):
         if word.lower() != "und":
             words[i] = word.capitalize()
 
-    # Verbinde die Wörter wieder zu einem String
     output_string = " ".join(words)
 
     return output_string
@@ -58,7 +54,7 @@ def get_categories_produktsortiment():
                 continue
     
 def get_categories_eigenmarken():
-    print("Get Eigenmarken")
+    if SHOW_PRINTS: print("Get Eigenmarken")
     global categories
     eigenmarken_url = "https://www.aldi-sued.de/de/produkte/eigenmarken.html"
     source = requests.get(eigenmarken_url, headers = headers).text
@@ -110,8 +106,7 @@ def getting_articles_from_shop(category, cat_url, cat_main_name, show_product_to
             max_pages += 1
 
     #maxPages auf 1, weil noch keine Möglichkeit "load more" zu aktivieren
-    if SHOW_PRINTS:
-        print("Crawl for category:", category, "[", current, "of", len(categories), "]")
+    if SHOW_PRINTS: print("Crawl for category:", category, "[", current, "of", len(categories), "]")
     
     max_pages = 1
     for page in range(1, max_pages+1):
@@ -167,9 +162,10 @@ def getting_articles_from_shop(category, cat_url, cat_main_name, show_product_to
                     # id
                     identifier = imageURL.split("/")[-1]
                 except:
-                    #print("error in imageURL or id")
                     continue   
-
+                
+                if SHOW_PRINTS == False:
+                    print(".", end="")
                 product_to_add = Product.Product(name, identifier, float(price), float(baseprice), baseprice_unit, "ALDI SUED", cat_main_name, url)
                
         
@@ -185,13 +181,14 @@ def get_products_from_shop():
     get_category_links()
     iteration = 0
     for category in categories:
-        print("Getting products for", category)
+        if SHOW_PRINTS: print("Getting products for", category)
         current += 1
         getting_articles_from_shop(category, categories[category]["url"], categories[category]["main_category"])
 
-        # iteration += 1
-        # if iteration == 7:
-        #     break
+        if ONLY_ITERATE_3_TIMES:
+            iteration += 1
+            if iteration == 7:
+                break
 
     print("Finished")
     

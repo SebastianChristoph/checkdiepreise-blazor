@@ -5,7 +5,7 @@ import pypyodbc as odbc
 import sqlite3
 import os
 
-SHOW_PRINTS = True
+SHOW_PRINTS = False
 
 connection_string = f"Driver={{ODBC Driver 18 for SQL Server}};Server=tcp:{secrets.server},1433;Database={secrets.db_name};Uid={secrets.username};Pwd={secrets.password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
 SQLITE_DB_NAME = "LocalSqliteDb.db"
@@ -81,6 +81,8 @@ def create_db_with_table():
         print("Found SQLite DB")
     
 def post_price_change_to_local_sqlite_db(price_change):
+    if SHOW_PRINTS == False:
+        print(".", end="")
     change_date = datetime.datetime.now().strftime('%Y-%m-%d')
     try:
         if SHOW_PRINTS : print("         POST PriceChange to DB")
@@ -197,6 +199,53 @@ def get_daily_report_for_store(store):
         if sqlite_connection:
             sqlite_connection.close()
 
+def get_average_store_data_from_sqlite_db():
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
+    try:
+        sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
+        cursor = sqlite_connection.cursor()
+        sql_query = f"""
+            SELECT Store, Category, AVG(Price) as avg_price, AVG(Baseprice) as avg_baseprice
+            FROM {TABLE_PRICE_CHANGES}
+            WHERE Date(Date) = ?
+            GROUP BY Store, Category"""
+        cursor.execute(sql_query, (today,))
+        rows = cursor.fetchall()
+        cursor.close()
+
+        return rows
+    
+    except Exception as e:
+        if SHOW_PRINTS : print("Verbindung fehlerhaft:", e)
+    finally:
+        if sqlite_connection:
+            sqlite_connection.close()
+
+def post_average_store_category_price_to_sqlite_db(store_category_price_change):
+    if SHOW_PRINTS == False:
+        print(".", end="")
+    try:
+        if SHOW_PRINTS : print("         POST Average Storages Prices to DB")
+        sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
+        cursor = sqlite_connection.cursor()
+        
+        if SHOW_PRINTS : print("             Erfolgreich mit DB verbunden", end = " > ")
+        sql_query = f"""INSERT INTO {TABLE_STORE_PRICE_CHANGES} (Id, StoreName, Date, Price, Baseprice, Category)
+        VALUES (?,?,?,?,?,?);"""
+        
+        # Verwende den Decimal-Wert direkt im SQL-Query
+        cursor.execute(sql_query, (None, store_category_price_change.store_name, store_category_price_change.date, store_category_price_change.price, store_category_price_change.baseprice, store_category_price_change.category))
+
+        sqlite_connection.commit()
+        if SHOW_PRINTS : print("Datenbank-Eintrag erfolgt", end = " > ")
+        cursor.close()
+    except Exception as e:
+        if SHOW_PRINTS : print("Verbindung fehlerhaft:", e, end = " > ")
+    finally:
+        if sqlite_connection:
+            sqlite_connection.close()
+            if SHOW_PRINTS : print("SQL Verbindung geschlossen")
+
 
 ################ AZURE #################
 def get_conn():
@@ -204,6 +253,8 @@ def get_conn():
     return conn
 
 def post_price_change_to_azure(price_change):
+    if SHOW_PRINTS == False:
+        print(".", end="")
     change_date = datetime.datetime.now().strftime('%Y-%m-%d')
     sql_query = f"""
     INSERT INTO [dbo].[ProductChanges] (Name, Date, Identifier, Price, PriceBefore, Baseprice, BasepriceBefore, Difference, DifferenceBaseprice, BasepriceUnit, Store, Category, Trend, Url)
@@ -229,6 +280,8 @@ def post_price_change_to_azure(price_change):
                 if SHOW_PRINTS: print("                 >>> RETRY:", tries)
 
 def post_random_product_to_daily_report_azure(product):
+    if SHOW_PRINTS == False:
+        print(".", end="")
     change_date = datetime.datetime.now().strftime('%Y-%m-%d')
     sql_query = f"""
     INSERT INTO [dbo].[DailyReports] (Name, Date, Identifier, Price, Baseprice, BasepriceUnit, Store, Category, Url)

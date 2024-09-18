@@ -14,6 +14,7 @@ namespace CheckDiePreise.Components.Pages
         private string _usedDb = string.Empty;
         private string _hrefMinProduct;
         private string _hrefMaxProduct;
+        private List<string> _availableStores = [];
 
         [Inject]
         private PriceService PriceService{ get; set; } = null!;
@@ -25,6 +26,7 @@ namespace CheckDiePreise.Components.Pages
             base.OnInitialized();
             _connectionString = Configuration.GetConnectionString("DefaultConnection");
             _canConnect = PriceService.CanConnectToDatabase();
+            _availableStores = Configuration.GetValue<string>("Stores").Split(",").ToList();
             _usedDb = Configuration.GetValue<string>("UseDb");
             _maxChange = await PriceService.GetTodaysProductChangeMaxAsync();
             _minChange = await PriceService.GetTodaysProductChangeMinAsync();

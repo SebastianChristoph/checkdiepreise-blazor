@@ -4,7 +4,7 @@ import re
 import PriceChange
 import random 
 
-SHOW_PRINTS = True
+SHOW_PRINTS = False
 TO_AZURE = False
 
 class Crawler_Handler:
@@ -21,8 +21,6 @@ class Crawler_Handler:
             db_handler.post_price_change_to_local_sqlite_db(price_change)
     
     def clean_price_text(self, price):
-
-        #print("             Price in:", price, type(price))
         try:
 
             cleaned_price = str(price)
@@ -40,8 +38,7 @@ class Crawler_Handler:
                 cleaned_price = format(cleaned_price, '.2f')
                 if (cleaned_price[-1] == "."):
                     cleaned_price = cleaned_price[:-1]
-                
-                #print("             Price out:", float(cleaned_price), type(price))
+
                 return float(cleaned_price)
             else:
                 if SHOW_PRINTS: print("No cleaning possible for:", price)
@@ -58,7 +55,7 @@ class Crawler_Handler:
 
     def clean_name(self, name):
 
-        forbidden_characters = ["|", '"', "\\", "/", "'", "™"]
+        forbidden_characters = ["|", '"', "\\", "/", "'", "™", "®"]
 
         for char in forbidden_characters:
             name = name.replace(char, "")
@@ -140,7 +137,7 @@ class Crawler_Handler:
             db_handler.post_random_product_to_daily_report_azure(random_product_for_report)
 
         
-        print("#################################################################################")
+        print("\n#################################################################################")
         print("     Neue Produkte:", self.new_products)
         print("     Update Produkte:", self.updates_products)
         print("     Skipped Produkte:", self.skipped_products)

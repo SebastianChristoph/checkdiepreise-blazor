@@ -4,6 +4,8 @@ import requests
 import Product
 
 SHOW_PRINTS = False
+ONLY_ITERATE_3_TIMES = False
+
 
 categories = {}
 list_of_found_products = []
@@ -48,7 +50,9 @@ def get_products_from_site(url, category):
 
     if SHOW_PRINTS:
         print("#####################################################################")
-    print("Get product infos for", category)
+        print("Get product infos for", category)
+    else:
+        print(".", end="")
     pages = get_site_pages(url)
 
     if pages == None:
@@ -56,11 +60,9 @@ def get_products_from_site(url, category):
 
 
     for i in range(1, pages+1):
-        if SHOW_PRINTS:
-            print(f"_______________page {i}_______________________")
+        if SHOW_PRINTS: print(f"_______________page {i}_______________________")
         url_to_scrape = f"{url}?page={i}"
-        if SHOW_PRINTS:
-            print(url_to_scrape)
+        if SHOW_PRINTS: print(url_to_scrape)
 
         try:
             s = requests.Session()
@@ -114,7 +116,8 @@ def get_products_from_site(url, category):
 
                 
                 product = Product.Product(name, identifier, float(price), float(baseprice), baseprice_unit, "LEGO", category, original_link)
-          
+                if SHOW_PRINTS == False:
+                    print(".", end="")
                 if product not in list_of_found_products:
                         if SHOW_PRINTS:
                             print(identifier, name, category)
@@ -133,9 +136,10 @@ def get_products_from_shop():
 
         get_products_from_site(categories[category_site]["url"], categories[category_site]["category"])
 
-        # iteration += 1
-        # if iteration == 2:
-        #     break
+        if ONLY_ITERATE_3_TIMES:
+            iteration += 1
+            if iteration == 7:
+                break
     
 get_products_from_shop()
 CrawlerHandler = crawler_handler.Crawler_Handler(list_of_found_products)

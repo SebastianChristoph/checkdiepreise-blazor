@@ -1,27 +1,34 @@
 ﻿@page "/"
-@* @rendermode InteractiveServer *@
 
 <PageTitle>Willkommen auf CheckDiePreise!</PageTitle>
 
 <MudGrid>
-        <MudItem sm="8" xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudStack>
-                <MudText Typo="Typo.h3">Check die Preise</MudText>
-                <MudText Typo="Typo.body1">
-                    Wie sehr gehen die Preise in deutschen Märkten nach oben oder unten? Wird Butter wirklich immer teurer? Werden Malms (IKEA) immer günstiger? <br />
-                    Um sich ein Bild verschaffen zu können, durchsuchen Roboter die Online-Shops der bekanntesten Supermärkte Deutschlands und sammeln Preise für über 240.620 Produkte - und das täglich.
-                    <br />
-                    <br />
-                    Erkunde selbst die Daten oder hilf mit, noch mehr Supermärkte, Drogerien oder Baumärkte hinzuzufügen.
-                </MudText>
-                <MudButton Href="/search" Style="max-width: 300px;" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Produktsuche</MudButton>
-            </MudStack>
-        </MudItem>
+    <MudItem sm="8" xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
+        <MudStack>
+            <MudText Typo="Typo.h3">Check die Preise</MudText>
+            <MudText Typo="Typo.body1">
+                Wie sehr gehen die Preise in deutschen Märkten nach oben oder unten? Wird Butter wirklich immer teurer? Werden Malms (IKEA) immer günstiger? <br />
+                    Um sich ein Bild verschaffen zu können, durchsuchen Roboter die Online-Shops der bekanntesten Supermärkte Deutschlands und sammeln Preise in @_availableStores.Count.ToString() WebStores - und das täglich.
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Tägliche werden die Preise aus folgenden Webshops abgerufen: <br/>
+                | @foreach (var store in _availableStores)
+                    {
+                    @($"{store} | ")
+                    }
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Erkunde selbst die Daten oder hilf mit, noch mehr Supermärkte, Drogerien oder Baumärkte hinzuzufügen.
+            </MudText>
 
-        <MudItem sm="4" xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudImage Fluid="true" Src="hero.png" Alt="Swedish Farm House" Class="rounded-lg" />
-        </MudItem>
-    </MudGrid>
+            <MudButton Href="/search" Style="max-width: 300px;" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Produktsuche</MudButton>
+        </MudStack>
+    </MudItem>
+
+    <MudItem sm="4" xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
+        <MudImage Fluid="true" Src="hero.png" Alt="Swedish Farm House" Class="rounded-lg" />
+    </MudItem>
+</MudGrid>
 
 <MudGrid>
     @if (_minChange is not null)
@@ -66,8 +73,7 @@
             </MudPaper>
         </MudItem>
     }
-    </MudGrid>
-
+</MudGrid>
 
 <div style="position: absolute; right: 0; top: 80px;">
 @if (_canConnect)
