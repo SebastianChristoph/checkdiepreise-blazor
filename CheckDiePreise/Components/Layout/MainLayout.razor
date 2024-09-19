@@ -8,7 +8,6 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">Check die Preise &nbsp;</MudText>
         <MudIcon Icon="@Icons.Material.Outlined.BarChart" Title="Favorite" />
-       @*  <MudText>@_connectionString</MudText> *@
         <MudSpacer/>
         
         
@@ -37,7 +36,7 @@
             <MudNavLink OnClick="@((e) => DrawerToggle("daily"))" Icon="@Icons.Material.Filled.CalendarToday">Tägliche Neuigkeiten</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("analysis"))" Icon="@Icons.Material.Filled.Dataset">Store Analyse</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("about"))" Icon="@Icons.Material.Filled.Info">Über diese Seite</MudNavLink>
-            <MudNavLink OnClick="@((e) => DrawerToggle("apis"))" Icon="@Icons.Material.Filled.Api">APIs</MudNavLink>
+@*             <MudNavLink OnClick="@((e) => DrawerToggle("apis"))" Icon="@Icons.Material.Filled.Api">APIs</MudNavLink> *@
             <MudNavLink OnClick="@((e) => DrawerToggle("admin"))" Icon="@Icons.Material.Filled.Login">Admin</MudNavLink>
         </MudNavMenu>
     </MudDrawer>

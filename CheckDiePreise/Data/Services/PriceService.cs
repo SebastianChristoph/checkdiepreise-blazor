@@ -65,8 +65,8 @@ namespace CheckDiePreise.Data.Services
         {
 
             List<ProductChange> products = await _context.ProductChanges
-                .Where(p => p.Date == DateTime.UtcNow.Date)
-                .ToListAsync();  // Datenbankabruf ohne Sortierung
+               .Where(p => p.Date.Date == DateTime.UtcNow.Date) // Vergleiche nur den Datumsanteil
+               .ToListAsync();
 
             ProductChange product = products
                 .OrderBy(p => p.Difference)

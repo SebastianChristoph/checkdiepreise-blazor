@@ -35,9 +35,20 @@
             <MudTd DataLabel="Price">@context.Price€ (@context.PriceBefore€) / Stk.</MudTd>
             <MudTd DataLabel="Difference">@context.Difference€</MudTd>
 
-            <MudTd DataLabel="Baseprice">@context.Baseprice€ (@context.BasepriceBefore€)/@context.BasepriceUnit</MudTd>
+            <MudTd DataLabel="Baseprice">@context.Baseprice€ (@context.BasepriceBefore€)/  @context.BasepriceUnit</MudTd>
             <MudTd DataLabel="DifferenceBaseprice">@context.DifferenceBaseprice€</MudTd>
-            <MudTd DataLabel="Trend">@context.Trend</MudTd>
+            <MudTd DataLabel="Trend">
+                
+                @if(context.Trend == "up")
+                {
+                    <span style="color:red">Preisanstieg</span>
+                }
+                else
+                {
+                    <span style="color:green">Preissenkung</span>
+                }
+
+               </MudTd>
             <MudTd><MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Href=@($"/product/{context.Store}/{context.Name}-{context.Identifier}") /></MudTd>
         </RowTemplate>
         <PagerContent>

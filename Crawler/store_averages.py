@@ -1,31 +1,42 @@
-import json
 import db_handler
-import StoreCategoryPriceChange
+import StoreCategoryAveragePrice
 import datetime 
-rows = db_handler.get_average_store_data_from_sqlite_db()
-result = {}
+from collections import defaultdict
 
-for row in rows:
-    store, category, avg_price, avg_baseprice = row
-    if store not in result:
+def calculate_store_category_averages(products):
+
+    print("\n#######################################")
+    print("\nCalculate Store Category Averages")
+
+    store_category_data = defaultdict(lambda: defaultdict(lambda: {'price_sum': 0, 'baseprice_sum': 0, 'count': 0}))
+    
+    # Aggregate data
+    for product in products:
+        store = product.store
+        category = product.category
+        store_category_data[store][category]['price_sum'] += product.price
+        store_category_data[store][category]['baseprice_sum'] += product.baseprice
+        store_category_data[store][category]['count'] += 1
+    
+    result = {}
+    for store, categories in store_category_data.items():
         result[store] = {}
-    result[store][category] = {
-        'Price': round(avg_price, 2),
-        'Baseprice': round(avg_baseprice, 2)
-    }
+        for category, stats in categories.items():
+            count = stats['count']
+            if count > 0:
+                avg_price = round(stats['price_sum'] / count , 2)
+                avg_baseprice = round(stats['baseprice_sum'] / count, 2)
+                result[store][category] = {
+                    'Price': avg_price,
+                    'Baseprice': avg_baseprice
+                }
 
-# Ergebnis anzeigen
+    date = datetime.datetime.now().strftime('%Y-%m-%d')
 
-result_json = json.dumps(result, indent=4)
+    for store, data in result.items():
+        for category, prices in data.items():
+            store_category_price_change = StoreCategoryAveragePrice.StoreCategoryPriceChange(store, date, prices['Price'], prices['Baseprice'], category)
 
-# Ergebnis anzeigen
-print(result_json)
+            db_handler.post_average_store_category_price_to_sqlite_db(store_category_price_change)
 
-
-date = datetime.datetime.now().strftime('%Y-%m-%d')
-
-for store, data in result.items():
-    for category, prices in data.items():
-        store_category_price_change = StoreCategoryPriceChange.StoreCategoryPriceChange(store, date, prices['Price'], prices['Baseprice'], category)
-
-        db_handler.post_average_store_category_price_to_sqlite_db(store_category_price_change)
+    print("\nDONE")

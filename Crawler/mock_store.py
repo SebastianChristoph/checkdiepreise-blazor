@@ -2,7 +2,6 @@ import crawler_handler
 import random 
 import Product
 
-
 RANDOM_PRODUCTS = 50
 
 def get_random_product():

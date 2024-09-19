@@ -3,6 +3,7 @@ import datetime
 import re
 import PriceChange
 import random 
+import store_averages
 
 SHOW_PRINTS = False
 TO_AZURE = False
@@ -136,7 +137,8 @@ class Crawler_Handler:
         if TO_AZURE:
             db_handler.post_random_product_to_daily_report_azure(random_product_for_report)
 
-        
+        store_averages.calculate_store_category_averages(self.products)
+
         print("\n#################################################################################")
         print("     Neue Produkte:", self.new_products)
         print("     Update Produkte:", self.updates_products)
