@@ -7,18 +7,9 @@ using MudBlazor.Services;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
-var useDb = builder.Configuration.GetValue<string>("UseDb");
-if(useDb == "SQLite")
-{
-    var connectionString = builder.Configuration.GetConnectionString("SQLiteTestConnection");
-    builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connectionString));
-}
-else
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-}
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddScoped<PriceService>();

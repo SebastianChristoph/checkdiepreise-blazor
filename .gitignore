@@ -402,10 +402,11 @@ FodyWeavers.xsd
 /CheckDiePreise/ProductChanges.db
 /CheckDiePreise/ProductChanges.db-shm
 /CheckDiePreise/ProductChanges.db-wal
-/LocalSqliteDb.db
+#/LocalSqliteDb.db
 /debug.html
 /debug2.html
 /testi.html
 /testi1.html
 /testi2.html
 /testi.json
+/Crawler/ionos.py

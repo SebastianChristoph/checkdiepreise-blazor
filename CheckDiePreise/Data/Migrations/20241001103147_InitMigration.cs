@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CheckDiePreise.Migrations
+namespace CheckDiePreise.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitMigration : Migration

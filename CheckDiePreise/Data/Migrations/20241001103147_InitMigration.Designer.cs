@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CheckDiePreise.Migrations
+namespace CheckDiePreise.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240921060952_InitMigration")]
+    [Migration("20241001103147_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
