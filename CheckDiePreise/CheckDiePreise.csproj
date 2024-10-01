@@ -20,4 +20,8 @@
     <PackageReference Include="Radzen.Blazor" Version="5.1.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
 </Project>

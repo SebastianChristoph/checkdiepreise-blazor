@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CheckDiePreise.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241001103147_InitMigration")]
+    [Migration("20241001105338_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
