@@ -17,11 +17,6 @@ public partial class MainLayout
 
     [Inject] IConfiguration Configuration { get; set; } = null!;
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    base.OnInitialized();
-    //    _connectionString = Configuration.GetConnectionString("DefaultConnection");
-    //}
     void DrawerToggle(string page)
     {
         _drawerOpen = !_drawerOpen;

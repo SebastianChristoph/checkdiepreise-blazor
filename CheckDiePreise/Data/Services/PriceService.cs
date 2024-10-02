@@ -13,68 +13,35 @@ namespace CheckDiePreise.Data.Services
 
         private DataContext _context;
 
-        public async Task<List<ProductChange>> GetRandomProductsAsync()
-        {
-            List<ProductChange> products = await _context.ProductChanges
-                .Take(5)                      // 10 Einträge nehmen
-                .ToListAsync();                // Asynchron abrufen
-
-            return products;
-        }
-
-        public async Task<ProductChange> GetRandomPriceChangeAsync()
-        {
-            ProductChange product = await _context.ProductChanges.FirstOrDefaultAsync();
-            return product;
-        }
-
-
         public async Task<List<ProductChange>> GetTodaysProductChanges()
         {
-
-            List<ProductChange> products = await _context.ProductChanges
-                .Where(p => p.Date.Date == DateTime.UtcNow.Date && (p.Difference !=0 ||  p.DifferenceBaseprice != 0)) // Vergleiche nur den Datumsanteil
+            return await _context.ProductChanges
+                .Where(p => p.Date.Date == DateTime.UtcNow.Date && (p.Difference !=0 ||  p.DifferenceBaseprice != 0))
                 .ToListAsync();
-
-            return products;
         }
 
-        public async Task<List<DailyReport>> GetLastDailyReports()
+        public async Task<DailyReport?> GetTodaysDailyReportByStore(string store)
         {
-            List<DailyReport> reports = await _context.DailyReports
-                .OrderBy(r => r.Store)
-                .ToListAsync();
-
-            return reports;
+            return await _context.DailyReports
+                .Where(r => r.Store == store)
+                .FirstOrDefaultAsync();
         }
 
-        public async Task<ProductChange> GetTodaysProductChangeMaxAsync()
+        public async Task<ProductChange?> GetTodaysProductChangeMaxAsync()
         {
-            List<ProductChange> products = await _context.ProductChanges
-              .Where(p => p.Date.Date == DateTime.UtcNow.Date) // Vergleiche nur den Datumsanteil
-              .ToListAsync();
-
-            ProductChange product = products
-                .OrderByDescending(p => p.Difference)  // Sortierung auf der Clientseite
-                .FirstOrDefault();  // Das größte Element auswählen
-
-            return product;
+            return await _context.ProductChanges
+                .Where(p => p.Date.Date == DateTime.UtcNow.Date)
+                .OrderByDescending(p => (double)p.Difference)
+                .FirstOrDefaultAsync(); 
         }
 
-        public async Task<ProductChange> GetTodaysProductChangeMinAsync()
+        public async Task<ProductChange?> GetTodaysProductChangeMinAsync()
         {
-
-            List<ProductChange> products = await _context.ProductChanges
-               .Where(p => p.Date.Date == DateTime.UtcNow.Date) // Vergleiche nur den Datumsanteil
-               .ToListAsync();
-
-            ProductChange product = products
-                .OrderBy(p => p.Difference)
-                .FirstOrDefault();  // Das größte Element auswählen
-
-            return product;
+            return await _context.ProductChanges
+                .Where(p => p.Date.Date == DateTime.UtcNow.Date)
+                .OrderBy(p => (double)p.Difference)
+                .FirstOrDefaultAsync();
         }
-
 
         public async Task<Dictionary<string, List<StorePriceChange>>> GetStorePriceChangesByStoreAsync(string storeName)
         {
@@ -89,11 +56,12 @@ namespace CheckDiePreise.Data.Services
             return storePriceChanges;
         }
 
-
-        public async Task<List<ProductChange>> GetAllProductsAsync()
+        public async Task<int> GetTodaysNewPriceChangesCountForStoreAsync(string store)
         {
-            List<ProductChange> products = await Task.FromResult(_context.ProductChanges.ToList());
-            return products;
+            List<ProductChange> todaysPriceChanges = await Task.FromResult(_context.ProductChanges
+                .Where(pc => pc.Store == store && pc.Date.Date == DateTime.UtcNow.Date)
+                .ToList());
+            return todaysPriceChanges.Count;
         }
 
         public async Task<List<ProductChange>> GetAllProductChangesOfProductAsync(string store, string identifier)

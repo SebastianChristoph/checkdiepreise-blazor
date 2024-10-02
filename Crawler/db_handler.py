@@ -6,8 +6,6 @@ import sqlite3
 import os
 
 SHOW_PRINTS = False
-
-connection_string = f"Driver={{ODBC Driver 18 for SQL Server}};Server=tcp:{secrets.server},1433;Database={secrets.db_name};Uid={secrets.username};Pwd={secrets.password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
 SQLITE_DB_NAME = "LocalSqliteDb.db"
 TABLE_PRICE_CHANGES = "ProductChanges"
 TABLE_STORE_PRICE_CHANGES = "StorePriceChanges"
@@ -246,65 +244,6 @@ def post_average_store_category_price_to_sqlite_db(store_category_price_change):
             sqlite_connection.close()
             if SHOW_PRINTS : print("SQL Verbindung geschlossen")
 
-
-################ AZURE #################
-def get_conn():
-    conn = odbc.connect(connection_string)
-    return conn
-
-def post_price_change_to_azure(price_change):
-    if SHOW_PRINTS == False:
-        print(".", end="")
-    change_date = datetime.datetime.now().strftime('%Y-%m-%d')
-    sql_query = f"""
-    INSERT INTO [dbo].[ProductChanges] (Name, Date, Identifier, Price, PriceBefore, Baseprice, BasepriceBefore, Difference, DifferenceBaseprice, BasepriceUnit, Store, Category, Trend, Url)
-    VALUES ('{price_change.product_name}', '{change_date}', '{price_change.identifier}', {price_change.price}, {price_change.price_before}, {price_change.baseprice},  {price_change.baseprice_before},  {price_change.difference}, {price_change.difference_baseprice}, '{price_change.baseprice_unit}', '{price_change.store}', '{price_change.category}', '{price_change.trend}', '{price_change.url}');
-    """
-    retries = 3
-    tries = 0
-    skip = False
-    while skip == False:
-        try:
-            with get_conn() as conn:
-                cursor = conn.cursor()
-                cursor.execute(sql_query)
-                if SHOW_PRINTS: print("             >>> POSTED TO AZURE!")
-                skip = True
-        except Exception as e:
-            tries += 1
-            print("                 >>> FEHLER UPLOAD AZURE!", e)
-            if tries == retries:
-                skip = True
-                if SHOW_PRINTS: print("                 >>> SKIP!")
-            else:
-                if SHOW_PRINTS: print("                 >>> RETRY:", tries)
-
-def post_random_product_to_daily_report_azure(product):
-    if SHOW_PRINTS == False:
-        print(".", end="")
-    change_date = datetime.datetime.now().strftime('%Y-%m-%d')
-    sql_query = f"""
-    INSERT INTO [dbo].[DailyReports] (Name, Date, Identifier, Price, Baseprice, BasepriceUnit, Store, Category, Url)
-    VALUES ('{product.product_name}', '{change_date}', '{product.identifier}', {product.price}, {product.baseprice}, '{product.baseprice_unit}', '{product.store}', '{product.category}', '{product.url}');
-    """
-    retries = 3
-    tries = 0
-    skip = False
-    while skip == False:
-        try:
-            with get_conn() as conn:
-                cursor = conn.cursor()
-                cursor.execute(sql_query)
-                if SHOW_PRINTS: print("             >>> POSTED RANDOM PRODUCT TO AZURE DAILY REPORT!")
-                skip = True
-        except Exception as e:
-            tries += 1
-            print("                 >>> FEHLER UPLOAD AZURE!", e)
-            if tries == retries:
-                skip = True
-                if SHOW_PRINTS: print("                 >>> SKIP!")
-            else:
-                if SHOW_PRINTS: print("                 >>> RETRY:", tries)
 
 def main():
     if SHOW_PRINTS: print("\n\nStart DB Handler")

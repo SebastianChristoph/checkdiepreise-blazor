@@ -36,12 +36,11 @@
             <MudNavLink OnClick="@((e) => DrawerToggle("daily"))" Icon="@Icons.Material.Filled.CalendarToday">Tägliche Neuigkeiten</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("analysis"))" Icon="@Icons.Material.Filled.Dataset">Store Analyse</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("about"))" Icon="@Icons.Material.Filled.Info">Über diese Seite</MudNavLink>
-@*             <MudNavLink OnClick="@((e) => DrawerToggle("apis"))" Icon="@Icons.Material.Filled.Api">APIs</MudNavLink> *@
             <MudNavLink OnClick="@((e) => DrawerToggle("admin"))" Icon="@Icons.Material.Filled.Login">Admin</MudNavLink>
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>
-        <MudContainer Class="pt-8" style="min-height: 100vh;max-width: 1500px;" Fixed="true">
+        <MudContainer Class="pt-4" style="min-height: 100vh;max-width: 1500px;" Fixed="true">
             <MudPaper Class="pa-8 ma-2" Elevation="3">
                 @Body
             </MudPaper>

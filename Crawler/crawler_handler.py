@@ -4,9 +4,9 @@ import re
 import PriceChange
 import random 
 import store_averages
+import ftp_uploader
 
-SHOW_PRINTS = False
-TO_AZURE = False
+SHOW_PRINTS = True
 
 class Crawler_Handler:
     def __init__(self, products):
@@ -91,9 +91,6 @@ class Crawler_Handler:
                 new_product_price_change = PriceChange.PriceChange(product.name, today, product.identifier, product.price, product.price, product.baseprice, product.baseprice, 0, 0, product.baseprice_unit, product.store, product.category, "none", product.url)
 
                 db_handler.post_price_change_to_local_sqlite_db(new_product_price_change)
-                if TO_AZURE:
-                    db_handler.post_price_change_to_azure(new_product_price_change)
-                
                 self.new_products += 1
                 
             else:
@@ -126,21 +123,22 @@ class Crawler_Handler:
                 new_price_change = PriceChange.PriceChange(product.name, today, product.identifier, product.price, price_changes_for_product["price_old"], product.baseprice, price_changes_for_product["baseprice_old"], difference, difference_baseprice, product.baseprice_unit, product.store, product.category, trend, product.url)
 
                 db_handler.post_price_change_to_local_sqlite_db(new_price_change)
-                if TO_AZURE:
-                    db_handler.post_price_change_to_azure(new_price_change)
                 self.updates_products += 1
                 
             if SHOW_PRINTS: print("     _____________________________________________")
 
-        random_product_for_report = random.choice(self.products)
-        db_handler.post_random_product_to_daily_report_sqlite(random_product_for_report)
-        if TO_AZURE:
-            db_handler.post_random_product_to_daily_report_azure(random_product_for_report)
-
+        if len(self.products) > 0:
+            random_product_for_report = random.choice(self.products)
+            if random_product_for_report:
+                db_handler.post_random_product_to_daily_report_sqlite(random_product_for_report)
+        else:
+            if SHOW_PRINTS: print("NO PRODUCTS TO CHOSE RANDOM REPORT")
         store_averages.calculate_store_category_averages(self.products)
 
         print("\n#################################################################################")
         print("     Neue Produkte:", self.new_products)
         print("     Update Produkte:", self.updates_products)
         print("     Skipped Produkte:", self.skipped_products)
+
+        ftp_uploader.upload_sqlitedb_to_azure()
 

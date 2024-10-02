@@ -26,7 +26,7 @@
         @if (!_searchAll)
         {
             <MudPaper Class="pa-2 ma-2">
-                <MudStack Row="true">
+                <MudStack Row="true" Style="flex-wrap: wrap;" Spacing="2">
 
                 @foreach (string store in _availableStores)
                 {
@@ -47,29 +47,7 @@
         </MudRadioGroup>
 
     </MudItem>
-        
-    @* ---------- DEBUG ----------------------- *@
-    <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
-        <MudItem xs="4">
-            <MudText Typo="Typo.h6">Debug</MudText>
-            @foreach (KeyValuePair<string, bool> store in _searchStores)
-            {
-                <MudText>@store.Key : @store.Value.ToString()</MudText>
-            }
-
-            <MudText>@_searchTrend</MudText>
-            <MudText>All Dates in Chart:</MudText>
-            @foreach(DateTime date in allDatesInChart)
-            {
-                <MudText>@date.ToString()</MudText>
-            }
-            @foreach (var identifier in _identifierInChart)
-            {
-                <MudText>@identifier</MudText>
-            }
-
-        </MudItem>
-    </MudHidden>
+       
 </MudGrid>  
 <MudButton class="mt-4" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" OnClick=" SearchProductChanges">Produkt suchen</MudButton>
 
@@ -118,8 +96,8 @@
         
 
         @* ---------- STORES ----------------------- *@
-        <MudPaper Class="pa-8 ma-2" Elevation="3">
-            <MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4">Gefundene Produkte:</MudText>
+        
+            <MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4 mt-8">Gefundene Produkte:</MudText>
 
             <MudExpansionPanels MultiExpansion="true">
 
@@ -210,7 +188,7 @@
                 }
 
             </MudExpansionPanels>
-        </MudPaper>
+    
     }   
     else
     {

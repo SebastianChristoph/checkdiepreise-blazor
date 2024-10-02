@@ -12,7 +12,6 @@ namespace CheckDiePreise.Components.Pages
         private string _store = string.Empty;
         private bool _displayUnit = true;
         private List<string> _availableStores = [];
-        private bool _showInfo = true;
 
         [Inject] PriceService PriceService { get; set; } = null!;
 
@@ -85,11 +84,6 @@ namespace CheckDiePreise.Components.Pages
         {
             _displayUnit = status;
             DrawChart(_store);
-        }
-
-        private void CloseInfo()
-        {
-            _showInfo = false;
         }
 
         private static string FormatAsDouble(object value)

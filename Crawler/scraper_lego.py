@@ -2,9 +2,11 @@ import crawler_handler
 from bs4 import BeautifulSoup
 import requests
 import Product
+import re
 
-SHOW_PRINTS = False
-ONLY_ITERATE_3_TIMES = False
+
+SHOW_PRINTS = True
+ONLY_ITERATE_3_TIMES = True
 
 
 categories = {}
@@ -13,6 +15,16 @@ list_of_found_products = []
 URL = "https://www.lego.com/de-de"
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'}
 
+
+def extract_numbers(input_string):
+    replace_string = input_string.replace(",", ".")
+    # Verwende einen regulären Ausdruck, um Zahlen und Kommata zu extrahieren
+    result = re.findall(r'[\d,]+', replace_string)
+    
+    # Verbinde alle gefundenen Teile zu einem String
+    if result:
+        return float(result[0])
+    return None
 
 def get_category_sites():
     s = requests.Session()
@@ -94,10 +106,15 @@ def get_products_from_site(url, category):
 
                 #price
                 price = product_wrapper.find("span", class_ ="price-sm-bold")
+                possible_price = product_wrapper.find("div", class_ = "ProductLeaf_priceRow__RUx3P")
                 if price != None:
                     price = price.text.replace("€", "").replace(",", ".")
+                elif possible_price != None:
+                     price = possible_price.text.replace("€", "").replace(",", ".")
                 else:
                     continue
+
+                price = extract_numbers(price)
 
                 # baseprice
                 pieces = 0
@@ -138,7 +155,7 @@ def get_products_from_shop():
 
         if ONLY_ITERATE_3_TIMES:
             iteration += 1
-            if iteration == 7:
+            if iteration == 3:
                 break
     
 get_products_from_shop()

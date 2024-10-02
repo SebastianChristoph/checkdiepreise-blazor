@@ -12,16 +12,10 @@
     </MudText>
 </MudPaper>
 
-@if (_showInfo)
-{
-    <MudAlert Class="my-4" Severity="Severity.Info" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true" CloseIconClicked="CloseInfo">
-        Analaysieren Sie hier die Preistrends der einzelnen Supermärkte und deren Kategorien. Sie können entscheiden, ob Sie sich die Preise pro Stk oder pro Einheit anzeigen lassen.
-    </MudAlert>
-}
 <MudGrid>
     <MudItem xs="12">
           
-        <MudButtonGroup Color="Color.Secondary" Variant="MudBlazor.Variant.Filled" Class="mb-4">
+        <MudButtonGroup Color="Color.Secondary" Variant="MudBlazor.Variant.Filled" Class="mb-4" Style="flex-wrap: wrap;">
 
             @foreach(var store in _availableStores)
             {

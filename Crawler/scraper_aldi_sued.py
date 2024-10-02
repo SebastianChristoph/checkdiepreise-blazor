@@ -11,7 +11,7 @@ list_of_found_products = []
 categories = {}
 current = 0
 
-SHOW_PRINTS = False
+SHOW_PRINTS = True
 ONLY_ITERATE_3_TIMES = False
 
 def clean_category_name(input_string):
@@ -187,7 +187,7 @@ def get_products_from_shop():
 
         if ONLY_ITERATE_3_TIMES:
             iteration += 1
-            if iteration == 7:
+            if iteration == 3:
                 break
 
     print("Finished")
