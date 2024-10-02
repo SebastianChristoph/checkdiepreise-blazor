@@ -12,81 +12,93 @@
     </MudText>
 </MudPaper>
 
-<MudGrid>
-    <MudItem xs="12">
-          
-        <MudButtonGroup Color="Color.Secondary" Variant="MudBlazor.Variant.Filled" Class="mb-4" Style="flex-wrap: wrap;">
+<MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+    <MudAlert Class="mt-4" Severity="Severity.Info">
+        Diese Funktion steht Ihnen in der mobilen Ansicht aus Platz-Gründen nicht zur Verfügung.
+        <br />
+        Daten brauchen Platz - schauen Sie sich also alles lieber auf der Desktop-Version an :-)
+        <MudIcon Icon="@Icons.Material.Filled.MobileOff"></MudIcon>
+    </MudAlert>
+</MudHidden>
 
-            @foreach(var store in _availableStores)
+<MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
+ 
+        <MudGrid>
+            <MudItem xs="12">
+
+                <MudButtonGroup Color="Color.Secondary" Variant="MudBlazor.Variant.Filled" Class="mb-4" Style="flex-wrap: wrap;">
+
+                    @foreach (var store in _availableStores)
+                    {
+                        <MudButton OnClick='() =>DrawChart(store)'>@store</MudButton>
+                    }
+                </MudButtonGroup>
+
+                <br />
+
+                <MudButtonGroup Color="Color.Tertiary" Variant="MudBlazor.Variant.Filled">
+                    <MudButton OnClick='() =>SetPrice(true)'>Artikelpreis</MudButton>
+                    <MudButton OnClick='() =>SetPrice(false)'>Grundpreis in €</MudButton>
+                </MudButtonGroup>
+
+            </MudItem>
+
+            @if (string.IsNullOrEmpty(_store))
             {
-                <MudButton OnClick='() =>DrawChart(store)'>@store</MudButton>
-            }
-        </MudButtonGroup>
-           
-        <br/>
-
-        <MudButtonGroup Color="Color.Tertiary" Variant="MudBlazor.Variant.Filled">
-            <MudButton OnClick='() =>SetPrice(true)'>Artikelpreis</MudButton>
-            <MudButton OnClick='() =>SetPrice(false)'>Grundpreis in €</MudButton>
-        </MudButtonGroup>
-          
-    </MudItem>
-
-    @if (string.IsNullOrEmpty(_store))
-    {
-        <MudItem xs="12">
-            <MudText Align="Align.Center" Typo="Typo.h6">Bitte wählen sie einen Supermarkt aus.</MudText>
-        </MudItem>
-    }
-    else
-    {
-        <MudItem xs="12">
-            @if (_displayUnit)
-            {
-                <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store in Preis/Stk</MudText>
+                <MudItem xs="12">
+                    <MudText Align="Align.Center" Typo="Typo.h6">Bitte wählen sie einen Supermarkt aus.</MudText>
+                </MudItem>
             }
             else
             {
-                <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store in Preis/Einheit</MudText>
-            }
-                
-        </MudItem>
-    }
-        
-
-    <MudItem xs="12" Style="min-height: 45vh;">
-
-        @if(_chartData.Count > 0)
-        {
-            <RadzenChart ColorScheme=ColorScheme.Palette>
-
-                @foreach (var category in _chartData)
-                {
-                    <RadzenLineSeries Interpolation="Interpolation.Step" Data="@category.Value" CategoryProperty="Date" Title=@category.Key LineType="LineType.Solid" StrokeWidth="4" ValueProperty="Price">
-                        <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
-                        <RadzenSeriesDataLabels Visible="false" />
-                    </RadzenLineSeries>
-                }
-
-
-                <RadzenCategoryAxis Padding="20" />
-                <RadzenValueAxis Min="0" Formatter="@FormatAsDouble">
-                    <RadzenGridLines Visible="true" />
-
+                <MudItem xs="12">
                     @if (_displayUnit)
                     {
-                        <RadzenAxisTitle Text="Preis in €/Stk" />
+                        <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store in Preis/Stk</MudText>
                     }
                     else
                     {
-                        <RadzenAxisTitle Text="Preis in €/Einheit" />
+                        <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store in Preis/Einheit</MudText>
                     }
 
-                        
-                </RadzenValueAxis>
-            </RadzenChart>
-        }
-        </MudItem>
-</MudGrid>
+                </MudItem>
+            }
+
+
+            <MudItem xs="12" Style="min-height: 45vh;">
+
+                @if (_chartData.Count > 0)
+                {
+                    <RadzenChart ColorScheme=ColorScheme.Palette>
+
+                        @foreach (var category in _chartData)
+                        {
+                            <RadzenLineSeries Interpolation="Interpolation.Step" Data="@category.Value" CategoryProperty="Date" Title=@category.Key LineType="LineType.Solid" StrokeWidth="4" ValueProperty="Price">
+                                <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
+                                <RadzenSeriesDataLabels Visible="false" />
+                            </RadzenLineSeries>
+                        }
+
+
+                        <RadzenCategoryAxis Padding="20" />
+                        <RadzenValueAxis Min="0" Formatter="@FormatAsDouble">
+                            <RadzenGridLines Visible="true" />
+
+                            @if (_displayUnit)
+                            {
+                                <RadzenAxisTitle Text="Preis in €/Stk" />
+                            }
+                            else
+                            {
+                                <RadzenAxisTitle Text="Preis in €/Einheit" />
+                            }
+
+
+                        </RadzenValueAxis>
+                    </RadzenChart>
+                }
+            </MudItem>
+        </MudGrid>
+</MudHidden>
 
 

@@ -36,9 +36,7 @@
                 </MudStack>
             </MudPaper>
         }
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-            <MudDivider Class="mt-8 mb-4" />
-        </MudHidden>
+   
 
         <MudRadioGroup @bind-Value="_searchTrend">
             <MudRadio Value="@("up")" Color="Color.Primary">Nur Preissteigerungen</MudRadio>
@@ -96,7 +94,32 @@
         
 
         @* ---------- STORES ----------------------- *@
-        
+        <MudStack Row="true" Class="mt-4" Style="flex-wrap: wrap;" Spacing="2">
+            <div style="display: flex; align-items: center; margin-right: 10px; color: gray;">
+                <span style="color: gray; margin-left: 4px;">Legende:</span>
+            </div>
+            <div style="display: flex; align-items: center; margin-right: 10px;color: gray;">
+                <MudIcon Icon="@Icons.Material.Filled.TrendingUp" />
+                <span style="color: gray; margin-left: 4px;">Preissteigerung</span>
+            </div>
+            <div style="display: flex; align-items: center; margin-right: 10px;color: gray;">
+                <MudIcon Icon="@Icons.Material.Filled.TrendingDown" />
+                <span style="color: gray; margin-left: 4px;">Preissenkung</span>
+            </div>
+            <div style="display: flex; align-items: center;color: gray;">
+                <MudIcon Icon="@Icons.Material.Filled.TrendingFlat" />
+                <span style="color: gray; margin-left: 4px;">bisher keine Preisänderung</span>
+            </div>
+        </MudStack>
+
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+            <MudAlert Class="mt-4" Severity="Severity.Info">
+                Einige Details und die Diagramm-Funktion werden in der mobilen Ansicht aus Platz-Gründen ausgeblendet
+                <MudIcon Icon="@Icons.Material.Filled.MobileOff"></MudIcon>
+            </MudAlert>
+        </MudHidden>
+
+
             <MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4 mt-8">Gefundene Produkte:</MudText>
 
             <MudExpansionPanels MultiExpansion="true">
@@ -123,17 +146,31 @@
                                                 @if (product.Value[product.Value.Count - 1].Trend == "up")
                                                 {
                                                     <span style="color:red;"> <MudIcon Icon="@Icons.Material.Filled.TrendingUp" class="mr-3"></MudIcon></span>  @product.Value[0].Name  
-                                                    <MudText Typo="Typo.body2" Color="Color.Tertiary">&nbsp;[@product.Key.ToString()]</MudText>
+                                                    <MudText Typo="Typo.body2" Color="Color.Tertiary">
+                                                    <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
+                                                        &nbsp;[@product.Key.ToString()]
+                                                    </MudHidden>
+                                                    
+                                                    
+                                                </MudText>
                                                 }
                                                 else if (product.Value[product.Value.Count - 1].Trend == "down")
                                                 {
                                                     <span style="color:green;"> <MudIcon Icon="@Icons.Material.Filled.TrendingDown" class="mr-3"></MudIcon></span>          @product.Value[0].Name
-                                                    <MudText Typo="Typo.body2" Color="Color.Tertiary">&nbsp;[@product.Key.ToString()]</MudText>
+                                                    <MudText Typo="Typo.body2" Color="Color.Tertiary">
+                                                    <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
+                                                        &nbsp;[@product.Key.ToString()]
+                                                    </MudHidden>
+                                                    </MudText>
                                                 }
                                                 else
                                                 {
                                                     <span style="color:gray;"> <MudIcon Icon="@Icons.Material.Filled.TrendingFlat" class="mr-3"></MudIcon></span>  @product.Value[0].Name
-                                                    <MudText Typo="Typo.body2" Color="Color.Tertiary">&nbsp;[@product.Key.ToString()]</MudText>
+                                                    <MudText Typo="Typo.body2" Color="Color.Tertiary">
+                                                    <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
+                                                        &nbsp;[@product.Key.ToString()]
+                                                    </MudHidden>
+                                                    </MudText>
                                                 }
                                             </div>
 
