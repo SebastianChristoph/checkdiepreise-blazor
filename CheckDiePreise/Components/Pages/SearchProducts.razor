@@ -54,7 +54,14 @@
 
 @if (_isSearching)
 {
-    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+    <MudGrid>
+        <MudItem xs="12">
+            <MudPaper Class="d-flex align-center justify-center mud-width-full py-8" Elevation="0">
+                <MudProgressCircular Color="Color.Info" Indeterminate="true" Size="Size.Large" />
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+  
 }
 
 @if (_productData is not null)

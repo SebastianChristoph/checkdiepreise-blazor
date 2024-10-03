@@ -23,7 +23,7 @@ namespace CheckDiePreise.Data.Services
         public async Task<DailyReport?> GetTodaysDailyReportByStore(string store)
         {
             return await _context.DailyReports
-                .Where(r => r.Store == store)
+                .Where(r => r.Store == store && r.Date.Date == DateTime.UtcNow.Date)
                 .FirstOrDefaultAsync();
         }
 
@@ -74,6 +74,7 @@ namespace CheckDiePreise.Data.Services
 
         public async Task<Dictionary<string, Dictionary<string, List<ProductChange>>>> GetGroupedProductsAsync(string productName, bool searchAll, string trend, Dictionary<string, bool> searchStores)
         {
+            int fuzzThreshold = 50;
             List<string> stores = searchStores
                 .Where(kvp => kvp.Value)
                 .Select(kvp => kvp.Key)
@@ -91,7 +92,7 @@ namespace CheckDiePreise.Data.Services
 
             var filteredProducts = products
                 .AsParallel()
-                .Where(p => Fuzz.Ratio(p.Name.ToLower(), productName.ToLower()) > 40 || p.Name.ToLower().Contains(productName.ToLower()) ||p.Identifier.Contains(productName))
+                .Where(p => Fuzz.Ratio(p.Name.ToLower(), productName.ToLower()) > fuzzThreshold || p.Name.ToLower().Contains(productName.ToLower()) ||p.Identifier.Contains(productName))
                 .ToList();
 
             var groupedProducts = filteredProducts

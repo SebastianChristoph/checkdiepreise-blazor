@@ -7,18 +7,17 @@
         <MudStack>
             <MudText style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: clamp(12px, 10vw, 46px); font-weight:bold">Check die Preise</MudText>
             <MudText Typo="Typo.body1">
-                Wie sehr gehen die Preise in deutschen Märkten nach oben oder unten? Wird Butter wirklich immer teurer? Werden Malms (IKEA) immer günstiger? <br />
-                    Um sich ein Bild verschaffen zu können, durchsuchen Roboter die Online-Shops der bekanntesten Supermärkte Deutschlands und sammeln Preise in @_availableStores.Count.ToString() WebStores - und das täglich.
+                Wie sehr gehen die Preise in deutschen Märkten nach oben oder unten?
+                <br />
+                Wird Butter wirklich immer teurer? Werden Malms bei IKEA immer günstiger? <br />
+                Um sich ein Bild verschaffen zu können, durchsuchen Roboter die Online-Shops der bekanntesten WebShops Deutschlands und sammeln Preise in @_availableStores.Count.ToString() WebStores - und das täglich.
             </MudText>
             <MudText Typo="Typo.body1">
-                Tägliche werden die Preise aus folgenden Webshops abgerufen: <br/>
-                @foreach (var store in _availableStores)
-                    {
-                    @($"{store}, ")
-                    }
+                Täglich werden die Preise aus folgenden Webshops abgerufen: <br />
+                @string.Join(", ", _availableStores)
             </MudText>
             <MudText Typo="Typo.body1">
-                Erkunde selbst die Daten oder hilf mit, noch mehr Supermärkte, Drogerien oder Baumärkte hinzuzufügen.
+                Erkunden Sie selbst die Daten oder helfen Sie mit, noch mehr Supermärkte, Drogerien oder Baumärkte hinzuzufügen.
             </MudText>
 
             <MudButton Href="/search" Style="max-width: 300px;" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Produktsuche</MudButton>
@@ -75,15 +74,15 @@
     }
 </MudGrid>
 
-<div style="position: absolute; right: 0; top: 80px;">
+<div style="position: absolute; right: 0px; top: 100px;">
 @if (_canConnect)
 {
-    <MudAlert Severity="Severity.Success">Verbunden mit sqlite</MudAlert>
+    <MudAlert Severity="Severity.Success">Datenbank verbunden</MudAlert>
 }
 
 else
 {
-    <MudAlert Severity="Severity.Error">Nicht verbunden: @_usedDb, ConnectionString: @_connectionString</MudAlert>
+    <MudAlert Severity="Severity.Error">Fehler in Datenbank</MudAlert>
 }
 
 </div>

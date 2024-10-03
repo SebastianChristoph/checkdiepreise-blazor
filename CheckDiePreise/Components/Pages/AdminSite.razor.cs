@@ -8,6 +8,15 @@ namespace CheckDiePreise.Components.Pages
     public partial class AdminSite
     {
         private Dictionary<string, int> todaysPriceChanges = [];
+        private Dictionary<string, int> reciveDataUntilHour = new Dictionary<string, int>
+        {
+            { "ALDI SUED", 11 },
+            { "Hellweg", 14 },
+            { "IKEA", 15 },
+            { "LEGO", 13 },
+            { "ShopApotheke", 9 },
+            { "LIDL", 12 },
+        };
         private Dictionary<string, DailyReport> todaysDailyReports = [];
         private IEnumerable<DailyReport> DailyReports = new List<DailyReport>();
         private List<string> _availableStores = [];

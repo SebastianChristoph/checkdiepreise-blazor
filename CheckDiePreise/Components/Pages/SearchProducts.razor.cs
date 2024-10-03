@@ -57,10 +57,17 @@ public partial class SearchProducts
             Snackbar.Add("Bitte geben Sie mehr als 2 Buchstaben als Produktnamen ein!", Severity.Warning);
             return;
         }
+
         DeleteAllSeriesInChart();
+        _productData = [];
         _isSearching = true;
+        StateHasChanged();
+
+        await Task.Delay(1);
+
         _productData = await PriceService.GetGroupedProductsAsync(_productName, _searchAll, _searchTrend, _searchStores);
         _isSearching = false;
+        StateHasChanged();
     }
 
     public void AddChartData(string store, string productName, string identifier)

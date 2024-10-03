@@ -14,17 +14,27 @@
                 @entry.Key  : @entry.Value <br/>
             </MudText>
             
-             @if (todaysDailyReports[entry.Key] is not null)
+            @if (todaysDailyReports[entry.Key] is not null)
+            {
+                <MudText Typo="Typo.caption">@todaysDailyReports[entry.Key].Name , @todaysDailyReports[entry.Key].Price€ <br/></MudText>
+            }
+            else
+            {
+
+                if (reciveDataUntilHour[entry.Key] > DateTime.UtcNow.Hour)
                 {
-                               <MudText Typo="Typo.caption">@todaysDailyReports[entry.Key].Name , @todaysDailyReports[entry.Key].Price€ <br/></MudText>
+                <MudText Color="Color.Warning">
+                    WARTE AUF DATEN BIS @reciveDataUntilHour[entry.Key]  Uhr
+                </MudText>
                 }
                 else
                 {
-                    <MudText Color="Color.Error">
-                        NO DATA</MudText>
+                <MudText Color="Color.Error">
+                    KEINE DATEN
+                </MudText>
                 }
-
-                <br/>
+            }
+            <br/>
         }
     }
 </MudHidden>
@@ -65,17 +75,28 @@
                                 <td>@todaysDailyReports[entry.Key].BasepriceUnit</td>
                                 <td>@todaysDailyReports[entry.Key].Category</td>
                                 <td><MudLink Href="@todaysDailyReports[entry.Key].Url" Target="_blank">Link</MudLink></td>
+                                }
+                                else
+                                {
+                                    if (reciveDataUntilHour[entry.Key] > DateTime.UtcNow.Hour)
+                                    {
+                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                    }
                             }
-                            else
-                            {
-                                <td><span style="color:red;">NO DATA</span></td>
-                                <td><span style="color:red;">NO DATA</span></td>
-                                <td><span style="color:red;">NO DATA</span></td>
-                                <td><span style="color:red;">NO DATA</span></td>
-                                <td><span style="color:red;">NO DATA</span></td>
-                                <td><span style="color:red;">NO DATA</span></td>
-                            }
-                            
                         </tr>
                     }
                 </tbody>

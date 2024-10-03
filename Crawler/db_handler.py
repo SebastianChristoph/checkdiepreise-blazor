@@ -11,8 +11,6 @@ TABLE_PRICE_CHANGES = "ProductChanges"
 TABLE_STORE_PRICE_CHANGES = "StorePriceChanges"
 TABLE_DAILY_REPORTS = "DailyReports"
 
-
-############### LOCAL SQLITE ##########
 def create_db_with_table():
     cwd = os.getcwd()
     if "LocalSqliteDb.db" not in os.listdir(cwd):
@@ -22,7 +20,6 @@ def create_db_with_table():
             cursor = sqlite_connection.cursor()
             print("     Erfolgreich mit DB verbunden")
 
-            # CREATE TABLE PRICE CHANGES
             sql_query = f"""CREATE TABLE {TABLE_PRICE_CHANGES} (
                                 Id INTEGER PRIMARY KEY AUTOINCREMENT, -- Auto-incrementing primary key
                                 Name NVARCHAR(255) NOT NULL,
