@@ -32,6 +32,10 @@ namespace CheckDiePreise.Components.Pages
         {
             base.OnInitialized();
             _adminPassword = Environment.GetEnvironmentVariable("adminpassword");
+
+            #if DEBUG
+            _adminPassword = "debuggi";
+            #endif
             _availableStores = Configuration.GetValue<string>("Stores").Split(",").ToList();
 
             foreach(var _availableStore in _availableStores)
