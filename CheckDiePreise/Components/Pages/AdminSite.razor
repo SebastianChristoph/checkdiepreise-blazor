@@ -2,140 +2,129 @@
 
 <PageTitle>ADMIN auf CheckDiePreise!</PageTitle>
 
-<MudText>PW: @_adminPassword</MudText>
+<MudText Typo="Typo.h4">Admin Bereich</MudText>
 
-<MudText Typo="Typo.h4">Admin</MudText>
-<MudText Class="mb-4">Bericht für: @DateTime.UtcNow.Date</MudText>
+<MudText>adminPassword: @_adminPassword</MudText>
 
-<MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-    @if (todaysPriceChanges is not null && todaysDailyReports is not null)
-    {
-        @foreach (KeyValuePair<string, int> entry in todaysPriceChanges)
+@if (_userPasswordInput != _adminPassword)
+{
+    <MudTextField @bind-Value="_userPasswordInput" Label="Bitte Admin-Passwort eingeben" Variant="MudBlazor.Variant.Text"></MudTextField>
+}
+
+
+@if (_userPasswordInput == _adminPassword)
+{
+    <MudText Class="mb-4">Bericht für: @DateTime.UtcNow.Date</MudText>
+
+    <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+        @if (todaysPriceChanges is not null && todaysDailyReports is not null)
         {
-            <MudText>
-                @entry.Key  : @entry.Value <br/>
-            </MudText>
-            
-            @if (todaysDailyReports[entry.Key] is not null)
+            @foreach (KeyValuePair<string, int> entry in todaysPriceChanges)
             {
-                <MudText Typo="Typo.caption">@todaysDailyReports[entry.Key].Name , @todaysDailyReports[entry.Key].Price€ <br/></MudText>
-            }
-            else
-            {
-
-                if (reciveDataUntilHour[entry.Key] > DateTime.UtcNow.Hour)
-                {
-                <MudText Color="Color.Warning">
-                    WARTE AUF DATEN BIS @reciveDataUntilHour[entry.Key]  Uhr
+                <MudText>
+                    @entry.Key  : @entry.Value <br />
                 </MudText>
+
+                @if (todaysDailyReports[entry.Key] is not null)
+                {
+                    <MudText Typo="Typo.caption">@todaysDailyReports[entry.Key].Name , @todaysDailyReports[entry.Key].Price€ <br /></MudText>
                 }
                 else
                 {
-                <MudText Color="Color.Error">
-                    KEINE DATEN
-                </MudText>
-                }
-            }
-            <br/>
-        }
-    }
-</MudHidden>
 
-
-<MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
-   <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-    <MudTabPanel Text="Täglicher Bericht">
-        @if (todaysPriceChanges is not null && todaysDailyReports is not null)
-        {
-
-            <MudSimpleTable Style="overflow-x: auto;">
-                <thead>
-                    <tr>
-                        <th><strong>WebShop</strong></th>
-                        <th><strong>Neue ProductChanges</strong></th>
-                        <th><strong>DailyReport ProductChange</strong></th>
-                        <th><strong>DailyReport Price</strong></th>
-                        <th><strong>DailyReport Baseprice</strong></th>
-                        <th><strong>DailyReport BasepriceUnit</strong></th>
-                        <th><strong>DailyReport Category</strong></th>
-                        <th><strong>DailyReport Url</strong></th>
-
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach(KeyValuePair<string, int>entry in todaysPriceChanges)
+                    if (reciveDataUntilHour[entry.Key] > DateTime.UtcNow.Hour)
                     {
-                        <tr>
-                            <td>@entry.Key</td>
-                            <td>@entry.Value</td>
-                            @if (todaysDailyReports[entry.Key] is not null)
+                        <MudText Color="Color.Warning">
+                            WARTE AUF DATEN BIS @reciveDataUntilHour[entry.Key]  Uhr
+                        </MudText>
+                    }
+                    else
+                    {
+                        <MudText Color="Color.Error">
+                            KEINE DATEN
+                        </MudText>
+                    }
+                }
+                <br />
+            }
+        }
+    </MudHidden>
+
+    <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+            <MudTabPanel Text="Täglicher Bericht">
+                @if (todaysPriceChanges is not null && todaysDailyReports is not null)
+                {
+
+                    <MudSimpleTable Style="overflow-x: auto;">
+                        <thead>
+                            <tr>
+                                <th><strong>WebShop</strong></th>
+                                <th><strong>Neue ProductChanges</strong></th>
+                                <th><strong>DailyReport ProductChange</strong></th>
+                                <th><strong>DailyReport Price</strong></th>
+                                <th><strong>DailyReport Baseprice</strong></th>
+                                <th><strong>DailyReport BasepriceUnit</strong></th>
+                                <th><strong>DailyReport Category</strong></th>
+                                <th><strong>DailyReport Url</strong></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (KeyValuePair<string, int> entry in todaysPriceChanges)
                             {
-                                <td>@todaysDailyReports[entry.Key].Name</td>
-                                <td>@todaysDailyReports[entry.Key].Price€</td>
-                                <td>@todaysDailyReports[entry.Key].Baseprice€</td>
-                                <td>@todaysDailyReports[entry.Key].BasepriceUnit</td>
-                                <td>@todaysDailyReports[entry.Key].Category</td>
-                                <td><MudLink Href="@todaysDailyReports[entry.Key].Url" Target="_blank">Link</MudLink></td>
-                                }
-                                else
-                                {
-                                    if (reciveDataUntilHour[entry.Key] > DateTime.UtcNow.Hour)
+                                <tr>
+                                    <td>@entry.Key</td>
+                                    <td>@entry.Value</td>
+                                    @if (todaysDailyReports[entry.Key] is not null)
                                     {
-                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                        <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                        <td>@todaysDailyReports[entry.Key].Name</td>
+                                        <td>@todaysDailyReports[entry.Key].Price€</td>
+                                        <td>@todaysDailyReports[entry.Key].Baseprice€</td>
+                                        <td>@todaysDailyReports[entry.Key].BasepriceUnit</td>
+                                        <td>@todaysDailyReports[entry.Key].Category</td>
+                                        <td><MudLink Href="@todaysDailyReports[entry.Key].Url" Target="_blank">Link</MudLink></td>
                                     }
                                     else
                                     {
-                                        <td><span style="color:red;">NO DATA</span></td>
-                                        <td><span style="color:red;">NO DATA</span></td>
-                                        <td><span style="color:red;">NO DATA</span></td>
-                                        <td><span style="color:red;">NO DATA</span></td>
-                                        <td><span style="color:red;">NO DATA</span></td>
-                                        <td><span style="color:red;">NO DATA</span></td>
+                                        if (reciveDataUntilHour[entry.Key] > DateTime.UtcNow.Hour)
+                                        {
+                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span style="color:red;">NO DATA</span></td>
+                                            <td><span style="color:red;">NO DATA</span></td>
+                                            <td><span style="color:red;">NO DATA</span></td>
+                                            <td><span style="color:red;">NO DATA</span></td>
+                                            <td><span style="color:red;">NO DATA</span></td>
+                                            <td><span style="color:red;">NO DATA</span></td>
+                                        }
                                     }
+                                </tr>
                             }
-                        </tr>
-                    }
-                </tbody>
-            </MudSimpleTable>
+                        </tbody>
+                    </MudSimpleTable>
+                }
+            </MudTabPanel>
+            <MudTabPanel Text="Andere Info">
+                <MudText>Other Info</MudText>
+            </MudTabPanel>
+        </MudTabs>
+
+
+    </MudHidden>
+}
 
 
 
-          @*    <MudTable Items="@DailyReports" Hover="true" SortLabel="Sort By">
-                 <HeaderContent>
-                     <MudTh><MudTableSortLabel SortBy="new Func<CheckDiePreise.Data.Models.DailyReport, object>(x=>x.Identifier)">ArtNr.</MudTableSortLabel></MudTh>
-                     <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.DailyReport, object>(x=>x.Store)">Shop</MudTableSortLabel></MudTh>
-                     <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.DailyReport, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
-                     <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.DailyReport, object>(x=>x.Price)">Preis</MudTableSortLabel></MudTh>
-                     <MudTh><MudTableSortLabel Enabled="true" SortBy="new Func<CheckDiePreise.Data.Models.DailyReport, object>(x=>x.Baseprice)">Grundpreis </MudTableSortLabel></MudTh>
-                     <MudTh>Details</MudTh>
-                 </HeaderContent>
-                 <RowTemplate>
-                     <MudTd DataLabel="Identifier">@context.Identifier</MudTd>
-                     <MudTd DataLabel="Store">@context.Store</MudTd>
-                     <MudTd DataLabel="Name"><MudLink Href="@context.Url" Target="_blank">@context.Name</MudLink></MudTd>
-                     <MudTd DataLabel="Price">@context.Price / Stk.</MudTd>
-                     <MudTd DataLabel="Baseprice">@context.Baseprice @context.BasepriceUnit</MudTd>
-                     <MudTd><MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Href=@($"/product/{context.Store}/{context.Name}-{context.Identifier}") /></MudTd>
-                 </RowTemplate>
-                 <PagerContent>
-                     <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100 }" />
-                 </PagerContent>
-             </MudTable> *@
-        }
-    </MudTabPanel>
-    <MudTabPanel Text="Andere Info">
-        <MudText>Other Info</MudText>
-    </MudTabPanel>
-</MudTabs>
 
-
-</MudHidden>
 
 
 

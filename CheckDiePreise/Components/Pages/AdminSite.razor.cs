@@ -1,7 +1,6 @@
 using CheckDiePreise.Data.Models;
 using CheckDiePreise.Data.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Configuration;
 
 namespace CheckDiePreise.Components.Pages
 {
@@ -22,6 +21,7 @@ namespace CheckDiePreise.Components.Pages
         private List<string> _availableStores = [];
 
         private string _adminPassword = "None";
+        private string _userPasswordInput = string.Empty;
 
         [Inject] IConfiguration Configuration { get; set; } = null!;
 
@@ -34,8 +34,9 @@ namespace CheckDiePreise.Components.Pages
             _adminPassword = Environment.GetEnvironmentVariable("adminpassword");
 
             #if DEBUG
-            _adminPassword = "debuggi";
+            _adminPassword = "123";
             #endif
+
             _availableStores = Configuration.GetValue<string>("Stores").Split(",").ToList();
 
             foreach(var _availableStore in _availableStores)
