@@ -39,10 +39,10 @@ else
                 <MudTd DataLabel="Store">@context.Store</MudTd>
                 <MudTd DataLabel="Name"><MudLink Href="@context.Url" Target="_blank">@context.Name</MudLink></MudTd>
                 <MudTd DataLabel="Price">@context.Price€ (@context.PriceBefore€) / Stk.</MudTd>
-                <MudTd DataLabel="Difference">@context.Difference€</MudTd>
+                <MudTd DataLabel="Difference">@context.Difference.ToString("0.00")€</MudTd>
 
                 <MudTd DataLabel="Baseprice">@context.Baseprice€ (@context.BasepriceBefore€)/  @context.BasepriceUnit</MudTd>
-                <MudTd DataLabel="DifferenceBaseprice">@context.DifferenceBaseprice€</MudTd>
+                <MudTd DataLabel="DifferenceBaseprice">@context.DifferenceBaseprice.ToString("0.00")€</MudTd>
                 <MudTd DataLabel="Trend">
                 
                     @if(context.Trend == "up")

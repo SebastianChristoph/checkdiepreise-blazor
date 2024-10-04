@@ -12,6 +12,7 @@ namespace CheckDiePreise.Components.Pages
 
         private List<ProductChange> _productChanges;
         private List<DataItem> _chartData = [];
+        private List<DataItem> _chartDataBaseprice = [];
         [Parameter] public string? Store { get; set; }
         [Parameter] public string? Name { get; set; }
         [Parameter] public string? Identifier { get; set; }
@@ -53,6 +54,31 @@ namespace CheckDiePreise.Components.Pages
                     Price = GetLatestPriceChange(_productChanges),
                 });
             }
+
+            double lastBaseprice = 0;
+
+            foreach (var prodcutChange in _productChanges)
+            {
+                if (prodcutChange.Date == DateTime.UtcNow.Date)
+                {
+                    foundToday = true;
+                }
+
+                _chartDataBaseprice.Add(new DataItem
+                {
+                    Date = prodcutChange.Date.ToString("dd.MM.yyyy"),
+                    Price = (double)prodcutChange.Baseprice,
+                });
+            }
+            if (!foundToday)
+            {
+
+                _chartDataBaseprice.Add(new DataItem
+                {
+                    Date = DateTime.UtcNow.Date.ToString("dd.MM.yyyy"),
+                    Price = GetLatestBasepriceChange(_productChanges),
+                });
+            }
         }
 
         public double GetLatestPriceChange(List<ProductChange> priceChanges)
@@ -67,6 +93,20 @@ namespace CheckDiePreise.Components.Pages
             }
             else return 0;
         }
+
+        public double GetLatestBasepriceChange(List<ProductChange> priceChanges)
+        {
+            // Suche das Element mit dem letzten Datum
+            var lastPriceChange = priceChanges
+                .OrderByDescending(spc => spc.Date) // Sortiere absteigend nach Datum
+                .FirstOrDefault();                  // Nimm das erste Element (nähestes zu heute)
+            if (lastPriceChange != null)
+            {
+                return (double)lastPriceChange.Baseprice;
+            }
+            else return 0;
+        }
+
 
         private static string FormatAsDouble(object value)
         {

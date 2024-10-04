@@ -5,7 +5,7 @@
 
 <PageTitle>Produkt-Detail</PageTitle>
 
-<MudGrid Class="mb-8">
+<MudGrid Class="mb-2">
     <MudItem xs="12">
         <MudText Class="mb-4" Typo="Typo.h4">Produktdetails</MudText>
         <MudText Typo="Typo.h6">@Name</MudText>
@@ -15,9 +15,14 @@
 
 @if(_productChanges is not null)
 {
-
+    <MudLink Href="@_productChanges[0].Url" Target="_blank" Class="mb-8">Zum Produkt im @Store -WebShop</MudLink>
       <RadzenChart>
-        <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartData" CategoryProperty="Date" Title=@Name LineType="LineType.Solid" StrokeWidth="4" Stroke="#E08148" ValueProperty="Price">
+        <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartData" CategoryProperty="Date" Title=@Name LineType="LineType.Solid" StrokeWidth="5" Stroke="#E08148" ValueProperty="Price">
+            <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
+            <RadzenSeriesDataLabels Visible="true" />
+        </RadzenLineSeries>
+
+        <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartDataBaseprice" CategoryProperty="Date" Title=@($"{Name} Grundpreis") LineType="LineType.Solid" StrokeWidth="5" Stroke="#62ABFF" ValueProperty="Price">
             <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
             <RadzenSeriesDataLabels Visible="true" />
         </RadzenLineSeries>

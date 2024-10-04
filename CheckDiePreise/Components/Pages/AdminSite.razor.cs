@@ -13,7 +13,7 @@ namespace CheckDiePreise.Components.Pages
             { "Hellweg", 14 },
             { "IKEA", 15 },
             { "LEGO", 13 },
-            { "ShopApotheke", 9 },
+            { "ShopApotheke", 10 },
             { "LIDL", 12 },
         };
         private Dictionary<string, DailyReport> todaysDailyReports = [];
