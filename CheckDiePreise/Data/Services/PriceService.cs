@@ -19,35 +19,35 @@ namespace CheckDiePreise.Data.Services
             return await _context.ProductChanges
                 .FirstOrDefaultAsync();
         }
-        public async Task<List<ProductChange>> GetTodaysProductChanges()
+        public async Task<List<ProductChange>> GetYesterdaysProductChanges()
         {
 #if DEBUG
             await Task.Delay(2000);
 #endif
             return await _context.ProductChanges
-                .Where(p => p.Date.Date == DateTime.UtcNow.Date && (p.Difference !=0 ||  p.DifferenceBaseprice != 0))
+                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1) && (p.Difference !=0 ||  p.DifferenceBaseprice != 0))
                 .ToListAsync();
         }
 
-        public async Task<DailyReport?> GetTodaysDailyReportByStore(string store)
+        public async Task<DailyReport?> GetYesterdaysDailyReportByStore(string store)
         {
             return await _context.DailyReports
-                .Where(r => r.Store == store && r.Date.Date == DateTime.UtcNow.Date)
+                .Where(r => r.Store == store && r.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<ProductChange?> GetTodaysProductChangeMaxAsync()
+        public async Task<ProductChange?> GetYesterdaysProductChangeMaxAsync()
         {
             return await _context.ProductChanges
-                .Where(p => p.Date.Date == DateTime.UtcNow.Date)
+                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
                 .OrderByDescending(p => (double)p.Difference)
                 .FirstOrDefaultAsync(); 
         }
 
-        public async Task<ProductChange?> GetTodaysProductChangeMinAsync()
+        public async Task<ProductChange?> GetYesterdaysProductChangeMinAsync()
         {
             return await _context.ProductChanges
-                .Where(p => p.Date.Date == DateTime.UtcNow.Date)
+                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
                 .OrderBy(p => (double)p.Difference)
                 .FirstOrDefaultAsync();
         }
@@ -67,10 +67,10 @@ namespace CheckDiePreise.Data.Services
             return storePriceChanges;
         }
 
-        public async Task<int> GetTodaysNewPriceChangesCountForStoreAsync(string store)
+        public async Task<int> GetYesterdaysNewPriceChangesCountForStoreAsync(string store)
         {
             List<ProductChange> todaysPriceChanges = await Task.FromResult(_context.ProductChanges
-                .Where(pc => pc.Store == store && pc.Date.Date == DateTime.UtcNow.Date)
+                .Where(pc => pc.Store == store && pc.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
                 .ToList());
             return todaysPriceChanges.Count;
         }

@@ -20,7 +20,7 @@ namespace CheckDiePreise.Components.Pages
             StateHasChanged();
             await Task.Delay(1);
 
-            ProductChanges = await PriceService.GetTodaysProductChanges();
+            ProductChanges = await PriceService.GetYesterdaysProductChanges();
             _showSpinner = false;
             StateHasChanged();
         }

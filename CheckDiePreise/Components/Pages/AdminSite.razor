@@ -12,36 +12,26 @@
 
 @if (_userPasswordInput == _adminPassword)
 {
-    <MudText Class="mb-4">Bericht für: @DateTime.UtcNow.Date</MudText>
+    <MudText Class="mb-4">Bericht für: @DateTime.UtcNow.Date.AddDays(-1).ToString("dd.MM.yyyy")</MudText>
 
     <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-        @if (todaysPriceChanges is not null && todaysDailyReports is not null)
+        @if (yesterdaysPriceChanges is not null && yesterdaysDailyReports is not null)
         {
-            @foreach (KeyValuePair<string, int> entry in todaysPriceChanges)
+            @foreach (KeyValuePair<string, int> entry in yesterdaysPriceChanges)
             {
                 <MudText>
                     @entry.Key  : @entry.Value <br />
                 </MudText>
 
-                @if (todaysDailyReports[entry.Key] is not null)
+                @if (yesterdaysDailyReports[entry.Key] is not null)
                 {
-                    <MudText Typo="Typo.caption">@todaysDailyReports[entry.Key].Name , @todaysDailyReports[entry.Key].Price€ <br /></MudText>
+                    <MudText Typo="Typo.caption">@yesterdaysDailyReports[entry.Key].Name , @yesterdaysDailyReports[entry.Key].Price€ <br /></MudText>
                 }
                 else
                 {
-
-                    if (reciveDataUntilHour[entry.Key] > DateTime.UtcNow.Hour)
-                    {
-                        <MudText Color="Color.Warning">
-                            WARTE AUF DATEN BIS @reciveDataUntilHour[entry.Key]  Uhr
-                        </MudText>
-                    }
-                    else
-                    {
-                        <MudText Color="Color.Error">
-                            KEINE DATEN
-                        </MudText>
-                    }
+                    <MudText Color="Color.Error">
+                        KEINE DATEN
+                    </MudText>   
                 }
                 <br />
             }
@@ -51,7 +41,7 @@
     <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
             <MudTabPanel Text="Täglicher Bericht">
-                @if (todaysPriceChanges is not null && todaysDailyReports is not null)
+                @if (yesterdaysPriceChanges is not null && yesterdaysDailyReports is not null)
                 {
 
                     <MudSimpleTable Style="overflow-x: auto;">
@@ -70,40 +60,28 @@
                         </thead>
                         <tbody>
 
-                            @foreach (KeyValuePair<string, int> entry in todaysPriceChanges)
+                            @foreach (KeyValuePair<string, int> entry in yesterdaysPriceChanges)
                             {
                                 <tr>
                                     <td>@entry.Key</td>
                                     <td>@entry.Value</td>
-                                    @if (todaysDailyReports[entry.Key] is not null)
+                                    @if (yesterdaysDailyReports[entry.Key] is not null)
                                     {
-                                        <td>@todaysDailyReports[entry.Key].Name</td>
-                                        <td>@todaysDailyReports[entry.Key].Price€</td>
-                                        <td>@todaysDailyReports[entry.Key].Baseprice€</td>
-                                        <td>@todaysDailyReports[entry.Key].BasepriceUnit</td>
-                                        <td>@todaysDailyReports[entry.Key].Category</td>
-                                        <td><MudLink Href="@todaysDailyReports[entry.Key].Url" Target="_blank">Link</MudLink></td>
+                                        <td>@yesterdaysDailyReports[entry.Key].Name</td>
+                                        <td>@yesterdaysDailyReports[entry.Key].Price€</td>
+                                        <td>@yesterdaysDailyReports[entry.Key].Baseprice€</td>
+                                        <td>@yesterdaysDailyReports[entry.Key].BasepriceUnit</td>
+                                        <td>@yesterdaysDailyReports[entry.Key].Category</td>
+                                        <td><MudLink Href="@yesterdaysDailyReports[entry.Key].Url" Target="_blank">Link</MudLink></td>
                                     }
                                     else
-                                    {
-                                        if (reciveDataUntilHour[entry.Key] > DateTime.UtcNow.Hour)
-                                        {
-                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                            <td><span style="color:orange;">Warte bis @reciveDataUntilHour[entry.Key]  Uhr</span></td>
-                                        }
-                                        else
-                                        {
-                                            <td><span style="color:red;">NO DATA</span></td>
-                                            <td><span style="color:red;">NO DATA</span></td>
-                                            <td><span style="color:red;">NO DATA</span></td>
-                                            <td><span style="color:red;">NO DATA</span></td>
-                                            <td><span style="color:red;">NO DATA</span></td>
-                                            <td><span style="color:red;">NO DATA</span></td>
-                                        }
+                                    {  
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
+                                        <td><span style="color:red;">NO DATA</span></td>
                                     }
                                 </tr>
                             }

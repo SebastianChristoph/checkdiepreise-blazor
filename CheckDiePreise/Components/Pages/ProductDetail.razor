@@ -8,14 +8,14 @@
 <MudGrid Class="mb-2">
     <MudItem xs="12">
         <MudText Class="mb-4" Typo="Typo.h4">Produktdetails</MudText>
-        <MudText Typo="Typo.h6">@Name</MudText>
         <MudText Color="MudBlazor.Color.Secondary" Typo="Typo.caption">@Store, Artikelnummer: @Identifier</MudText>
+        <MudText Typo="Typo.h6">@Name</MudText>
     </MudItem>
 </MudGrid>
 
 @if(_productChanges is not null)
 {
-    <MudLink Href="@_productChanges[0].Url" Target="_blank" Class="mb-8">Zum Produkt im @Store -WebShop</MudLink>
+    <MudButton Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Href="@_productChanges[0].Url" Target="_blank" Class="mb-8">Zum Produkt im @Store-WebShop</MudButton>
       <RadzenChart>
         <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartData" CategoryProperty="Date" Title=@Name LineType="LineType.Solid" StrokeWidth="5" Stroke="#E08148" ValueProperty="Price">
             <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
@@ -34,6 +34,7 @@
         </RadzenValueAxis>
     </RadzenChart>
 
+    <MudText Typo="Typo.caption">(Ein Klick auf das Produkt in der Legende blendet dieses ein oder aus.)</MudText>
 
     @if(_productChanges.Count < 2)
     {

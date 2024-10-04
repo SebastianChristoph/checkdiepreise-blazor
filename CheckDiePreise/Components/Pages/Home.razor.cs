@@ -41,8 +41,8 @@ namespace CheckDiePreise.Components.Pages
             return;
 #endif
 
-            _maxChange = await PriceService.GetTodaysProductChangeMaxAsync();
-            _minChange = await PriceService.GetTodaysProductChangeMinAsync();
+            _maxChange = await PriceService.GetYesterdaysProductChangeMaxAsync();
+            _minChange = await PriceService.GetYesterdaysProductChangeMinAsync();
 
             if (_minChange is not null)
             {

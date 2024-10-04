@@ -16,10 +16,11 @@
 
 <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
     <MudAlert Class="mt-4" Severity="Severity.Info">
-        Diese Funktion steht Ihnen in der mobilen Ansicht aus Platz-Gründen nicht zur Verfügung.
+        <MudIcon Icon="@Icons.Material.Filled.MobileOff"></MudIcon>
+        <br />Diese Funktion steht Ihnen in der mobilen Ansicht aus Platz-Gründen nicht zur Verfügung.
         <br />
         Daten brauchen Platz - schauen Sie sich also alles lieber auf der Desktop-Version an :-)
-        <MudIcon Icon="@Icons.Material.Filled.MobileOff"></MudIcon>
+        
     </MudAlert>
 </MudHidden>
 
@@ -63,7 +64,7 @@
                 }
                 else
                 {
-                    <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store in Preis/Einheit</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.h6">Supermarkt-Daten für @_store Grundpreis</MudText>
                 }
 
             </MudItem>
@@ -101,7 +102,7 @@
                                 }
                                 else
                                 {
-                                    <RadzenAxisTitle Text="Preis in €/Einheit" />
+                                    <RadzenAxisTitle Text="Grundpreis in €" />
                                 }
 
 

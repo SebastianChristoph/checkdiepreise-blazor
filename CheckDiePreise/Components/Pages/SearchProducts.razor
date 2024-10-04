@@ -124,8 +124,9 @@
 
         <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
             <MudAlert Class="mt-4" Severity="Severity.Info">
-                Einige Details und die Diagramm-Funktion werden in der mobilen Ansicht aus Platz-Gründen ausgeblendet
                 <MudIcon Icon="@Icons.Material.Filled.MobileOff"></MudIcon>
+                <br/>
+                Einige Details und die Diagramm-Funktion werden in der mobilen Ansicht aus Platz-Gründen ausgeblendet
             </MudAlert>
         </MudHidden>
 
@@ -234,13 +235,17 @@
                     </MudExpansionPanel>
                 }
 
-            </MudExpansionPanels>
-    
+        </MudExpansionPanels>
+
     }   
     else
     {
-        <MudPaper Class="pa-16 ma-2" Elevation="3">
-            <MudText>Keine Ergebnisse.</MudText>
-        </MudPaper>
+        @if (!_isSearching)
+        {
+            <MudPaper Class="pa-16 ma-2" Elevation="3">
+                <MudText>Keine Ergebnisse.</MudText>
+            </MudPaper>
+        }
+      
     }
 }

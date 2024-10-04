@@ -25,7 +25,7 @@
     </MudItem>
 
     <MudItem sm="4" xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
-        <MudImage Fluid="true" Src="hero.png" Alt="Swedish Farm House" Class="rounded-lg" />
+        <MudImage Fluid="true" Src="hero.png" Alt="CheckDiePreise" Class="rounded-lg" />
     </MudItem>
 </MudGrid>
 
@@ -41,7 +41,7 @@ else
             <MudItem sm="6" xs="12">
                 <MudPaper Class="pa-6 ma-2" Elevation="3">
                     <MudStack>
-                        <MudText Typo="Typo.h6" Color="Color.Primary">Gewinner des Tages <MudIcon Icon="@Icons.Material.Outlined.Mood" Title="Favorite" /></MudText>
+                        <MudText Typo="Typo.h6" Color="Color.Primary">Gewinner von Gestern <MudIcon Icon="@Icons.Material.Outlined.Mood" Title="Favorite" /></MudText>
                         <MudText Typo="Typo.h6">@_minChange.Name</MudText>
                         <MudText Typo="Typo.body1">@_minChange.Store</MudText>
                         <MudSpacer />
@@ -62,7 +62,7 @@ else
             <MudItem sm="6" xs="12">
                 <MudPaper Class="pa-6 ma-2" Elevation="3">
                     <MudStack>
-                        <MudText Typo="Typo.h6" Color="Color.Secondary">Verlierer des Tages <MudIcon Icon="@Icons.Material.Outlined.MoodBad" Title="Favorite" /></MudText>
+                        <MudText Typo="Typo.h6" Color="Color.Secondary">Verlierer von Gestern <MudIcon Icon="@Icons.Material.Outlined.MoodBad" Title="Favorite" /></MudText>
                         <MudText Typo="Typo.h6">@_maxChange.Name</MudText>
                         <MudText Typo="Typo.body1">@_maxChange.Store</MudText>
                         <MudSpacer />

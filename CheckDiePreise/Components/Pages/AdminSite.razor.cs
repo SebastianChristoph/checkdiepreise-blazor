@@ -6,17 +6,17 @@ namespace CheckDiePreise.Components.Pages
 {
     public partial class AdminSite
     {
-        private Dictionary<string, int> todaysPriceChanges = [];
-        private Dictionary<string, int> reciveDataUntilHour = new Dictionary<string, int>
-        {
-            { "ALDI SUED", 11 },
-            { "Hellweg", 14 },
-            { "IKEA", 15 },
-            { "LEGO", 13 },
-            { "ShopApotheke", 10 },
-            { "LIDL", 12 },
-        };
-        private Dictionary<string, DailyReport> todaysDailyReports = [];
+        private Dictionary<string, int> yesterdaysPriceChanges = [];
+        //private Dictionary<string, int> reciveDataUntilHour = new Dictionary<string, int>
+        //{
+        //    { "ALDI SUED", 11 },
+        //    { "Hellweg", 15 },
+        //    { "IKEA", 16 },
+        //    { "LEGO", 14 },
+        //    { "ShopApotheke", 10 },
+        //    { "LIDL", 13 },
+        //};
+        private Dictionary<string, DailyReport> yesterdaysDailyReports = [];
         private IEnumerable<DailyReport> DailyReports = new List<DailyReport>();
         private List<string> _availableStores = [];
 
@@ -41,11 +41,11 @@ namespace CheckDiePreise.Components.Pages
 
             foreach(var _availableStore in _availableStores)
             {
-                var priceChangeCount = await PriceService.GetTodaysNewPriceChangesCountForStoreAsync(_availableStore);
-                var todaysDailyReport = await PriceService.GetTodaysDailyReportByStore(_availableStore);
+                var priceChangeCount = await PriceService.GetYesterdaysNewPriceChangesCountForStoreAsync(_availableStore);
+                var yesterdaysDailyReport = await PriceService.GetYesterdaysDailyReportByStore(_availableStore);
 
-                todaysPriceChanges.Add(_availableStore, priceChangeCount);
-                todaysDailyReports.Add(_availableStore, todaysDailyReport);
+                yesterdaysPriceChanges.Add(_availableStore, priceChangeCount);
+                yesterdaysDailyReports.Add(_availableStore, yesterdaysDailyReport);
                
             }
         }
