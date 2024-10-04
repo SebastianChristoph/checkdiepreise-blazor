@@ -15,6 +15,7 @@ namespace CheckDiePreise.Components.Pages
         private string _hrefMinProduct;
         private string _hrefMaxProduct;
         private List<string> _availableStores = [];
+        private bool _showSpinner = false;
 
         [Inject]
         private PriceService PriceService{ get; set; } = null!;
@@ -28,9 +29,20 @@ namespace CheckDiePreise.Components.Pages
             _canConnect = PriceService.CanConnectToDatabase();
             _availableStores = Configuration.GetValue<string>("Stores").Split(",").ToList();
             _usedDb = Configuration.GetValue<string>("UseDb");
+
+            _showSpinner = true;
+            StateHasChanged();
+            await Task.Delay(1);
+#if DEBUG
+            _minChange = await PriceService.GetRandomProductChangeWithDelayForDebug();
+            _maxChange = await PriceService.GetRandomProductChangeWithDelayForDebug();
+            _showSpinner = false;
+            StateHasChanged();
+            return;
+#endif
+
             _maxChange = await PriceService.GetTodaysProductChangeMaxAsync();
             _minChange = await PriceService.GetTodaysProductChangeMinAsync();
-
 
             if (_minChange is not null)
             {
@@ -41,6 +53,7 @@ namespace CheckDiePreise.Components.Pages
             {
                 _hrefMaxProduct = $"/product/{_maxChange.Store}/{_maxChange.Name}-{_maxChange.Identifier}";
             }
+            _showSpinner = false;
         }
     }
 }

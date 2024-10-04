@@ -31,12 +31,12 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <MudNavMenu>
-            <MudNavLink OnClick="@((e) => DrawerToggle(""))" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
+            <MudNavLink OnClick="@((e) => DrawerToggle(""))" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("search"))" Icon="@Icons.Material.Filled.ManageSearch">Produkt suchen</MudNavLink>
-            <MudNavLink OnClick="@((e) => DrawerToggle("daily"))" Icon="@Icons.Material.Filled.CalendarToday">Tägliche Neuigkeiten</MudNavLink>
-            <MudNavLink OnClick="@((e) => DrawerToggle("analysis"))" Icon="@Icons.Material.Filled.Dataset">Store Analyse</MudNavLink>
+            <MudNavLink OnClick="@((e) => DrawerToggle("daily"))" Icon="@Icons.Material.Filled.Newspaper">Tägliche Neuigkeiten</MudNavLink>
+            <MudNavLink OnClick="@((e) => DrawerToggle("analysis"))" Icon="@Icons.Material.Filled.ShoppingCart">Store Analyse</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("about"))" Icon="@Icons.Material.Filled.Info">Über diese Seite</MudNavLink>
-            <MudNavLink OnClick="@((e) => DrawerToggle("admin"))" Icon="@Icons.Material.Filled.Login">Admin</MudNavLink>
+            <MudNavLink OnClick="@((e) => DrawerToggle("admin"))" Icon="@Icons.Material.Filled.Cable">Admin</MudNavLink>
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>

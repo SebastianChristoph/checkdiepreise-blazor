@@ -30,6 +30,10 @@
     </RadzenChart>
 
 
+    @if(_productChanges.Count < 2)
+    {
+        <MudAlert Severity="Severity.Info">Für dieses Produkt wurden bisher keine Preis-Änderungen erfasst. Der unten angezeigte Preis ist der erstmals erfasste Preis aus dem WebShop.</MudAlert>
+    }
 
     <MudSimpleTable Class="mt-8" Dense="true" Hover="true" Striped="true" Style="overflow-x: auto;">
         <thead>
@@ -44,7 +48,7 @@
                 @foreach (var productChange in _productChanges)
             {
                 <tr>
-                   <td>@productChange.Date</td>
+                    <td>@productChange.Date.ToString("dd/MM/yyyy")</td>
                    <td>@productChange.Price€ / Stk</td>
                    <td>@productChange.Baseprice€ / @productChange.BasepriceUnit</td>
                    <td>

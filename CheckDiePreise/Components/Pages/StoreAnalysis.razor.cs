@@ -12,6 +12,7 @@ namespace CheckDiePreise.Components.Pages
         private string _store = string.Empty;
         private bool _displayUnit = true;
         private List<string> _availableStores = [];
+        private bool _showSpinner = false;
 
         [Inject] PriceService PriceService { get; set; } = null!;
 
@@ -27,6 +28,10 @@ namespace CheckDiePreise.Components.Pages
 
         private async Task DrawChart(string storeName = "")
         {
+            _showSpinner = true;
+            StateHasChanged();
+            await Task.Delay(1);
+
             _chartData = [];
             _store = storeName;
             var storedata = await PriceService.GetStorePriceChangesByStoreAsync(_store);
@@ -66,6 +71,8 @@ namespace CheckDiePreise.Components.Pages
 
                 _chartData.Add(category.Key, data);
             }
+            _showSpinner = false;
+            StateHasChanged();
         }
         public double GetLatestPriceChange(List<StorePriceChange> storePriceChanges)
         {

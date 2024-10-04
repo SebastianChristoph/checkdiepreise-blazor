@@ -13,7 +13,7 @@
 
 <MudGrid>
     <MudItem sm="8" xs="12">
-        <MudTextField Label="Produktname oder Artikelnummer" Variant="MudBlazor.Variant.Outlined" @bind-Value="_productName" />
+        <MudTextField Label="Produktname oder Art.Nr." Variant="MudBlazor.Variant.Outlined" @bind-Value="_productName" />
         <MudText Typo="Typo.caption">Tipp: Eine Einzelwort-Suche ergibt bessere Resultate!</MudText>
         <MudDivider Class="mt-8 mb-4"/>
           
@@ -57,7 +57,7 @@
     <MudGrid>
         <MudItem xs="12">
             <MudPaper Class="d-flex align-center justify-center mud-width-full py-8" Elevation="0">
-                <MudProgressCircular Color="Color.Info" Indeterminate="true" Size="Size.Large" />
+                <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
             </MudPaper>
         </MudItem>
     </MudGrid>
@@ -69,6 +69,7 @@
     if (_productData.Count > 0)
     {
         <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
+
         @if(_identifierInChart.Count > 0){
             @* ---------- CHART ----------------------- *@
             <MudPaper Class="pa-16 ma-2" Elevation="3">
@@ -100,7 +101,7 @@
         </MudHidden>
         
 
-        @* ---------- STORES ----------------------- *@
+        @* ---------- LEGEND ----------------------- *@
         <MudStack Row="true" Class="mt-4" Style="flex-wrap: wrap;" Spacing="2">
             <div style="display: flex; align-items: center; margin-right: 10px; color: gray;">
                 <span style="color: gray; margin-left: 4px;">Legende:</span>
@@ -119,6 +120,8 @@
             </div>
         </MudStack>
 
+        @* ---------- MOBILE INFO ----------------------- *@
+
         <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
             <MudAlert Class="mt-4" Severity="Severity.Info">
                 Einige Details und die Diagramm-Funktion werden in der mobilen Ansicht aus Platz-Gründen ausgeblendet
@@ -126,7 +129,7 @@
             </MudAlert>
         </MudHidden>
 
-
+        @* ---------- STORES ----------------------- *@
             <MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4 mt-8">Gefundene Produkte:</MudText>
 
             <MudExpansionPanels MultiExpansion="true">

@@ -26,13 +26,18 @@
             Die Daten und Preise sind frei in den Online-Shops zugänglich. Wenn man z.B. die Seite
             <br />
             <br />
-            <MudLink Href="https://www.kaufland.de/item/search/?search_value=kartoffel">
-            https://www.kaufland.de/item/search/?search_value=kartoffel
-            </MudLink>
+            
+                <MudLink Href="https://www.kaufland.de/item/search/?search_value=kartoffel">
+                    <code>
+                        https://www.kaufland.de/item/search/?search_value=kartoffel
+                    </code>
+                </MudLink>
+            
             <br />
             <br />
 
-            aufruft, erhält man viele Artikel zum Suchwort Kartoffel. Mit automatisierten
+            aufruft, erhält man viele Artikel zum Suchwort Kartoffel. 
+            <br />Mit automatisierten
             Scripts kann man den Quellcode dieser Website auslesen und die Preise
             auslesen. 
             <br/>
@@ -47,7 +52,9 @@
             <br />
             <br />
             <MudLink Href="https://www.lidl.de/p/api/gridboxes/DE/de/?max=1">
-                https://www.lidl.de/p/api/gridboxes/DE/de/?max=1
+                <code>
+                    https://www.lidl.de/p/api/gridboxes/DE/de/?max=1
+                </code>
             </MudLink>
             <br />
             <br />
@@ -64,7 +71,7 @@
             <MudDivider Class="my-4"/>
             <MudText Align="Align.End">Du möchtest dir den Code ansehen?</MudText>
             <MudStack Row="true" Reverse="true">
-                <MudButton Style="width: 30%" Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Git-Repo</MudButton>
+                <MudButton Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Git-Repo</MudButton>
             </MudStack>
                 
         </ChildContent>
@@ -88,43 +95,16 @@
             <br/>
             <br />
             Durch den Zugriff auf die APIs oder URLS der Online-Shops ist es möglich, alle möglichen Daten zu erhalten.
-            Diese werden in einem Python Script sortiert und am Ende in einer JSON-Datei gespeichert - und das täglich.
+            Diese werden in einem Python Script sortiert und am Ende in einer SQLite-Datenbank gespeichert - und das täglich.
 
-            <br />
-            <br />
-            Die JSON, die nach dem Ordnen der Daten entsteht, sieht pro Supermarkt so aus:
-            <br />
-            <code>
-            {
-            "store": "LIDL",
-            "products" : [
-            {
-            "name": "Original Irische Butter"
-            "id" : 12345,
-            "category": "Molkerei",
-            "original_link": "www..",
-            "unit" : "pro kg",
-            "price_changes": [
-            {
-            "date": "30-10-2023",
-            "price_single": "15.99",
-            "price_bulk": "21.32"},
-            }
-            ]
-            }
-            ]
-            }
-            </code>
-
-            <br />
-            <br />
-
+            <br />    
+            <br/>
             Die Hauptaufgabe von Web-Scraping besteht darin, Daten von Webseiten zu sammeln und in einer strukturierten Form zu speichern, die für weitere Analysen oder Anwendungen verwendet werden kann.
 
             <MudDivider Class="my-4" />
             <MudText Align="Align.End">Du möchtest dir den Code ansehen?</MudText>
             <MudStack Row="true" Reverse="true">
-                <MudButton Style="width: 30%" Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Git-Repo</MudButton>
+                <MudButton Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Git-Repo</MudButton>
             </MudStack>
         </ChildContent>
     </MudExpansionPanel>
@@ -138,12 +118,31 @@
             </div>
         </TitleContent>
         <ChildContent>
-            Panel Content
+            <strong>WebScraping</strong>
+            <MudList T="string">
+                <MudListItem Text="Python" SecondaryText="Die Python-Skripte übernehmen die Automatisierung des WebScrapings, die Datenverarbeitung sowie das Speichern der extrahierten Daten in einer SQLite-Datenbank. Die Skripte sind so konzipiert, dass sie skalierbar und effizient mit großen Datenmengen umgehen können. Täglich wird die SQLite-Datenbank via SFTP mit der Azure-Datenbank synchronisiert." Icon="@Icons.Material.Filled.Code" />
+
+                <MudListItem Text="Raspberry Pi" SecondaryText="Die Python-Skripte laufen auf einem Raspberry Pi, der als Low-Cost-Server für die Ausführung der WebScraping-Jobs dient. Der Raspberry Pi bietet eine kosteneffiziente und energiearme Lösung für den Dauerbetrieb von automatisierten Prozessen." Icon="@Icons.Material.Filled.HomeMax" />
+
+                <MudListItem Text="BeautifulSoup" SecondaryText="Für das WebScraping wird primär die Python-Bibliothek BeautifulSoup verwendet, die es ermöglicht, HTML- und XML-Dokumente zu parsen und gezielt Daten auszulesen. BeautifulSoup wird in Kombination mit Requests zur effizienten Datenextraktion verwendet." Icon="@Icons.Material.Filled.ManageSearch" />
+            </MudList>
+            <br />
+            <strong>App</strong>
+            <MudList T="string">
+                <MudListItem Text="Blazor" SecondaryText="Die Webanwendung verwendet Blazor, ein leistungsstarkes Single-Page-Application-Framework von ASP.NET. Blazor ermöglicht die Implementierung von server- und clientseitiger Logik in C#. Es bietet Echtzeit-Kommunikation und eine optimale Benutzererfahrung durch minimalen Server-Roundtrip." Icon="@Icons.Material.Filled.AutoAwesomeMosaic" />
+            </MudList>
+            <br />
+            <strong>Deployment</strong>
+            <MudList T="string">
+                <MudListItem Text="Git" SecondaryText="Der Quellcode wird durch Git versionsverwaltet. Mithilfe von GitHub Actions wird ein CI/CD-Prozess implementiert, der eine nahtlose Automatisierung des Deployments auf Azure ermöglicht. Dadurch wird sichergestellt, dass neue Features effizient und kontinuierlich ausgerollt werden können." Icon="@Icons.Material.Filled.AccountTree" />
+
+                <MudListItem Text="Azure" SecondaryText="Die Anwendung wird als Azure WebApp gehostet, was skalierbare Cloud-Ressourcen und eine hohe Verfügbarkeit sicherstellt. Azure WebApps bieten zudem einfache Integration mit anderen Azure-Diensten, was die Skalierbarkeit und Erweiterbarkeit der Anwendung erhöht." Icon="@Icons.Material.Filled.Backup" />
+            </MudList>
 
             <MudDivider Class="my-4" />
             <MudText Align="Align.End">Du möchtest dir den Code ansehen?</MudText>
             <MudStack Row="true" Reverse="true">
-                <MudButton Style="width: 30%" Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Git-Repo</MudButton>
+                <MudButton Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" FullWidth="true" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary">Zur Git-Repo</MudButton>
             </MudStack>
         </ChildContent>
     </MudExpansionPanel>

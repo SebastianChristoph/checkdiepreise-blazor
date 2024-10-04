@@ -13,8 +13,17 @@ namespace CheckDiePreise.Data.Services
 
         private DataContext _context;
 
+        public async Task<ProductChange?> GetRandomProductChangeWithDelayForDebug()
+        {
+            await Task.Delay(1000);
+            return await _context.ProductChanges
+                .FirstOrDefaultAsync();
+        }
         public async Task<List<ProductChange>> GetTodaysProductChanges()
         {
+#if DEBUG
+            await Task.Delay(2000);
+#endif
             return await _context.ProductChanges
                 .Where(p => p.Date.Date == DateTime.UtcNow.Date && (p.Difference !=0 ||  p.DifferenceBaseprice != 0))
                 .ToListAsync();
@@ -45,7 +54,9 @@ namespace CheckDiePreise.Data.Services
 
         public async Task<Dictionary<string, List<StorePriceChange>>> GetStorePriceChangesByStoreAsync(string storeName)
         {
-            // Hole die Preisänderungen und gruppiere sie nach Kategorie
+#if DEBUG
+            await Task.Delay(2000);
+#endif
             var storePriceChanges = await Task.FromResult(_context.StorePriceChanges
                 .Where(spc => spc.StoreName == storeName)
                 .OrderBy(spc => spc.Category)
