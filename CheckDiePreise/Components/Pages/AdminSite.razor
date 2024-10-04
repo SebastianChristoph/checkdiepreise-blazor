@@ -4,8 +4,6 @@
 
 <MudText Typo="Typo.h4">Admin Bereich</MudText>
 
-<MudText>adminPassword: @_adminPassword</MudText>
-
 @if (_userPasswordInput != _adminPassword)
 {
     <MudTextField @bind-Value="_userPasswordInput" Label="Bitte Admin-Passwort eingeben" Variant="MudBlazor.Variant.Text"></MudTextField>
