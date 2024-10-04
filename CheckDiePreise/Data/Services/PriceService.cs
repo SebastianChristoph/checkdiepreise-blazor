@@ -79,6 +79,7 @@ namespace CheckDiePreise.Data.Services
         {
             List<ProductChange> productChanges = await Task.FromResult(_context.ProductChanges
                 .Where(p=> p.Store == store && p.Identifier == identifier)
+                .OrderByDescending(p => p.Date)
                 .ToList());
             return productChanges;
         }
@@ -117,7 +118,7 @@ namespace CheckDiePreise.Data.Services
                             nameGroup => nameGroup.Key,
                             nameGroup =>
                             {
-                                var orderedProducts = nameGroup.OrderBy(p => p.Date).ToList();
+                                var orderedProducts = nameGroup.OrderByDescending(p => p.Date).ToList();
                                 if (trend != "both")
                                 {
                                     if (orderedProducts.Last().Trend == trend)

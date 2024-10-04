@@ -41,7 +41,18 @@ else
             <MudItem sm="6" xs="12">
                 <MudPaper Class="pa-6 ma-2" Elevation="3">
                     <MudStack>
-                        <MudText Typo="Typo.h6" Color="Color.Primary">Gewinner von Gestern <MudIcon Icon="@Icons.Material.Outlined.Mood" Title="Favorite" /></MudText>
+                       
+
+                         <MudStack Row="true" Class="mt-4" Style="flex-wrap: wrap;" Spacing="2">
+                            <div style="display: flex; align-items: center; margin-right: 10px;">
+                                <MudText Typo="Typo.h6" Color="Color.Primary">Gewinner von Gestern </MudText>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-right: 10px;color: #53B3DB;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Mood" Title="Favorite" />
+                            </div>
+                        </MudStack>
+
+
                         <MudText Typo="Typo.h6">@_minChange.Name</MudText>
                         <MudText Typo="Typo.body1">@_minChange.Store</MudText>
                         <MudSpacer />
@@ -62,7 +73,17 @@ else
             <MudItem sm="6" xs="12">
                 <MudPaper Class="pa-6 ma-2" Elevation="3">
                     <MudStack>
-                        <MudText Typo="Typo.h6" Color="Color.Secondary">Verlierer von Gestern <MudIcon Icon="@Icons.Material.Outlined.MoodBad" Title="Favorite" /></MudText>
+                       
+                        <MudStack Row="true" Class="mt-4" Style="flex-wrap: wrap;" Spacing="2">
+                            <div style="display: flex; align-items: center; margin-right: 10px;">
+                                <MudText Typo="Typo.h6" Color="Color.Secondary">Verlierer von Gestern</MudText>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-right: 10px;color: #DC9B53;">
+                                <MudIcon Icon="@Icons.Material.Outlined.MoodBad" Title="Favorite" />
+                            </div>
+                        </MudStack>
+
+
                         <MudText Typo="Typo.h6">@_maxChange.Name</MudText>
                         <MudText Typo="Typo.body1">@_maxChange.Store</MudText>
                         <MudSpacer />

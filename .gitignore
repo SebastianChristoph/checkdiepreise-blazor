@@ -411,3 +411,5 @@ FodyWeavers.xsd
 /testi.json
 /Crawler/ionos.py
 /Crawler/test.txt
+/CheckDiePreise/Data/LocalSqliteDb.db
+/LocalSqliteDb.db

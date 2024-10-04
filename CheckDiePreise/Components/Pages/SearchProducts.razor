@@ -156,7 +156,7 @@
                                             <div class="d-flex align-center">
                                                 @if (product.Value[product.Value.Count - 1].Trend == "up")
                                                 {
-                                                    <span style="color:red;"> <MudIcon Icon="@Icons.Material.Filled.TrendingUp" class="mr-3"></MudIcon></span>  @product.Value[0].Name  
+                                                    <span style="color:red;"> <MudIcon Icon="@Icons.Material.Filled.TrendingUp" class="mr-3"></MudIcon></span>@product.Value[0].Name  
                                                     <MudText Typo="Typo.body2" Color="Color.Tertiary">
                                                     <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
                                                         &nbsp;[@product.Key.ToString()]
@@ -167,7 +167,7 @@
                                                 }
                                                 else if (product.Value[product.Value.Count - 1].Trend == "down")
                                                 {
-                                                    <span style="color:green;"> <MudIcon Icon="@Icons.Material.Filled.TrendingDown" class="mr-3"></MudIcon></span>          @product.Value[0].Name
+                                                    <span style="color:green;"> <MudIcon Icon="@Icons.Material.Filled.TrendingDown" class="mr-3"></MudIcon></span>@product.Value[0].Name
                                                     <MudText Typo="Typo.body2" Color="Color.Tertiary">
                                                     <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
                                                         &nbsp;[@product.Key.ToString()]
@@ -193,7 +193,7 @@
                                                         @foreach (ProductChange productChange in product.Value)
                                                         {
                                                             <li>
-                                                                <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.Price€ / Stk &nbsp; [@productChange.Baseprice€ /  @productChange.BasepriceUnit]
+                                                            <strong>@productChange.Date.ToString("dd/MM/yyyy"):</strong> @productChange.Price.ToString("N2")€ / Stk &nbsp; [@productChange.Baseprice.ToString("N2")€ /  @productChange.BasepriceUnit]
                                                             </li>
                                                         }
                                                     </ul>

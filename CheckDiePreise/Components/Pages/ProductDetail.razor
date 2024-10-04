@@ -55,8 +55,8 @@
             {
                 <tr>
                     <td>@productChange.Date.ToString("dd/MM/yyyy")</td>
-                   <td>@productChange.Price€ / Stk</td>
-                   <td>@productChange.Baseprice€ / @productChange.BasepriceUnit</td>
+                    <td>@productChange.Price.ToString("N2")€ / Stk</td>
+                    <td>@productChange.Baseprice.ToString("N2")€ / @productChange.BasepriceUnit</td>
                    <td>
 
                             @if (productChange.Trend == "up")
