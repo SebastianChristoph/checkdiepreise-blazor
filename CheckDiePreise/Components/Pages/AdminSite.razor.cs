@@ -21,6 +21,8 @@ namespace CheckDiePreise.Components.Pages
         private IEnumerable<DailyReport> DailyReports = new List<DailyReport>();
         private List<string> _availableStores = [];
 
+        private string _adminPassword = "None";
+
         [Inject] IConfiguration Configuration { get; set; } = null!;
 
         [Inject]
@@ -29,6 +31,7 @@ namespace CheckDiePreise.Components.Pages
         protected override async Task OnInitializedAsync()
         {
             base.OnInitialized();
+            _adminPassword = Environment.GetEnvironmentVariable("adminpassword");
             _availableStores = Configuration.GetValue<string>("Stores").Split(",").ToList();
 
             foreach(var _availableStore in _availableStores)
