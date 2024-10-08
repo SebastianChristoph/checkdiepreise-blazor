@@ -3,7 +3,6 @@ using CheckDiePreise.Data.Services;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Radzen.Blazor;
-using Radzen.Blazor.Rendering;
 using System.Globalization;
 
 namespace CheckDiePreise.Components.Pages;
@@ -22,11 +21,6 @@ public partial class SearchProducts
     Interpolation interpolation = Interpolation.Step;
 
     private List<string> _identifierInChart = [];
-
-
-    private List<DateTime> allDatesInChart = [];
-
-    private Dictionary<string, List<ProductChange>> allSeriesInChart = [];
 
     [Parameter] public string Product { get; set; }
 
@@ -70,71 +64,68 @@ public partial class SearchProducts
         StateHasChanged();
     }
 
-    public void AddChartData(string store, string productName, string identifier)
+    public void AddProductToChart(string productName, string store, string identifier)
     {
 
-        var productChanges = _productData[store][productName];
-        if (!allSeriesInChart.ContainsKey(productName))
+        var productChanges = _productData[store][identifier];
+        DateTime today = DateTime.Today;
+        List<DataItem> dataItemList = [];
+
+        // Anlegen eines DataItems mit Price = null für jeden Tag seit Startdatum
+        for (DateTime date = productChanges[0].Date; date <= today; date = date.AddDays(1))
         {
-            allSeriesInChart.Add(productName, productChanges);
-            _identifierInChart.Add(identifier);
+
+            DataItem dataItem = new DataItem
+            {
+                Date = date.ToString("dd.MM.yyyy"),
+                Price = 0
+            };
+
+            if (!dataItemList.Contains(dataItem))
+            {
+                dataItemList.Add(dataItem);
+            }
+
+        }
+
+        decimal lastPrice = 0;
+        foreach (var dataItem in dataItemList)
+        {
+            var matchingProductChange = productChanges.FirstOrDefault(change => change.Date.ToString("dd.MM.yyyy") == dataItem.Date);
+
+            if (matchingProductChange != null)
+            {
+                // Preis des ProductChange setzen
+                lastPrice = matchingProductChange.Price;
+                dataItem.Price = (double)matchingProductChange.Price;
+            }
+            else
+            {
+                dataItem.Price = (double?)lastPrice;
+            }
+        }
+
+        if (_chartData.ContainsKey(productName)){
+            _chartData.Remove(productName);
         }
         else
         {
-            allSeriesInChart.Remove(productName);
+            _chartData.Add(productName, dataItemList);
+        }
+       
+        if (_identifierInChart.Contains(identifier)){
             _identifierInChart.Remove(identifier);
         }
-        ReOrderChartData(productChanges);
-    }
-
-    private void ReOrderChartData(List<ProductChange> newDataSet)
-    {
-        foreach (var productChange in newDataSet)
+        else
         {
-
-            if (!allDatesInChart.Contains(productChange.Date))
-            {
-                allDatesInChart.Add(productChange.Date);
-            }
-        }
-        allDatesInChart.Sort();
-        ReDrawChart();
-    }
-
-    private void ReDrawChart()
-    {
-        _chartData = new Dictionary<string, List<DataItem>>();
-        foreach (KeyValuePair<string, List<ProductChange>> serie in allSeriesInChart)
-        {
-            List<DataItem> serieData = [];
-            foreach(DateTime date in allDatesInChart) {
-
-                double? price = null;
-                // Suche nach einem ProductChange, dessen Datum mit dem aktuellen Datum übereinstimmt
-                var matchingProductChange = serie.Value.FirstOrDefault(pc => pc.Date == date);
-
-                if (matchingProductChange != null)
-                {
-                    // Wenn eine Übereinstimmung gefunden wurde, setze den Preis
-                    price = (double)matchingProductChange.Price;
-                    serieData.Add(new DataItem
-                    {
-                        Date = date,
-                        Price = price,
-                    });
-                }
-            }
-
-            _chartData.Add(serie.Key, serieData);
+            _identifierInChart.Add(identifier);
         }
     }
 
     private void DeleteAllSeriesInChart()
     {
-        allSeriesInChart = [];
+        _chartData = [];
         _identifierInChart = [];
-        allDatesInChart = [];
-        ReDrawChart();
     }
 
     private static string FormatAsDouble(object value)
@@ -144,7 +135,7 @@ public partial class SearchProducts
 
    public class DataItem
     {
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public double? Price { get; set; }
     }
 }

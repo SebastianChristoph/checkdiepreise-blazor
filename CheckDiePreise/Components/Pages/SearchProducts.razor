@@ -6,6 +6,12 @@
 @using Radzen
 @using Radzen.Blazor
 
+<style>
+    .rz-chart svg {
+        overflow: visible;
+    }
+</style>
+
 <MudSnackbarProvider/>
 
 <PageTitle>Produktsuche</PageTitle>
@@ -49,7 +55,6 @@
 </MudGrid>  
 <MudButton class="mt-4" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" OnClick=" SearchProductChanges">Produkt suchen</MudButton>
 
-
 @* ---------- SPINNER ----------------------- *@
 
 @if (_isSearching)
@@ -70,34 +75,44 @@
     {
         <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
 
-        @if(_identifierInChart.Count > 0){
+       
             @* ---------- CHART ----------------------- *@
-            <MudPaper Class="pa-16 ma-2" Elevation="3">
+            @if(_identifierInChart.Count > 0)
+            {
+                <MudPaper Class="pa-16 ma-2" Elevation="3">
 
-                <RadzenChart>
-                    @foreach (KeyValuePair<string, List<DataItem>> dataset in _chartData)
-                    {
-                        <RadzenLineSeries Interpolation="@interpolation" Data="@dataset.Value" CategoryProperty="Date" Title="@dataset.Key" LineType="LineType.Solid" ValueProperty="Price">
-                            <RadzenMarkers Visible="false" MarkerType="MarkerType.Square" />
-                            <RadzenSeriesDataLabels Visible="true" />
-                        </RadzenLineSeries>
-                    }
+                    <RadzenChart>
+                        @foreach (KeyValuePair<string, List<DataItem>> dataset in _chartData)
+                        {
+                            <RadzenLineSeries Interpolation="@interpolation" Data="@dataset.Value" CategoryProperty="Date" Title="@dataset.Key" LineType="LineType.Solid" ValueProperty="Price">
+                                <RadzenMarkers Visible="false" MarkerType="MarkerType.Square" />
+                                <RadzenSeriesDataLabels Visible="false" />
+                            </RadzenLineSeries>
+                        }
 
-                    <RadzenCategoryAxis Padding="20" />
-                    <RadzenValueAxis Step="1" Formatter="FormatAsDouble">
-                        <RadzenGridLines Visible="true" />
-                        <RadzenAxisTitle Text="Preis in €" />
-                    </RadzenValueAxis>
-                </RadzenChart>
+                        <RadzenCategoryAxis>
+                            <RadzenTicks>
+                                <Template>
+                                    <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">@context.Value</text>
+                                </Template>
+                            </RadzenTicks>
+                        </RadzenCategoryAxis>
+                        <RadzenValueAxis Formatter="FormatAsDouble">
+                            <RadzenGridLines Visible="true" />
+                            <RadzenAxisTitle Text="Preis pro Artikel in €" />
+                        </RadzenValueAxis>
+                    </RadzenChart>
 
-                <MudStack Row="true" Reverse="true">
-                    <MudTooltip Text="Diagramm zurücksetzen">
-                        <MudFab OnClick="DeleteAllSeriesInChart" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Replay" Size="Size.Small" />
-                    </MudTooltip>
-                </MudStack>
+                    <MudStack Row="true" Reverse="true">
+                        <MudTooltip Text="Diagramm zurücksetzen">
+                            <MudFab OnClick="DeleteAllSeriesInChart" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Replay" Size="Size.Small" />
+                        </MudTooltip>
+                    </MudStack>
 
-            </MudPaper>
-        }
+                </MudPaper>
+            }
+           
+        
         </MudHidden>
         
 
@@ -210,13 +225,13 @@
                                                         @if (_identifierInChart.Contains(product.Value[0].Identifier))
                                                         {
                                                             <MudTooltip Text="Aus Diagramm ausblenden">
-                                                                <MudIconButton OnClick="() => AddChartData(store.Key,product.Key.ToString(), product.Value[0].Identifier)" Icon="@Icons.Material.Filled.MultilineChart" Variant="MudBlazor.Variant.Filled" Color="Color.Error" Size="Size.Medium" />
+                                                                <MudIconButton OnClick="() => AddProductToChart(product.Value[0].Name, store.Key, product.Value[0].Identifier)" Icon="@Icons.Material.Filled.MultilineChart" Variant="MudBlazor.Variant.Filled" Color="Color.Error" Size="Size.Medium" />
                                                             </MudTooltip>
                                                         }
                                                         else
                                                         {
                                                             <MudTooltip Text="Im Diagramm anzeigen">
-                                                                <MudIconButton OnClick="() => AddChartData(store.Key,product.Key.ToString(), product.Value[0].Identifier)" Icon="@Icons.Material.Filled.StackedBarChart" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Size="Size.Medium" />
+                                                            <MudIconButton OnClick="() => AddProductToChart(product.Value[0].Name, store.Key, product.Value[0].Identifier)" Icon="@Icons.Material.Filled.StackedBarChart" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Size="Size.Medium" />
                                                             </MudTooltip>
 
                                                         }

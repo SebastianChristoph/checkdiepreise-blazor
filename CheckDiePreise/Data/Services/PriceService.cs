@@ -118,7 +118,7 @@ namespace CheckDiePreise.Data.Services
                             nameGroup => nameGroup.Key,
                             nameGroup =>
                             {
-                                var orderedProducts = nameGroup.OrderByDescending(p => p.Date).ToList();
+                                var orderedProducts = nameGroup.OrderBy(p => p.Date).ToList();
                                 if (trend != "both")
                                 {
                                     if (orderedProducts.Last().Trend == trend)
