@@ -29,56 +29,79 @@ namespace CheckDiePreise.Components.Pages
 
         private void DrawChart()
         {
-            bool foundToday = false;
-            double lastPrice = 0;
-
-            foreach (var prodcutChange in _productChanges)
+            DateTime today = DateTime.Today;
+            List<DataItem> dataItemList = [];
+            for (DateTime date = _productChanges[0].Date; date <= today; date = date.AddDays(1))
             {
-                if (prodcutChange.Date == DateTime.UtcNow.Date)
+
+                DataItem dataItem = new DataItem
                 {
-                    foundToday = true;
+                    Date = date.ToString("dd.MM.yyyy"),
+                    Price = 0
+                };
+
+                if (!dataItemList.Contains(dataItem))
+                {
+                    dataItemList.Add(dataItem);
                 }
 
-                _chartData.Add(new DataItem
-                {
-                    Date = prodcutChange.Date.ToString("dd.MM.yyyy"),
-                    Price = (double)prodcutChange.Price,
-                });
-            }
-            if (!foundToday)
-            {
-
-                _chartData.Add(new DataItem
-                {
-                    Date = DateTime.UtcNow.Date.ToString("dd.MM.yyyy"),
-                    Price = GetLatestPriceChange(_productChanges),
-                });
             }
 
-            double lastBaseprice = 0;
-
-            foreach (var prodcutChange in _productChanges)
+            decimal lastPrice = 0;
+            foreach (var dataItem in dataItemList)
             {
-                if (prodcutChange.Date == DateTime.UtcNow.Date)
+                var matchingProductChange = _productChanges.FirstOrDefault(change => change.Date.ToString("dd.MM.yyyy") == dataItem.Date);
+
+                if (matchingProductChange != null)
                 {
-                    foundToday = true;
+                    // Preis des ProductChange setzen
+                    lastPrice = matchingProductChange.Price;
+                    dataItem.Price = (double)matchingProductChange.Price;
+                }
+                else
+                {
+                    dataItem.Price = (double?)lastPrice;
+                }
+            }
+
+            _chartData = dataItemList;
+
+
+            List<DataItem> dataItemListBasePrice = [];
+            for (DateTime date = _productChanges[0].Date; date <= today; date = date.AddDays(1))
+            {
+
+                DataItem dataItem = new DataItem
+                {
+                    Date = date.ToString("dd.MM.yyyy"),
+                    Price = 0
+                };
+
+                if (!dataItemListBasePrice.Contains(dataItem))
+                {
+                    dataItemListBasePrice.Add(dataItem);
                 }
 
-                _chartDataBaseprice.Add(new DataItem
-                {
-                    Date = prodcutChange.Date.ToString("dd.MM.yyyy"),
-                    Price = (double)prodcutChange.Baseprice,
-                });
             }
-            if (!foundToday)
-            {
 
-                _chartDataBaseprice.Add(new DataItem
+            decimal lastBaseprice = 0;
+            foreach (var dataItem in dataItemListBasePrice)
+            {
+                var matchingProductChange = _productChanges.FirstOrDefault(change => change.Date.ToString("dd.MM.yyyy") == dataItem.Date);
+
+                if (matchingProductChange != null)
                 {
-                    Date = DateTime.UtcNow.Date.ToString("dd.MM.yyyy"),
-                    Price = GetLatestBasepriceChange(_productChanges),
-                });
+                    // Preis des ProductChange setzen
+                    lastPrice = matchingProductChange.Baseprice;
+                    dataItem.Price = (double)matchingProductChange.Baseprice;
+                }
+                else
+                {
+                    dataItem.Price = (double?)lastPrice;
+                }
             }
+
+            _chartDataBaseprice = dataItemList;
         }
 
         public double GetLatestPriceChange(List<ProductChange> priceChanges)

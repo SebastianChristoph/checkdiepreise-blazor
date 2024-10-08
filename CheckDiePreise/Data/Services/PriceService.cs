@@ -79,7 +79,7 @@ namespace CheckDiePreise.Data.Services
         {
             List<ProductChange> productChanges = await Task.FromResult(_context.ProductChanges
                 .Where(p=> p.Store == store && p.Identifier == identifier)
-                .OrderByDescending(p => p.Date)
+                .OrderBy(p => p.Date)
                 .ToList());
             return productChanges;
         }

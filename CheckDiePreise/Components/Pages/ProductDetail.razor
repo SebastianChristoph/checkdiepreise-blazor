@@ -3,6 +3,12 @@
 @using Radzen
 @using Radzen.Blazor
 
+<style>
+    .rz-chart svg {
+        overflow: visible;
+    }
+</style>
+
 <PageTitle>Produkt-Detail</PageTitle>
 
 <MudGrid Class="mb-2">
@@ -27,13 +33,22 @@
             <RadzenSeriesDataLabels Visible="true" />
         </RadzenLineSeries>
 
-        <RadzenCategoryAxis Padding="20" />
+        <RadzenCategoryAxis>
+            <RadzenTicks>
+                <Template>
+                    <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">@context.Value</text>
+                </Template>
+            </RadzenTicks>
+        </RadzenCategoryAxis>
         <RadzenValueAxis Min="0">
             <RadzenGridLines Visible="true" />
             <RadzenAxisTitle Text="Preis in €" />
         </RadzenValueAxis>
     </RadzenChart>
 
+    <br/>
+    <br/>
+    <br />
     <MudText Typo="Typo.caption">(Ein Klick auf das Produkt in der Legende blendet dieses ein oder aus.)</MudText>
 
     @if(_productChanges.Count < 2)
