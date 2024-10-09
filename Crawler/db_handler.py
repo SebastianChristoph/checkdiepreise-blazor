@@ -1,7 +1,5 @@
 
 import datetime
-import secrets
-import pypyodbc as odbc
 import sqlite3
 import os
 
