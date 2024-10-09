@@ -5,7 +5,15 @@
 <MudGrid>
     <MudItem sm="8" xs="12" Class="d-flex align-center justify-center mud-width-full py-4">
         <MudStack>
-            <MudText style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: clamp(12px, 10vw, 46px); font-weight:bold">Check die Preise</MudText>
+
+            <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+                <MudText style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: clamp(12px, 10vw, 46px); font-weight:bold">Willkommen</MudText>
+            </MudHidden>
+
+            <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
+                <MudText style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: clamp(12px, 10vw, 46px); font-weight:bold">Check die Preise</MudText>
+            </MudHidden>
+
             <MudText Typo="Typo.body1">
                 Wie sehr gehen die Preise in deutschen Märkten nach oben oder unten?
                 <br />

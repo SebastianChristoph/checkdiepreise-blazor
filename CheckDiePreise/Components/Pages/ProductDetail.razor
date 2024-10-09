@@ -19,80 +19,90 @@
     </MudItem>
 </MudGrid>
 
-@if(_productChanges is not null)
+<MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+    <MudAlert Class="mt-4" Severity="Severity.Info">
+        <MudIcon Icon="@Icons.Material.Filled.MobileOff"></MudIcon>
+        <br />
+        Einige Details und die Diagramm-Funktion werden in der mobilen Ansicht aus Platz-Gründen ausgeblendet
+    </MudAlert>
+</MudHidden>
+
+@if (_productChanges is not null)
 {
-    <MudButton Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Href="@_productChanges[0].Url" Target="_blank" Class="mb-8">Zum Produkt im @Store-WebShop</MudButton>
-      <RadzenChart>
-        <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartData" CategoryProperty="Date" Title=@Name LineType="LineType.Solid" StrokeWidth="5" Stroke="#E08148" ValueProperty="Price">
-            <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
-            <RadzenSeriesDataLabels Visible="true" />
-        </RadzenLineSeries>
+    <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
+        <MudButton Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Href="@_productChanges[0].Url" Target="_blank" Class="mb-8">Zum Produkt im @Store-WebShop</MudButton>
+          <RadzenChart>
+            <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartData" CategoryProperty="Date" Title=@Name LineType="LineType.Solid" StrokeWidth="5" Stroke="#E08148" ValueProperty="Price">
+                <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
+                <RadzenSeriesDataLabels Visible="true" />
+            </RadzenLineSeries>
 
-        <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartDataBaseprice" CategoryProperty="Date" Title=@($"{Name} Grundpreis") LineType="LineType.Solid" StrokeWidth="5" Stroke="#62ABFF" ValueProperty="Price">
-            <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
-            <RadzenSeriesDataLabels Visible="true" />
-        </RadzenLineSeries>
+            <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartDataBaseprice" CategoryProperty="Date" Title=@($"{Name} Grundpreis") LineType="LineType.Solid" StrokeWidth="5" Stroke="#62ABFF" ValueProperty="Price">
+                <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
+                <RadzenSeriesDataLabels Visible="true" />
+            </RadzenLineSeries>
 
-        <RadzenCategoryAxis>
-            <RadzenTicks>
-                <Template>
-                    <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">@context.Value</text>
-                </Template>
-            </RadzenTicks>
-        </RadzenCategoryAxis>
-        <RadzenValueAxis Min="0">
-            <RadzenGridLines Visible="true" />
-            <RadzenAxisTitle Text="Preis in €" />
-        </RadzenValueAxis>
-    </RadzenChart>
+            <RadzenCategoryAxis>
+                <RadzenTicks>
+                    <Template>
+                        <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">@context.Value</text>
+                    </Template>
+                </RadzenTicks>
+            </RadzenCategoryAxis>
+            <RadzenValueAxis Min="0">
+                <RadzenGridLines Visible="true" />
+                <RadzenAxisTitle Text="Preis in €" />
+            </RadzenValueAxis>
+        </RadzenChart>
 
-    <br/>
-    <br/>
-    <br />
-    <MudText Typo="Typo.caption">(Ein Klick auf das Produkt in der Legende blendet dieses ein oder aus.)</MudText>
+        <br/>
+        <br/>
+        <br />
+        <MudText Typo="Typo.caption">(Ein Klick auf das Produkt in der Legende blendet dieses ein oder aus.)</MudText>
 
-    @if(_productChanges.Count < 2)
-    {
-        <MudAlert Severity="Severity.Info">Für dieses Produkt wurden bisher keine Preis-Änderungen erfasst. Der unten angezeigte Preis ist der erstmals erfasste Preis aus dem WebShop.</MudAlert>
-    }
+        @if(_productChanges.Count < 2)
+        {
+            <MudAlert Severity="Severity.Info">Für dieses Produkt wurden bisher keine Preis-Änderungen erfasst. Der unten angezeigte Preis ist der erstmals erfasste Preis aus dem WebShop.</MudAlert>
+        }
 
+    </MudHidden>
     <MudSimpleTable Class="mt-8" Dense="true" Hover="true" Striped="true" Style="overflow-x: auto;">
-        <thead>
-            <tr>
-               <th><strong>Preisänderung</strong></th>
-                <th><strong>Preis pro Stk.</strong></th>
-                <th><strong>Preis pro Einheit</strong></th>
-                <th><strong>Trend</strong></th>
-            </tr>
-        </thead>
-        <tbody>
-                @foreach (var productChange in _productChanges)
-            {
+            <thead>
                 <tr>
-                    <td>@productChange.Date.ToString("dd/MM/yyyy")</td>
-                    <td>@productChange.Price.ToString("N2")€ / Stk</td>
-                    <td>@productChange.Baseprice.ToString("N2")€ / @productChange.BasepriceUnit</td>
-                   <td>
-
-                            @if (productChange.Trend == "up")
-                            {
-                                <span style="color:red;"> <MudIcon Icon="@Icons.Material.Filled.TrendingUp" class="mr-3"></MudIcon></span>
-                            }
-                            else if (productChange.Trend == "down")
-                            {
-                                <span style="color:green;"> <MudIcon Icon="@Icons.Material.Filled.TrendingDown" class="mr-3"></MudIcon></span>
-                            }
-                            else
-                            {
-                                <span style="color:gray;"> <MudIcon Icon="@Icons.Material.Filled.TrendingFlat" class="mr-3"></MudIcon></span>
-                                ;
-                            }
-
-                   </td>
+                   <th><strong>Preisänderung</strong></th>
+                    <th><strong>Preis pro Stk.</strong></th>
+                    <th><strong>Preis pro Einheit</strong></th>
+                    <th><strong>Trend</strong></th>
                 </tr>
-            }
-        </tbody>
-</MudSimpleTable>
+            </thead>
+            <tbody>
+                    @foreach (var productChange in _productChanges)
+                {
+                    <tr>
+                        <td>@productChange.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@productChange.Price.ToString("N2")€ / Stk</td>
+                        <td>@productChange.Baseprice.ToString("N2")€ / @productChange.BasepriceUnit</td>
+                       <td>
+
+                                @if (productChange.Trend == "up")
+                                {
+                                    <span style="color:red;"> <MudIcon Icon="@Icons.Material.Filled.TrendingUp" class="mr-3"></MudIcon></span>
+                                }
+                                else if (productChange.Trend == "down")
+                                {
+                                    <span style="color:green;"> <MudIcon Icon="@Icons.Material.Filled.TrendingDown" class="mr-3"></MudIcon></span>
+                                }
+                                else
+                                {
+                                    <span style="color:gray;"> <MudIcon Icon="@Icons.Material.Filled.TrendingFlat" class="mr-3"></MudIcon></span>
+                                    ;
+                                }
+
+                       </td>
+                    </tr>
+                }
+            </tbody>
+    </MudSimpleTable>
 }
 
 
