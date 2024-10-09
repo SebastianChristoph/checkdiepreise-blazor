@@ -85,8 +85,8 @@ def clean_baseprice(input_string):
 
     match = re.search(r'\((.*?)\)', input_string)
     if match:
-        extracted_text = match.group(1)  # Die Gruppe 1 entspricht dem Text zwischen "(" und ")"
-        return extracted_text.strip()  # E
+        extracted_text = match.group(1)
+        return extracted_text.strip()
 
     return input_string
 
@@ -155,11 +155,9 @@ def getting_articles_from_shop(category, cat_url, cat_main_name, show_product_to
                 name = product.find("h2", class_ ="product-title").text.strip()  
 
                 try:
-                    #imageURL and ID
+                   #ID
                     image_wrapper = product.find("img", class_ = "at-product-images_img")
                     imageURL = image_wrapper.get("data-src")
-
-                    # id
                     identifier = imageURL.split("/")[-1]
                 except:
                     continue   
@@ -168,7 +166,6 @@ def getting_articles_from_shop(category, cat_url, cat_main_name, show_product_to
                     print(".", end="")
                 product_to_add = Product.Product(name, identifier, float(price), float(baseprice), baseprice_unit, "ALDI SUED", cat_main_name, url)
                
-        
                 if product_to_add not in list_of_found_products:
                     list_of_found_products.append(product_to_add)
         except Exception as e:

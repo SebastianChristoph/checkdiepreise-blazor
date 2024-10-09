@@ -21,9 +21,6 @@ def clean_price(price) -> float:
 def get_products_from_shop():
     source = requests.get(URL, headers = headers).text
     soup = BeautifulSoup(source, "lxml")
-    # with open("testi.html", "w", encoding="UTF-8") as file:
-    #         file.write(soup.prettify())
-    #         print("testi.html")
     category_urls = soup.find_all("a", class_ = "js-navigation-offcanvas-link")
 
     # Main Categories
@@ -40,25 +37,17 @@ def get_products_from_shop():
         if len(last_page_li)> 0:
             input_tag = last_page_li[0].find("input", type="radio")
             last_page = int(input_tag.get('value'))
-            #print("     Last Page: ", last_page)
 
         for page in range(1, last_page):
-            # print(f"    Page {page} of {last_page}")
             url_for_page = f"{category_url}?order=relevance&p={page}"
             print(f"{url_for_page} | {last_page}")
 
             source = requests.get(url_for_page, headers = headers).text
             soup = BeautifulSoup(source, "lxml")
-            # with open("testi1.html", "w", encoding="UTF-8") as file:
-            #     file.write(soup.prettify())
-            #     print("testi1.html")
 
             product_wrappers = soup.find_all("div", class_="cms-listing-col")
             iteration = 0
             for product_wrapper in product_wrappers:
-                # with open("testi2.html", "w", encoding="UTF-8") as file:
-                #     file.write(product_wrapper.prettify())
-                #     print("testi2.html")
                 url = ""
                 identifier = ""
                 name = ""
@@ -99,7 +88,6 @@ def get_products_from_shop():
                         price = product_wrapper.find("span", class_="default-price").text
                         price = clean_price(price)
 
-
                 except Exception as e: 
                     print("no name, skip", e)
                     continue
@@ -138,7 +126,6 @@ def get_products_from_shop():
 
                     if iteration == 3:
                         break
-
             
             if ONLY_ITERATE_3_TIMES or ONLY_ITERATE_3_PRODUCTS:
                 break

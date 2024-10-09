@@ -51,7 +51,6 @@ def add_products_from_category_page(url, page_iteration_limit = 10):
     url_to_check = url + f"?page={page}"
     print("     Add Products from Category Page:", url_to_check)
     
-    #print("     normal page")
     try:
         s = requests.Session()
         s.headers = headers
@@ -64,10 +63,12 @@ def add_products_from_category_page(url, page_iteration_limit = 10):
             link = product_info.find("a").get("href")
             if link not in URLS_COLLECTION:
                 URLS_COLLECTION.append(link)          
+    
     except Exception as e:
         print("     Error1", e)
     
     url_to_check = url + "?sort=PRICE_LOW_TO_HIGH"
+    
     try:
         s = requests.Session()
         s.headers = headers
@@ -80,10 +81,10 @@ def add_products_from_category_page(url, page_iteration_limit = 10):
             link = product_info.find("a").get("href")
             if link not in URLS_COLLECTION:
                 URLS_COLLECTION.append(link)          
+    
     except Exception as e:
         print("     Error2", e)
 
-    #print("     MOST_POPULAR")
     url_to_check = url + "?sort=MOST_POPULAR"
     try:
         s = requests.Session()
@@ -108,16 +109,12 @@ def get_product_info(url):
         source = s.get(url, headers = headers).text
         soup = BeautifulSoup(source, "lxml")
 
-       
-
         utag_data_script = soup.find('script', {'data-type': 'utag-data'})
         javascript_code = utag_data_script.string
         start = javascript_code.find('var utag_data = ') + len('var utag_data = ')
         end = javascript_code.find(';', start)
         utag_data_json = javascript_code[start:end]
         utag_data = json.loads(utag_data_json+"}")
-
-       
 
         meta_wrappers = soup.find_all("meta")
 
@@ -133,7 +130,6 @@ def get_product_info(url):
         # price
         price = utag_data["price"][0]
         baseprice = utag_data["price"][0]
-
         baseprice_unit = "Artikel"
 
         # CATEGORY
@@ -142,8 +138,6 @@ def get_product_info(url):
         category = category_list[1].text.strip()
 
         product_to_add = Product.Product(name, identifier, float(price), float(baseprice), baseprice_unit, "IKEA", category, product_url)
-        
-
         list_of_found_products.append(product_to_add)
         
     except:

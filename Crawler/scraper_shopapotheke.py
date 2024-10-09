@@ -18,7 +18,6 @@ ONLY_ITERATE_3_TIMES = False
 ONY_FIND_3_PRODUCTS = False
 
 def extract_numbers_from_string(input_string):
-    # Verwendet reguläre Ausdrücke, um alle Zahlen im String zu finden
     numbers = re.findall(r'\d+', input_string)
     return [int(number) for number in numbers]
 
@@ -33,17 +32,19 @@ def get_first_categories():
     start = script_content.find("publicRuntimeConfig")
 
     last_brace_index = script_content.rfind("}")
+
     if last_brace_index != -1:
         remaining_string = script_content[:last_brace_index]
         second_last_brace_index = remaining_string.rfind("}")
 
     dicti = json.loads(script_content[start-2:second_last_brace_index+1])
     counter_main = 0
+
     for main_category in dicti["publicRuntimeConfig"]["publicConfig"]["safeFooterCategories"]:
         counter_main += 1
         main_category_name = main_category["title"]
-
         print(f"+++++ MAIN: {main_category_name} ({counter_main} of {len(dicti["publicRuntimeConfig"]["publicConfig"]["safeFooterCategories"])})")
+        
         counter_second = 0
         for first_category in main_category["links"]:
             counter_second += 1
@@ -111,7 +112,6 @@ def get_products_from_sub(url_to_scrawl, category):
         source = requests.get(url_to_scrawl, headers=headers).text
         soup = BeautifulSoup(source, "lxml")
 
-        # get total products
         total_products = soup.find(
             "p", class_="o-FilterBox__total-products").text.split("von")[-1]
         total = extract_numbers_from_string(total_products)[-1]
@@ -160,28 +160,11 @@ def get_products_from_sub(url_to_scrawl, category):
                 name = product_wrapper.find("img").get("alt")
 
                 product = Product.Product(name, id, float(price), float(baseprice), unit, "ShopApotheke", category, original_link)
-                # if product not in list_of_found_products:
-                #     if SHOW_PRINTS:
-                #         print(id, name, category)
-                #         list_of_found_products.append(product)
-
-                # new_product = {
-                #     "name": name,
-                #     "price": price,
-                #     "baseprice": baseprice,
-                #     "id": id,
-                #     "imageURL": imageURL,
-                #     "original_link": original_link,
-                #     "unit": unit,
-                #     "category": category
-                # }
-
                 if id not in used_ids:
                     list_of_found_products.append(product)
                     used_ids.append(id)
 
         except Exception as e:
-            #print("                  ", e)
             continue
         
         if ONY_FIND_3_PRODUCTS:
@@ -193,7 +176,6 @@ def get_products_from_shop():
     current = 1
     print("Get Categories")
     get_first_categories()
-    print("Done")
 
     for product_page in categories:
         if SHOW_PRINTS:

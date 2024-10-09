@@ -4,13 +4,10 @@ import datetime
 from collections import defaultdict
 
 def calculate_store_category_averages(products):
-
-    print("\n#######################################")
     print("\nCalculate Store Category Averages")
 
     store_category_data = defaultdict(lambda: defaultdict(lambda: {'price_sum': 0, 'baseprice_sum': 0, 'count': 0}))
     
-    # Aggregate data
     for product in products:
         store = product.store
         category = product.category
@@ -38,5 +35,3 @@ def calculate_store_category_averages(products):
             store_category_price_change = StoreCategoryAveragePrice.StoreCategoryPriceChange(store, date, prices['Price'], prices['Baseprice'], category)
 
             db_handler.post_average_store_category_price_to_sqlite_db(store_category_price_change)
-
-    print("\nDONE")

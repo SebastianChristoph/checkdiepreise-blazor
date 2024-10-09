@@ -5,10 +5,7 @@ import random
 import crawler_handler
 import Product
 
-
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'}
-
-
 list_of_found_products = []
 
 def get_products_from_shop(hits_max = 30000):
@@ -62,18 +59,16 @@ def get_products_from_shop(hits_max = 30000):
                 raise Exception("Fehler in Baseprice:", ex)
 
             product_to_add = Product.Product(name, identifier, float(price), float(baseprice), baseprice_unit, "LIDL", category, url)
-        
-
 
             if product_to_add not in list_of_found_products:                
                 list_of_found_products.append(product_to_add)
+
         except Exception as e:
             print("error:", e)
             print(product)
             print("_______________________________")
             continue
     
-
 get_products_from_shop()
 CrawlerHandler = crawler_handler.Crawler_Handler(list_of_found_products)
 CrawlerHandler.handle()

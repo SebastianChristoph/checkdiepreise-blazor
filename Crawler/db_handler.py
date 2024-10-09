@@ -88,7 +88,6 @@ def post_price_change_to_local_sqlite_db(price_change):
         sql_query = f"""INSERT INTO {TABLE_PRICE_CHANGES} (Id, Name, Date, Identifier, Price, PriceBefore, Baseprice, BasepriceBefore, Difference, DifferenceBaseprice, BasepriceUnit, Store, Category, Trend, Url)
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"""
         
-        # Verwende den Decimal-Wert direkt im SQL-Query
         cursor.execute(sql_query, (None, price_change.product_name, change_date, price_change.identifier, price_change.price, price_change.price_before, price_change.baseprice, price_change.baseprice_before, price_change.difference, price_change.difference_baseprice, price_change.baseprice_unit, price_change.store, price_change.category, price_change.trend, price_change.url))
 
         sqlite_connection.commit()
@@ -119,7 +118,6 @@ def post_random_product_to_daily_report_sqlite(product):
             sql_query = f"""INSERT INTO {TABLE_DAILY_REPORTS} (Id, Name, Date, Identifier, Price, Baseprice, BasepriceUnit, Store, Category, Url)
             VALUES (?,?,?,?,?,?,?,?,?,?);"""
             
-            # Verwende den Decimal-Wert direkt im SQL-Query
             cursor.execute(sql_query, (None, product.name, change_date, product.identifier, product.price, product.baseprice, product.baseprice_unit, product.store, product.category,product.url))
 
             sqlite_connection.commit()
@@ -138,26 +136,18 @@ def get_latest_price_data_by_identifier_for_product_from_sqlite_db(store, identi
 
     try:
         sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
-       # Den Row-Factory setzen, um ein Dictionary mit den Spaltennamen als Keys zu erhalten
         sqlite_connection.row_factory = sqlite3.Row
         cursor = sqlite_connection.cursor()
 
-        # SQL-Abfrage vorbereiten
         sql_query = f"""SELECT * FROM {TABLE_PRICE_CHANGES}
                         WHERE Store=? AND Identifier=?
                         ORDER BY Date ASC"""
         cursor.execute(sql_query, (store, identifier))
-
-        # Ergebnisse abrufen
         results = cursor.fetchall()
         cursor.close()
 
-        # Prüfen, ob Ergebnisse vorhanden sind
         if len(results) > 0:
-            # Den letzten Eintrag in ein Dictionary umwandeln
             last_entry = dict(results[-1])
-
-            # Zugriff auf die relevanten Felder
             data = {
                 "date": last_entry["Date"],
                 "price_old": last_entry["Price"],
@@ -181,8 +171,6 @@ def get_daily_report_for_store(store):
         sql_query = f"""SELECT * FROM {TABLE_DAILY_REPORTS}
                 WHERE Store=? AND Date=?"""
         cursor.execute(sql_query, (store, today))
-
-        # Ergebnisse abrufen
         results = cursor.fetchall()
         cursor.close()
 
@@ -227,8 +215,6 @@ def post_average_store_category_price_to_sqlite_db(store_category_price_change):
         if SHOW_PRINTS : print("             Erfolgreich mit DB verbunden", end = " > ")
         sql_query = f"""INSERT INTO {TABLE_STORE_PRICE_CHANGES} (Id, StoreName, Date, Price, Baseprice, Category)
         VALUES (?,?,?,?,?,?);"""
-        
-        # Verwende den Decimal-Wert direkt im SQL-Query
         cursor.execute(sql_query, (None, store_category_price_change.store_name, store_category_price_change.date, store_category_price_change.price, store_category_price_change.baseprice, store_category_price_change.category))
 
         sqlite_connection.commit()
@@ -240,7 +226,6 @@ def post_average_store_category_price_to_sqlite_db(store_category_price_change):
         if sqlite_connection:
             sqlite_connection.close()
             if SHOW_PRINTS : print("SQL Verbindung geschlossen")
-
 
 def main():
     if SHOW_PRINTS: print("\n\nStart DB Handler")

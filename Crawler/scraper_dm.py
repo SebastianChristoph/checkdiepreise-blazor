@@ -30,7 +30,6 @@ def getting_articles_from_shop(searchterm, page, category):
                 try:
 
                     #price
-
                     price = product["priceLocalized"].replace("€", "").replace(",",".").strip()
                     price = float(price)
 
@@ -61,17 +60,6 @@ def getting_articles_from_shop(searchterm, page, category):
                 if product_to_add not in list_of_found_products:
                     list_of_found_products.append(product_to_add)
                 
-                # new_dictionary = {
-                #     "name" : product["brandName"] + " - " + product["title"],
-                #     "price" : price,
-                #     "baseprice": baseprice,
-                #     "unit" : unit,
-                #     "category" : category,
-                #     "original_link" : "https://www.dm.de" + product["relativeProductUrl"],
-                #     "id" : product["gtin"]
-                # }
-                #list_of_found_products.append(new_dictionary)
-
                 if ITERATE_ONLY_3_TIMES:
                     if product_count == 3: 
                         collecting = False
@@ -80,10 +68,8 @@ def getting_articles_from_shop(searchterm, page, category):
         except Exception as e:
             collecting = False
             if SHOW_PRINTS:
-                print("*******************************************************")
                 print(source)
                 print("error", e)
-                print("*******************************************************")
 
 def main():
     break_seconds = 45
@@ -111,9 +97,7 @@ def main():
             break_counter = 0
 
     print("\n\nWait", break_seconds, "seconds...\n")
-    #if ITERATE_ONLY_3_TIMES == False:
     CrawlerHandler = crawler_handler.Crawler_Handler(list_of_found_products)
     CrawlerHandler.handle()
-
 
 main()

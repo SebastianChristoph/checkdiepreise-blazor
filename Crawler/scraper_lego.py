@@ -18,10 +18,8 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 
 def extract_numbers(input_string):
     replace_string = input_string.replace(",", ".")
-    # Verwende einen regulären Ausdruck, um Zahlen und Kommata zu extrahieren
     result = re.findall(r'[\d,]+', replace_string)
     
-    # Verbinde alle gefundenen Teile zu einem String
     if result:
         return float(result[0])
     return None
@@ -70,7 +68,6 @@ def get_products_from_site(url, category):
     if pages == None:
         return
 
-
     for i in range(1, pages+1):
         if SHOW_PRINTS: print(f"_______________page {i}_______________________")
         url_to_scrape = f"{url}?page={i}"
@@ -82,7 +79,6 @@ def get_products_from_site(url, category):
             source = s.get(url_to_scrape, headers = headers).text
             soup = BeautifulSoup(source, "lxml")
             product_wrappers = soup.find_all("li", class_ = "Grid_grid-item__FLJlN")
-
 
             for product_wrapper in product_wrappers:
                 if product_wrapper.get("data-test") != "product-item":
@@ -139,6 +135,7 @@ def get_products_from_site(url, category):
                         if SHOW_PRINTS:
                             print(identifier, name, category)
                         list_of_found_products.append(product)
+                        
         except Exception as e:
             print("error getting page products", e)
     
