@@ -13,7 +13,9 @@
         
         <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
             <div style="height: 30px; display:flex; gap: 1em;">
+                 <MudTooltip Text="Produkt-Schnellsuche">
                 <MudTextField style="height: 35px" Variant="MudBlazor.Variant.Outlined" @bind-Value="_quicksearch" />
+                </MudTooltip>
                  <MudTooltip Text="Produkt suchen">
                     <MudIconButton Href=@($"/search/{_quicksearch}") Icon="@Icons.Material.Filled.Search" Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Size="Size.Small" />
                 </MudTooltip>
@@ -33,8 +35,8 @@
         <MudNavMenu>
             <MudNavLink OnClick="@((e) => DrawerToggle(""))" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("search"))" Icon="@Icons.Material.Filled.ManageSearch">Produkt suchen</MudNavLink>
-            <MudNavLink OnClick="@((e) => DrawerToggle("daily"))" Icon="@Icons.Material.Filled.Newspaper">Tägliche Neuigkeiten</MudNavLink>
-            <MudNavLink OnClick="@((e) => DrawerToggle("analysis"))" Icon="@Icons.Material.Filled.ShoppingCart">Store Analyse</MudNavLink>
+            <MudNavLink OnClick="@((e) => DrawerToggle("daily"))" Icon="@Icons.Material.Filled.Newspaper">Tägliche Updates</MudNavLink>
+            <MudNavLink OnClick="@((e) => DrawerToggle("analysis"))" Icon="@Icons.Material.Filled.ShoppingCart">WebShop Analyse</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("about"))" Icon="@Icons.Material.Filled.Info">Über diese Seite</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("admin"))" Icon="@Icons.Material.Filled.Cable">Admin</MudNavLink>
         </MudNavMenu>

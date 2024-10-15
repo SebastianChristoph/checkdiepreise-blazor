@@ -9,9 +9,8 @@ public partial class MainLayout
 {
 
     bool _drawerOpen = true;
-    private string _quicksearch ="Produkt-Schnellsuche";
-    //private string? _connectionString;
-
+    private string _quicksearch ="";
+   
     [Inject] 
     private NavigationManager NavigationManager { get; set; } = null!;
 

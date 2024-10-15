@@ -31,15 +31,16 @@
 {
     <MudHidden Breakpoint="Breakpoint.Xs" Invert="false">
         <MudButton Variant="MudBlazor.Variant.Filled" Color="Color.Secondary" Href="@_productChanges[0].Url" Target="_blank" Class="mb-8">Zum Produkt im @Store-WebShop</MudButton>
+
           <RadzenChart>
-            <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartData" CategoryProperty="Date" Title=@Name LineType="LineType.Solid" StrokeWidth="5" Stroke="#E08148" ValueProperty="Price">
-                <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
-                <RadzenSeriesDataLabels Visible="true" />
+            <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartData" CategoryProperty="Date" Title=@(Name.Length > 20 ? Name.Substring(0, 20) + "..." : Name) LineType="LineType.Solid" StrokeWidth="5" Stroke="#E08148" ValueProperty="Price">
+                <RadzenMarkers Visible="true" />
+                <RadzenSeriesDataLabels Visible="false" />
             </RadzenLineSeries>
 
-            <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartDataBaseprice" CategoryProperty="Date" Title=@($"{Name} Grundpreis") LineType="LineType.Solid" StrokeWidth="5" Stroke="#62ABFF" ValueProperty="Price">
-                <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
-                <RadzenSeriesDataLabels Visible="true" />
+            <RadzenLineSeries Interpolation="Interpolation.Step" Data="@_chartDataBaseprice" CategoryProperty="Date" Title=@(Name.Length > 20 ? Name.Substring(0, 20) + "... (Grundpreis)" : Name + "(Grundpreis)") LineType="LineType.Solid" StrokeWidth="5" Stroke="#62ABFF" ValueProperty="Price">
+                <RadzenMarkers Visible="true" />
+                <RadzenSeriesDataLabels Visible="false" />
             </RadzenLineSeries>
 
             <RadzenCategoryAxis>

@@ -5,7 +5,7 @@
 
 <PageTitle>Supermarkt Analyse</PageTitle>
 <MudPaper Class="pa-4 mb-4" Elevation="1">
-    <MudText Typo="Typo.h4">Supermarkt Analyse</MudText>
+    <MudText Typo="Typo.h4">WebShop Analyse</MudText>
     <MudDivider Class="my-4" />
     <MudText>
        Analysiere selbst die Webshops!
@@ -83,16 +83,22 @@
                     {
                         <RadzenChart ColorScheme=ColorScheme.Palette>
 
-                            @foreach (var category in _chartData)
+                        @foreach (var category in _chartData.Select((kvp, index) => new { kvp, index }))
                             {
-                                <RadzenLineSeries Interpolation="Interpolation.Step" Data="@category.Value" CategoryProperty="Date" Title=@category.Key LineType="LineType.Solid" StrokeWidth="4" ValueProperty="Price">
-                                    <RadzenMarkers Visible="true" MarkerType="MarkerType.Square" />
+                            <RadzenLineSeries Interpolation="Interpolation.Step" Data="@category.kvp.Value" CategoryProperty="Date" Title=@category.kvp.Key LineType="LineType.Solid" StrokeWidth="2" Stroke="@GetRandomColorHex(category.index)" ValueProperty="Price">
+                                <RadzenMarkers Visible="true" />
                                     <RadzenSeriesDataLabels Visible="false" />
                                 </RadzenLineSeries>
                             }
 
 
-                            <RadzenCategoryAxis Padding="20" />
+                        <RadzenCategoryAxis Padding="0">
+                            <RadzenTicks>
+                                <Template >
+                                    <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg); ">@context.Value</text>
+                                </Template>
+                            </RadzenTicks>
+                            </RadzenCategoryAxis>
                             <RadzenValueAxis Min="0" Formatter="@FormatAsDouble">
                                 <RadzenGridLines Visible="true" />
 
@@ -108,11 +114,25 @@
 
                             </RadzenValueAxis>
                         </RadzenChart>
+
+                        
+        <br/>
+        <br/>
+        <br />
+
                     }
             }
         </MudItem>
         </MudGrid>
-    <MudText Typo="Typo.caption">(Ein Klick auf eine Kategorie in der Legende blendet diese ein oder aus.)</MudText>
+
+        
+        @if (_chartData.Count > 0)
+        {
+            <MudStack Row="true" Reverse="true">
+                <MudText Typo="Typo.caption">(Ein Klick auf eine Kategorie in der Legende blendet diese ein oder aus.)</MudText>
+            </MudStack>
+           }
+    
 </MudHidden>
 
 

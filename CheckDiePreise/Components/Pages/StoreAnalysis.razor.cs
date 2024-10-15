@@ -1,6 +1,7 @@
 using CheckDiePreise.Data.Models;
 using CheckDiePreise.Data.Services;
 using Microsoft.AspNetCore.Components;
+using System.Drawing;
 using System.Globalization;
 
 namespace CheckDiePreise.Components.Pages
@@ -13,6 +14,10 @@ namespace CheckDiePreise.Components.Pages
         private bool _displayUnit = true;
         private List<string> _availableStores = [];
         private bool _showSpinner = false;
+        private List<Color> colors = new List<Color> { Color.Red, Color.Blue, Color.Green, Color.Orange, Color.Purple, Color.Lime, Color.Navy, Color.Crimson, Color.Magenta, Color.DarkOrange,Color.DarkRed, Color.ForestGreen,Color.RoyalBlue, Color.Sienna, Color.SteelBlue,   Color.DarkViolet, Color.DeepPink, Color.Firebrick,   Color.MediumVioletRed, Color.DarkSlateBlue, Color.Tomato, Color.DodgerBlue,
+        };
+
+    
 
         [Inject] PriceService PriceService { get; set; } = null!;
 
@@ -25,6 +30,20 @@ namespace CheckDiePreise.Components.Pages
             _availableStores.Sort();
         }
 
+        private string GetRandomColorHex(int index)
+        {
+            try
+            {
+                return ColorTranslator.ToHtml(colors[index]);
+            }
+            catch
+            {
+                Random random = new Random();
+                int randIndex = random.Next(colors.Count);
+                return ColorTranslator.ToHtml(colors[randIndex]);
+            }
+            
+        }
 
         private async Task DrawChart(string storeName = "")
         {
