@@ -16,7 +16,7 @@ namespace CheckDiePreise.Data.Services
         public async Task<ProductChange?> GetRandomProductChangeWithDelayForDebug()
         {
             await Task.Delay(1000);
-            return await _context.ProductChanges.Where(p => p.Price != p.PriceBefore)
+            return await _context.ProductChanges
                 .FirstOrDefaultAsync();
         }
         public async Task<List<ProductChange>> GetYesterdaysProductChanges()
@@ -37,21 +37,22 @@ namespace CheckDiePreise.Data.Services
         public async Task<ProductChange?> GetYesterdaysProductChangeMaxAsync()
         {
             return await _context.ProductChanges
-                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1) && p.PriceBefore != 0) 
-                .OrderByDescending(p => Math.Abs((p.Difference / p.PriceBefore) * 100))
-                .FirstOrDefaultAsync();
+                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
+                .OrderByDescending(p => (double)p.Difference)
+                .FirstOrDefaultAsync(); 
         }
 
         public async Task<ProductChange?> GetYesterdaysProductChangeMinAsync()
         {
             return await _context.ProductChanges
-                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1) && p.PriceBefore != 0) 
-                .OrderBy(p => Math.Abs((p.Difference / p.PriceBefore) * 100))
+                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
+                .OrderBy(p => (double)p.Difference)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<Dictionary<string, List<StorePriceChange>>> GetStorePriceChangesByStoreAsync(string storeName)
         {
+
             var storePriceChanges = await Task.FromResult(_context.StorePriceChanges
                 .Where(spc => spc.StoreName == storeName)
                 .OrderBy(spc => spc.Category)
