@@ -12,16 +12,21 @@ namespace CheckDiePreise.Data.Services
         }
 
         private DataContext _context;
+        private int thresholdPriceDifference = 60;
 
         public async Task<ProductChange?> GetRandomProductChangeWithDelayForDebug()
         {
-            await Task.Delay(1000);
-            return await _context.ProductChanges
-                .FirstOrDefaultAsync();
+            var filteredProducts = await _context.ProductChanges
+                .Where(p => p.PriceBefore != 0)
+                .ToListAsync(); 
+
+            return filteredProducts
+                .Where(p => ((p.Difference / p.PriceBefore) * 100) > thresholdPriceDifference)
+                .OrderBy(p => (p.Difference / p.PriceBefore) * 100)
+                .FirstOrDefault();
         }
         public async Task<List<ProductChange>> GetYesterdaysProductChanges()
         {
-
             return await _context.ProductChanges
                 .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1) && (p.Difference !=0 ||  p.DifferenceBaseprice != 0))
                 .ToListAsync();
@@ -36,18 +41,26 @@ namespace CheckDiePreise.Data.Services
 
         public async Task<ProductChange?> GetYesterdaysProductChangeMaxAsync()
         {
-            return await _context.ProductChanges
-                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
-                .OrderByDescending(p => (double)p.Difference)
-                .FirstOrDefaultAsync(); 
+            var filteredProducts = await _context.ProductChanges
+               .Where(p => p.PriceBefore != 0)
+               .ToListAsync();
+
+            return filteredProducts
+                .Where(p => ((p.Difference / p.PriceBefore) * 100) < thresholdPriceDifference)
+                .OrderByDescending(p => (p.Difference / p.PriceBefore) * 100)
+                .FirstOrDefault();
         }
 
         public async Task<ProductChange?> GetYesterdaysProductChangeMinAsync()
         {
-            return await _context.ProductChanges
-                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
-                .OrderBy(p => (double)p.Difference)
-                .FirstOrDefaultAsync();
+            var filteredProducts = await _context.ProductChanges
+                 .Where(p => p.PriceBefore != 0)
+                 .ToListAsync();
+
+            return filteredProducts
+                .Where(p => ((p.Difference / p.PriceBefore) * 100) > thresholdPriceDifference)
+                .OrderBy(p => (p.Difference / p.PriceBefore) * 100)
+                .FirstOrDefault();
         }
 
         public async Task<Dictionary<string, List<StorePriceChange>>> GetStorePriceChangesByStoreAsync(string storeName)
