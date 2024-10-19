@@ -50,7 +50,7 @@ namespace CheckDiePreise.Data.Services
             return await _context.ProductChanges
              .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
              .Where(p => p.DifferencePercentage > thresholdPriceDifference)
-             .OrderBy(p => p.DifferencePercentage)
+             .OrderBy(p => (double)p.DifferencePercentage)
              .FirstOrDefaultAsync();
         }
 
