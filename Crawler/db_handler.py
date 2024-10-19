@@ -4,14 +4,16 @@ import sqlite3
 import os
 
 SHOW_PRINTS = False
-SQLITE_DB_NAME = "LocalSqliteDb.db"
+
+SQLITE_DB_NAME = "/home/pi/crawler/LocalSqliteDb.db"
 TABLE_PRICE_CHANGES = "ProductChanges"
 TABLE_STORE_PRICE_CHANGES = "StorePriceChanges"
 TABLE_DAILY_REPORTS = "DailyReports"
 
-def create_db_with_table():
-    cwd = os.getcwd()
-    if "LocalSqliteDb.db" not in os.listdir(cwd):
+def create_db_with_table(drop = False):
+    if("LocalSqliteDb.db" in os.listdir("/home/pi/crawler/")):
+        print("Found SQLite DB")
+    else:
         print("CREATE SQLite DB")
         try:
             sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
@@ -29,6 +31,8 @@ def create_db_with_table():
                                 BasepriceBefore NUMERIC(18,2) NOT NULL,
                                 Difference NUMERIC(18,2) NOT NULL,
                                 DifferenceBaseprice NUMERIC(18,2) NOT NULL,
+                                DifferencePercentage DECIMAL(18,2) NOT NULL,
+	                            DifferenceBasepricePercentage DECIMAL(18,2) NOT NULL,
                                 BasepriceUnit NVARCHAR(50) NOT NULL,
                                 Store NVARCHAR(255) NOT NULL,
                                 Category NVARCHAR(255),
@@ -64,18 +68,16 @@ def create_db_with_table():
             sqlite_connection.commit()
             cursor.close()
 
-        except:
-            print("     Verbindung fehlerhaft")
+        except Exception as e:
+            print("     Verbindung fehlerhaft:", e)
         finally:
             if sqlite_connection:
                 sqlite_connection.close()
                 print("     SQL Verbindung geschlossen")
-    else:
-        print("Found SQLite DB")
+        # else:
+        #     print("Found SQLite DB")
     
 def post_price_change_to_local_sqlite_db(price_change):
-    if SHOW_PRINTS == False:
-        print(".", end="")
     change_date = datetime.datetime.now().strftime('%Y-%m-%d')
     try:
         if SHOW_PRINTS : print("         POST PriceChange to DB")
@@ -89,7 +91,7 @@ def post_price_change_to_local_sqlite_db(price_change):
         cursor.execute(sql_query, (None, price_change.product_name, change_date, price_change.identifier, price_change.price, price_change.price_before, price_change.baseprice, price_change.baseprice_before, price_change.difference, price_change.difference_baseprice, price_change.baseprice_unit, price_change.store, price_change.category, price_change.trend, price_change.url))
 
         sqlite_connection.commit()
-        if SHOW_PRINTS : print("Datenbank-Eintrag erfolgt", end = " > ")
+        if SHOW_PRINTS : print(f"Datenbank-Eintrag erfolgt für {change_date}", end = " > ")
         cursor.close()
 
     except Exception as e:
@@ -130,7 +132,7 @@ def post_random_product_to_daily_report_sqlite(product):
                 if SHOW_PRINTS : print("SQL Verbindung geschlossen")
 
 def get_latest_price_data_by_identifier_for_product_from_sqlite_db(store, identifier) -> dict:
-    if SHOW_PRINTS : print(f"         Get Price Change for {store} [{identifier}]")
+    if SHOW_PRINTS: print(f"         Get Price Change for {store} [{identifier}]")
 
     try:
         sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
@@ -141,6 +143,7 @@ def get_latest_price_data_by_identifier_for_product_from_sqlite_db(store, identi
                         WHERE Store=? AND Identifier=?
                         ORDER BY Date ASC"""
         cursor.execute(sql_query, (store, identifier))
+
         results = cursor.fetchall()
         cursor.close()
 
@@ -151,6 +154,8 @@ def get_latest_price_data_by_identifier_for_product_from_sqlite_db(store, identi
                 "price_old": last_entry["Price"],
                 "baseprice_old": last_entry["Baseprice"]
             }
+
+            if SHOW_PRINTS: f"FOUND PRICE CHANGE IN DB: {data}"
             return data
 
         return None
@@ -203,8 +208,6 @@ def get_average_store_data_from_sqlite_db():
             sqlite_connection.close()
 
 def post_average_store_category_price_to_sqlite_db(store_category_price_change):
-    if SHOW_PRINTS == False:
-        print(".", end="")
     try:
         if SHOW_PRINTS : print("         POST Average Storages Prices to DB")
         sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
@@ -213,6 +216,7 @@ def post_average_store_category_price_to_sqlite_db(store_category_price_change):
         if SHOW_PRINTS : print("             Erfolgreich mit DB verbunden", end = " > ")
         sql_query = f"""INSERT INTO {TABLE_STORE_PRICE_CHANGES} (Id, StoreName, Date, Price, Baseprice, Category)
         VALUES (?,?,?,?,?,?);"""
+        
         cursor.execute(sql_query, (None, store_category_price_change.store_name, store_category_price_change.date, store_category_price_change.price, store_category_price_change.baseprice, store_category_price_change.category))
 
         sqlite_connection.commit()
@@ -225,6 +229,22 @@ def post_average_store_category_price_to_sqlite_db(store_category_price_change):
             sqlite_connection.close()
             if SHOW_PRINTS : print("SQL Verbindung geschlossen")
 
+
+def test_sqlite_connection():
+    print("try to connect to sqlite")
+    try:
+        sqlite_connection = sqlite3.connect(SQLITE_DB_NAME)
+        if sqlite_connection:
+            print("Verbindung erfolgreich.")
+            return True
+    except Exception as e:
+        print("Verbindung fehlgeschlagen:", e)
+        return False
+    finally:
+        if sqlite_connection:
+            sqlite_connection.close()
+
+              
 def main():
     if SHOW_PRINTS: print("\n\nStart DB Handler")
     create_db_with_table()

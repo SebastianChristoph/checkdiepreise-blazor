@@ -4,10 +4,10 @@ import re
 import PriceChange
 import random 
 import store_averages
-import ftp_uploader
+#import ftp_uploader
 
 start_time = datetime.datetime.now()
-SHOW_PRINTS = True
+SHOW_PRINTS = False
 
 class Crawler_Handler:
     def __init__(self, products):
@@ -23,8 +23,8 @@ class Crawler_Handler:
             db_handler.post_price_change_to_local_sqlite_db(price_change)
     
     def clean_price_text(self, price):
-        
         try:
+
             cleaned_price = str(price)
             cleaned_price = cleaned_price.replace(",", ".")
 
@@ -85,16 +85,16 @@ class Crawler_Handler:
             price_changes_for_product = db_handler.get_latest_price_data_by_identifier_for_product_from_sqlite_db(product.store, product.identifier)
 
             if price_changes_for_product is None:
-                # New Product from WebStore
+                # Neues Produkt
                 if SHOW_PRINTS: print(f"         >>> Neues Produkt mit Preis: {product.price} [{product.baseprice}] ({today})")
-                new_product_price_change = PriceChange.PriceChange(product.name, today, product.identifier, product.price, product.price, product.baseprice, product.baseprice, 0, 0, product.baseprice_unit, product.store, product.category, "none", product.url)
+                new_product_price_change = PriceChange.PriceChange(product.name, today, product.identifier, product.price, product.price, product.baseprice, product.baseprice, 0, 0, 0, 0, product.baseprice_unit, product.store, product.category, "none", product.url)
 
                 self.price_changes.append(new_product_price_change)  # Sammele die Price Changes
                 db_handler.post_price_change_to_local_sqlite_db(new_product_price_change)
                 self.new_products += 1
                 
             else:
-                # existing product 
+                # Bestehendes Produkt
                 if price_changes_for_product["date"] == today:
                     if SHOW_PRINTS: print("         >> Bereits Eintrag für TODAY:", price_changes_for_product["date"])
                     self.skipped_products += 1
@@ -103,17 +103,31 @@ class Crawler_Handler:
                 difference = product.price - price_changes_for_product["price_old"]
                 difference_baseprice = product.baseprice - price_changes_for_product["baseprice_old"]
 
+                try:
+                    # Berechnung des prozentualen Unterschieds (Vermeidung von Division durch Null)
+                    if price_changes_for_product["price_old"] != 0:
+                        price_difference_percent = (difference / price_changes_for_product["price_old"]) * 100
+                    else:
+                        price_difference_percent = None  # oder setze es auf 0, wenn du das bevorzugst
+
+                    if price_changes_for_product["baseprice_old"] != 0:
+                        baseprice_difference_percent = (difference_baseprice / price_changes_for_product["baseprice_old"]) * 100
+                    else:
+                        baseprice_difference_percent = None  # oder setze es auf 0, wenn du das bevorzugst
+                except:
+                    price_difference_percent = None
+                    baseprice_difference_percent = None
+
+
                 if difference == 0 and difference_baseprice == 0:
                     self.skipped_products += 1
                     continue
 
                 trend = "up" if (difference > 0 or difference_baseprice > 0) else "down"
                 if SHOW_PRINTS: print(f"         >>> Neuer PriceChange {product.name} ({today})")
-
                 new_price_change = PriceChange.PriceChange(
                     product.name, today, product.identifier, product.price, price_changes_for_product["price_old"],
-                    product.baseprice, price_changes_for_product["baseprice_old"], difference, difference_baseprice,
-                    product.baseprice_unit, product.store, product.category, trend, product.url
+                    product.baseprice, price_changes_for_product["baseprice_old"], difference, difference_baseprice, price_difference_percent, baseprice_difference_percent, product.baseprice_unit, product.store, product.category, trend, product.url
                 )
 
                 self.price_changes.append(new_price_change)
@@ -136,6 +150,8 @@ class Crawler_Handler:
         print("     Neue Produkte:", self.new_products)
         print("     Update Produkte:", self.updates_products)
         print("     Skipped Produkte:", self.skipped_products)
+
+        #ftp_uploader.upload_sqlitedb_to_azure()
 
         end_time = datetime.datetime.now()
         time_difference = end_time - start_time

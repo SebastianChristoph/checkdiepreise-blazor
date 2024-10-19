@@ -18,6 +18,8 @@ namespace CheckDiePreise.Data.Models
         [Required] public decimal BasepriceBefore { get; set; }
         [Required] public decimal Difference { get; set; }
         [Required] public decimal DifferenceBaseprice { get; set; }
+        public decimal? DifferencePercentage { get; set; }
+        public decimal? DifferenceBasepricePercentage { get; set; }
         [Required] public string BasepriceUnit { get; set; }
         [Required] public string Store { get; set; }
         public string Category { get; set; }
