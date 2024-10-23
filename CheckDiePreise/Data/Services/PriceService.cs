@@ -22,11 +22,19 @@ namespace CheckDiePreise.Data.Services
               .OrderByDescending(p => (double)p.DifferencePercentage)
               .FirstOrDefaultAsync();
         }
-        public async Task<List<ProductChange>> GetYesterdaysProductChanges()
+        public async Task<List<ProductChange>> GetYesterdaysProductChanges(string storeName)
         {
+            if (storeName == "all")
+            {
+                return await _context.ProductChanges
+               .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1) && (p.Difference != 0 || p.DifferenceBaseprice != 0))
+               .ToListAsync();
+            }
+
             return await _context.ProductChanges
-                .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1) && (p.Difference !=0 ||  p.DifferenceBaseprice != 0))
-                .ToListAsync();
+               .Where(p => p.Date.Date == DateTime.UtcNow.Date.AddDays(-1) && (p.Difference != 0 || p.DifferenceBaseprice != 0) && p.Store == storeName)
+               .ToListAsync();
+
         }
 
         public async Task<DailyReport?> GetYesterdaysDailyReportByStore(string store)
