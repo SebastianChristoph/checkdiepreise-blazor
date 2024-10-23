@@ -17,8 +17,8 @@ namespace CheckDiePreise.Data.Services
         public async Task<ProductChange?> GetRandomProductChangeWithDelayForDebug()
         {
             return await _context.ProductChanges
-              .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null)
-              .Where(p => p.DifferencePercentage > thresholdPriceDifference)
+              .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.DifferencePercentage != 0)
+              .Where(p => p.DifferencePercentage < thresholdPriceDifference)
               .OrderByDescending(p => (double)p.DifferencePercentage)
               .FirstOrDefaultAsync();
         }
@@ -39,8 +39,8 @@ namespace CheckDiePreise.Data.Services
         public async Task<ProductChange?> GetYesterdaysProductChangeMaxAsync()
         {
             return await _context.ProductChanges
-             .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
-             .Where(p => p.DifferencePercentage > thresholdPriceDifference)
+             .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.DifferencePercentage > 0)
+             .Where(p => p.DifferencePercentage < thresholdPriceDifference)
              .OrderByDescending(p => (double)p.DifferencePercentage)
              .FirstOrDefaultAsync();
         }
@@ -48,9 +48,9 @@ namespace CheckDiePreise.Data.Services
         public async Task<ProductChange?> GetYesterdaysProductChangeMinAsync()
         {
             return await _context.ProductChanges
-             .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.Date.Date == DateTime.UtcNow.Date.AddDays(-1))
-             .Where(p => p.DifferencePercentage > thresholdPriceDifference)
-             .OrderBy(p => (double)p.DifferencePercentage)
+             .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.DifferencePercentage != 0)
+             .Where(p => p.DifferencePercentage < thresholdPriceDifference)
+             .OrderByDescending(p => (double)p.DifferencePercentage)
              .FirstOrDefaultAsync();
         }
 
