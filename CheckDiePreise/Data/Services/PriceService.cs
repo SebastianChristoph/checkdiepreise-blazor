@@ -39,8 +39,7 @@ namespace CheckDiePreise.Data.Services
         public async Task<ProductChange?> GetYesterdaysProductChangeMaxAsync()
         {
             return await _context.ProductChanges
-             .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.DifferencePercentage > 0)
-             .Where(p => p.DifferencePercentage < thresholdPriceDifference)
+             .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.DifferencePercentage > 0 && p.DifferencePercentage < thresholdPriceDifference)
              .OrderByDescending(p => (double)p.DifferencePercentage)
              .FirstOrDefaultAsync();
         }
@@ -48,8 +47,7 @@ namespace CheckDiePreise.Data.Services
         public async Task<ProductChange?> GetYesterdaysProductChangeMinAsync()
         {
             return await _context.ProductChanges
-             .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.DifferencePercentage != 0)
-             .Where(p => p.DifferencePercentage < thresholdPriceDifference)
+             .Where(p => p.PriceBefore != 0 && p.DifferencePercentage != null && p.DifferencePercentage < 0 && p.DifferencePercentage > (thresholdPriceDifference*-1))
              .OrderByDescending(p => (double)p.DifferencePercentage)
              .FirstOrDefaultAsync();
         }
