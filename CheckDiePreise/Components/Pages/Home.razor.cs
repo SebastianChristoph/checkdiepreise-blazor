@@ -33,13 +33,13 @@ namespace CheckDiePreise.Components.Pages
             _showSpinner = true;
             StateHasChanged();
             await Task.Delay(1);
-        #if DEBUG
-                    _minChange = await PriceService.GetRandomProductChangeWithDelayForDebug();
-                    _maxChange = await PriceService.GetRandomProductChangeWithDelayForDebug();
-                    _showSpinner = false;
-                    StateHasChanged();
-                    return;
-        #endif
+        //#if DEBUG
+        //            _minChange = await PriceService.GetRandomProductChangeWithDelayForDebug();
+        //            _maxChange = await PriceService.GetRandomProductChangeWithDelayForDebug();
+        //            _showSpinner = false;
+        //            StateHasChanged();
+        //            return;
+        //#endif
 
             _maxChange = await PriceService.GetYesterdaysProductChangeMaxAsync();
             _minChange = await PriceService.GetYesterdaysProductChangeMinAsync();
