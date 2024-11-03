@@ -4,7 +4,7 @@
 <MudPopoverProvider />
 
 <MudLayout>
-@*     <MudAppBar Elevation="1">
+     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">Check die Preise &nbsp;</MudText>
         <MudIcon Icon="@Icons.Material.Outlined.BarChart" Title="Favorite" />
@@ -28,9 +28,9 @@
             <MudIconButton Href="https://github.com/SebastianChristoph/checkdiepreise-blazor" Target="_blank" Icon="@Icons.Material.Filled.ForkRight" Color="Color.Inherit" Edge="Edge.End" />
         </MudTooltip>
                  
-    </MudAppBar> *@
+    </MudAppBar>
 
- @*    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+   <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <MudNavMenu>
             <MudNavLink OnClick="@((e) => DrawerToggle(""))" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("search"))" Icon="@Icons.Material.Filled.ManageSearch">Produkt suchen</MudNavLink>
@@ -39,7 +39,7 @@
             <MudNavLink OnClick="@((e) => DrawerToggle("about"))" Icon="@Icons.Material.Filled.Info">Über diese Seite</MudNavLink>
             <MudNavLink OnClick="@((e) => DrawerToggle("admin"))" Icon="@Icons.Material.Filled.Cable">Admin</MudNavLink>
         </MudNavMenu>
-    </MudDrawer> *@
+    </MudDrawer> 
     <MudMainContent>
         <MudContainer Class="pt-4" style="min-height: 100vh;max-width: 1500px;" Fixed="true">
             <MudPaper Class="pa-8 ma-2" Elevation="3">
