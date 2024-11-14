@@ -9,7 +9,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 
 list_of_found_products = []
 SHOW_PRINTS = True
-ITERATE_ONLY_3_TIMES = True
+ITERATE_ONLY_3_TIMES = False
 
 def getting_articles_from_shop(searchterm, page, category): 
     collecting = True

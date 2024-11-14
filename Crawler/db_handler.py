@@ -6,12 +6,13 @@ import os
 SHOW_PRINTS = False
 
 SQLITE_DB_NAME = "/home/pi/crawler/LocalSqliteDb.db"
+SQLITE_DB_NAME = "C:/Users/sebas/Desktop/portfolopOnline/checkdiepreise-blazor/Crawler/LocalSqliteDb.db"
 TABLE_PRICE_CHANGES = "ProductChanges"
 TABLE_STORE_PRICE_CHANGES = "StorePriceChanges"
 TABLE_DAILY_REPORTS = "DailyReports"
 
 def create_db_with_table(drop = False):
-    if("LocalSqliteDb.db" in os.listdir("/home/pi/crawler/")):
+    if("LocalSqliteDb.db" in os.listdir("C:/Users/sebas/Desktop/portfolopOnline/checkdiepreise-blazor/Crawler")):
         print("Found SQLite DB")
     else:
         print("CREATE SQLite DB")

@@ -6,7 +6,7 @@ import re
 
 
 SHOW_PRINTS = True
-ONLY_ITERATE_3_TIMES = True
+ONLY_ITERATE_3_TIMES = False
 
 
 categories = {}
