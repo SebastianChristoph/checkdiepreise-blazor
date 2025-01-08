@@ -12,5 +12,5 @@ Dieses Projekt vereint WebScraping mit Python und das Visualisieren der Daten mi
 
   ### Problemlösung: SQLite DB, Azure ud Git
 
-  Es ist möglich eine SQLite Datenbank auf Azure zu hosten, auf die der Raspberry Pi mit seinen Crawler-Scrips zugreift. Diese Azure SQL DB ist jedoch teuer (rund 70 Euro pro Monat). Daher nutze ich eine SQLite DB. Diese ist immer aktuell auf dem Raspberry Pi. Ein tägiches Skript holt sich diese DB via SSH vom Raspberry Pi und synchronisiert die DB mit dem Git Repo der checkdiepreise-Repo. 
+Es ist möglich eine SQLite Datenbank auf Azure zu hosten, auf die der Raspberry Pi mit seinen Crawler-Scrips zugreift. Diese Azure SQL DB ist jedoch teuer (rund 70 Euro pro Monat). Daher nutze ich eine SQLite DB. Diese ist immer aktuell auf dem Raspberry Pi. Ein tägiches Skript auf einem lokalen Server holt sich diese DB via SSH vom Raspberry Pi und synchronisiert die DB mit dem Git Repo der checkdiepreise-Repo. Das ganze geht dann via GitHub Actions direkt in die *Azure Web App*.
 Etwas umständlich, aber gratis !  
