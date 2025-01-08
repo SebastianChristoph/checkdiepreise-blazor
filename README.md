@@ -1,4 +1,4 @@
-# checkdiepreise-blazor
+# check-die-preise -  eine Python & ASP.NET Applikation
 
 Wie sehr gehen die Preise in deutschen Märkten nach oben oder unten?
 Wird Butter wirklich immer teurer? Werden Malms bei IKEA immer günstiger?
