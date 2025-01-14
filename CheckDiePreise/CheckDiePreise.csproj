@@ -24,8 +24,4 @@
     <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\LocalSqliteDb.db" />
-  </ItemGroup>
-
 </Project>
