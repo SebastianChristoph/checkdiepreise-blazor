@@ -93,7 +93,17 @@
                         <RadzenCategoryAxis>
                             <RadzenTicks>
                                 <Template>
-                                    <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">@context.Value</text>
+                                    @{
+                                        // Prüfe die Position in der ersten Liste des KeyValuePairs
+                                        var dateValue = context.Value;
+                                        var firstDataset = _chartData.FirstOrDefault().Value; // Nimm die erste Liste
+                                        if (firstDataset != null && firstDataset.IndexOf(firstDataset.FirstOrDefault(d => d.Date == dateValue)) % 2 == 0)
+                                        {
+                                            <svg:text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">
+                                                @dateValue
+                                            </svg:text>
+                                        }
+                                    }
                                 </Template>
                             </RadzenTicks>
                         </RadzenCategoryAxis>

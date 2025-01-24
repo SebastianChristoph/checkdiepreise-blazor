@@ -46,7 +46,16 @@
             <RadzenCategoryAxis>
                 <RadzenTicks>
                     <Template>
-                        <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">@context.Value</text>
+                        @{
+                            // Manuelles Entfernen von jedem zweiten Wert
+                            var dateValue = context.Value;
+                            if (_chartData.IndexOf(_chartData.FirstOrDefault(d => d.Date == dateValue)) % 2 == 0)
+                            {
+                                <svg:text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">
+                                    @dateValue
+                                </svg:text>
+                            }
+                        }
                     </Template>
                 </RadzenTicks>
             </RadzenCategoryAxis>
